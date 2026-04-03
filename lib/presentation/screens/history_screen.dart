@@ -42,8 +42,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(Icons.history, size: 64, color: AppColors.muted, opacity: 0.2),
+        children: [
+          Icon(Icons.history, size: 64, color: AppColors.muted.withValues(alpha: 0.2)),
           SizedBox(height: 16),
           Text('Aucune démarche enregistrée', style: TextStyle(color: AppColors.muted, fontSize: 13)),
         ],
@@ -95,7 +95,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Container(
       width: 36,
       height: 36,
-      decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
       child: Icon(icon, color: color, size: 20),
     );
   }

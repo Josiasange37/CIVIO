@@ -25,8 +25,8 @@ class OfflineMapScreen extends StatelessWidget {
       ),
       body: FlutterMap(
         options: MapOptions(
-          center: center,
-          zoom: 13.0,
+          initialCenter: center,
+          initialZoom: 13.0,
           maxZoom: 18.0,
           minZoom: 10.0,
         ),
@@ -42,7 +42,7 @@ class OfflineMapScreen extends StatelessWidget {
               point: LatLng(loc.lat, loc.lon),
               width: 80,
               height: 80,
-              builder: (ctx) => Column(
+              child: Column(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(4),

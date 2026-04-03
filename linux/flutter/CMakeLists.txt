@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 
 set(WRAPPER_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
 
+# === Global include for flutter_linux headers ===
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ephemeral/flutter_linux")
+add_compile_options(-I"${CMAKE_CURRENT_SOURCE_DIR}/ephemeral/flutter_linux")
+
 # === Flutter Library ===
 set(FLUTTER_LIBRARY "${CMAKE_BINARY_DIR}/flutter/libflutter_linux_gtk.so")
 
@@ -40,6 +44,7 @@ target_sources(flutter_wrapper_plugin PUBLIC
 
 target_include_directories(flutter_wrapper_plugin PUBLIC
   "${FLUTTER_GENERATED_PLUGIN_DIR}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ephemeral/flutter_linux"
 )
 
 # === Dependency Imports ===

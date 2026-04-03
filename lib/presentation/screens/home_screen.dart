@@ -109,9 +109,9 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Bonjour, comment puis-je vous aider ?',
-                style: TextStyle(color: Colors.white, fontSize: 13, opacity: 0.85),
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13),
               ),
             ],
           ),
@@ -211,7 +211,7 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text(
             'Fonctionnement hybride',
             style: TextStyle(
@@ -226,8 +226,7 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               height: 1.5,
-              color: AppColors.primaryDark,
-              opacity: 0.8,
+              color: AppColors.primaryDark.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -258,7 +257,7 @@ class HomeScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: active ? AppColors.primary.withOpacity(0.15) : Colors.transparent,
+        color: active ? AppColors.primary.withValues(alpha: 0.15) : Colors.transparent,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(

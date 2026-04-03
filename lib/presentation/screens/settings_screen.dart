@@ -97,7 +97,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: const Text('Assistant Vocal', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
         subtitle: const Text('Parler pour interagir avec EKEMA', style: TextStyle(fontSize: 10)),
         value: _voiceEnabled,
-        activeColor: AppColors.primary,
+        activeThumbColor: AppColors.primary,
         onChanged: (v) => setState(() => _voiceEnabled = v),
       ),
     );
@@ -108,7 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: SwitchListTile(
         title: const Text('Mode sombre', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
         value: _darkMode,
-        activeColor: AppColors.primary,
+        activeThumbColor: AppColors.primary,
         onChanged: (v) => setState(() => _darkMode = v),
       ),
     );

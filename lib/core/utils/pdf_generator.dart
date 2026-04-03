@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:path_provider/path_provider.dart';
 
 class PdfGenerator {
   static Future<Uint8List> generateOfficialDocument({
@@ -67,7 +65,7 @@ class PdfGenerator {
               pw.SizedBox(height: 30),
 
               // Body
-              pw.Text(content, style: pw.TextStyle(font: font, fontSize: 12, lineHeight: 1.5)),
+              pw.Text(content, style: pw.TextStyle(font: font, fontSize: 12, height: 1.5)),
               
               pw.SizedBox(height: 40),
               

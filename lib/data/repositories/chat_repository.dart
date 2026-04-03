@@ -1,7 +1,7 @@
-import 'ai_service.dart';
-import 'connectivity_service.dart';
-import 'fallback_ai_service.dart';
-import 'openrouter_service.dart';
+import '../../core/services/ai_service.dart';
+import '../../core/services/connectivity_service.dart';
+import '../../core/services/fallback_ai_service.dart';
+import '../../core/services/openrouter_service.dart';
 
 /// Hybrid chat repository that switches between online AI and offline fallback
 class ChatRepository {

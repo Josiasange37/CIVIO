@@ -41,6 +41,9 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
 
+# Global include for flutter_linux headers
+include_directories("${FLUTTER_MANAGED_DIR}/ephemeral/flutter_linux")
+
 # Application build
 add_subdirectory("runner")
 

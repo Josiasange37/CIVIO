@@ -1,9 +1,8 @@
 import 'package:get_it/get_it.dart';
-import '../core/services/ai_service.dart';
-import '../core/services/connectivity_service.dart';
-import '../core/services/fallback_ai_service.dart';
-import '../core/services/openrouter_service.dart';
-import '../data/repositories/chat_repository.dart';
+import '../services/connectivity_service.dart';
+import '../services/fallback_ai_service.dart';
+import '../services/openrouter_service.dart';
+import '../../data/repositories/chat_repository.dart';
 
 /// Dependency injection container setup
 /// 
