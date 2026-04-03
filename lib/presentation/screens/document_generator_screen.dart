@@ -76,7 +76,7 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
             onPressed: _loading ? null : _doGenerate,
             child: _loading 
               ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-              : const Text('📄 GÉNÉRER LE DOCUMENT PDF'),
+              : const Text('GÉNÉRER LE DOCUMENT PDF'),
           ),
         ],
       ),
@@ -193,7 +193,14 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              Expanded(child: OutlinedButton(onPressed: () => setState(() => _generated = false), child: const Text('✏️ MODIFIER'))),
+              Expanded(child: OutlinedButton(onPressed: () => setState(() => _generated = false), child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.edit, size: 16),
+                  SizedBox(width: 4),
+                  Text('MODIFIER'),
+                ],
+              ))),
               const SizedBox(width: 8),
               Expanded(flex: 2, child: ElevatedButton(
                 onPressed: () async {
@@ -207,7 +214,14 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
                   );
                   await PdfGenerator.saveAndShare(bytes, 'demande_bourse_ekema.pdf');
                 }, 
-                child: const Text('📥 TÉLÉCHARGER PDF'),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.download, size: 16),
+                    SizedBox(width: 4),
+                    Text('TÉLÉCHARGER PDF'),
+                  ],
+                ),
               )),
             ],
           ),

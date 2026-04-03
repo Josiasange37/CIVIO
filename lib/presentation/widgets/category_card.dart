@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 
 class CategoryCard extends StatelessWidget {
-  final String icon;
+  final IconData icon;
   final String label;
   final VoidCallback onTap;
   final bool animate;
@@ -29,7 +29,7 @@ class CategoryCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 24)),
+            Icon(icon, size: 24, color: AppColors.primary),
             const SizedBox(height: 8),
             Text(
               label,

@@ -104,13 +104,13 @@ class HomeScreen extends StatelessWidget {
                       color: Colors.white12,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Center(child: Text('👤', style: TextStyle(fontSize: 18))),
+                    child: const Center(child: Icon(Icons.person_outline, color: Colors.white, size: 20)),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               const Text(
-                'Bonjour 👋 Comment puis-je vous aider ?',
+                'Bonjour, comment puis-je vous aider ?',
                 style: TextStyle(color: Colors.white, fontSize: 13, opacity: 0.85),
               ),
             ],
@@ -131,12 +131,12 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildCategoryGrid(BuildContext context) {
     final categories = [
-      {'icon': '🪪', 'label': 'CNI / Passeport', 'route': '/dialogue'},
-      {'icon': '📄', 'label': 'Actes civils', 'route': null},
-      {'icon': '🏢', 'label': 'Entreprise', 'route': null},
-      {'icon': '🎓', 'label': 'Concours', 'route': null},
-      {'icon': '⚖️', 'label': 'Judiciaire', 'route': null},
-      {'icon': '✍️', 'label': 'Rédiger', 'route': '/document-generator'},
+      {'icon': Icons.badge_outlined, 'label': 'CNI / Passeport', 'route': '/dialogue'},
+      {'icon': Icons.description_outlined, 'label': 'Actes civils', 'route': null},
+      {'icon': Icons.business_outlined, 'label': 'Entreprise', 'route': null},
+      {'icon': Icons.school_outlined, 'label': 'Concours', 'route': null},
+      {'icon': Icons.balance_outlined, 'label': 'Judiciaire', 'route': null},
+      {'icon': Icons.edit_note, 'label': 'Rédiger', 'route': '/document-generator'},
     ];
 
     return GridView.builder(
@@ -152,7 +152,7 @@ class HomeScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         final cat = categories[index];
         return CategoryCard(
-          icon: cat['icon'] as String,
+          icon: cat['icon'] as IconData,
           label: cat['label'] as String,
           onTap: () {
             if (cat['route'] != null) {
@@ -213,7 +213,7 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
           Text(
-            '💡 Fonctionnement hors ligne',
+            'Fonctionnement hybride',
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
@@ -222,7 +222,7 @@ class HomeScreen extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            'EKEMA fonctionne sans connexion internet. Toutes les procédures sont stockées localement sur votre appareil.',
+            'EKEMA fonctionne avec ou sans connexion. Les réponses IA sont disponibles en ligne, les procédures de base toujours accessibles.',
             style: TextStyle(
               fontSize: 11,
               height: 1.5,
@@ -245,16 +245,16 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildNavItem('🏠', 'Accueil', true),
-          _buildNavItem('💬', 'Dialogue', false),
-          _buildNavItem('📋', 'Plan', false),
-          _buildNavItem('✍️', 'Rédiger', false),
+          _buildNavItem(Icons.home_outlined, 'Accueil', true),
+          _buildNavItem(Icons.chat_bubble_outline, 'Dialogue', false),
+          _buildNavItem(Icons.assignment_outlined, 'Plan', false),
+          _buildNavItem(Icons.edit_outlined, 'Rédiger', false),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(String icon, String label, bool active) {
+  Widget _buildNavItem(IconData icon, String label, bool active) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -263,7 +263,7 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 16)),
+          Icon(icon, size: 20, color: active ? AppColors.primary : AppColors.muted),
           if (active) ...[
             const SizedBox(width: 8),
             Text(

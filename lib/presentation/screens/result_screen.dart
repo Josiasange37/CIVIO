@@ -94,9 +94,9 @@ class _ResultScreenState extends State<ResultScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildBadge('💰', 'Env. ${procedure.steps[0].cost}'),
+              _buildBadge(Icons.attach_money, 'Env. ${procedure.steps[0].cost}'),
               const SizedBox(width: 8),
-              _buildBadge('📅', 'Délai ${procedure.steps[procedure.steps.length-1].time}'),
+              _buildBadge(Icons.calendar_today, 'Délai ${procedure.steps[procedure.steps.length-1].time}'),
             ],
           ),
         ],
@@ -104,7 +104,7 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  Widget _buildBadge(String icon, String text) {
+  Widget _buildBadge(IconData icon, String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
@@ -113,7 +113,7 @@ class _ResultScreenState extends State<ResultScreen> {
       ),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 12)),
+          Icon(icon, size: 12, color: Colors.white),
           const SizedBox(width: 6),
           Text(
             text,
@@ -182,10 +182,10 @@ class _ResultScreenState extends State<ResultScreen> {
                     Row(
                       children: [
                         if (step.cost != "0 FCFA") ...[
-                          _buildTag('💸', step.cost, AppColors.lightAmber, AppColors.amber),
+                          _buildTag(Icons.account_balance_wallet, step.cost, AppColors.lightAmber, AppColors.amber),
                           const SizedBox(width: 6),
                         ],
-                        _buildTag('⌛', step.time, AppColors.primaryLight, AppColors.primaryDark),
+                        _buildTag(Icons.schedule, step.time, AppColors.primaryLight, AppColors.primaryDark),
                       ],
                     ),
                   ],
@@ -198,13 +198,13 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  Widget _buildTag(String icon, String label, Color bg, Color text) {
+  Widget _buildTag(IconData icon, String label, Color bg, Color text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 10)),
+          Icon(icon, size: 10, color: text),
           const SizedBox(width: 4),
           Text(
             label,
