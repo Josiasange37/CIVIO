@@ -44,8 +44,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.history, size: 64, color: AppColors.muted.withValues(alpha: 0.2)),
-          SizedBox(height: 16),
-          Text('Aucune démarche enregistrée', style: TextStyle(color: AppColors.muted, fontSize: 13)),
+          const SizedBox(height: 16),
+          const Text('Aucune démarche enregistrée', style: TextStyle(color: AppColors.muted, fontSize: 13)),
         ],
       ),
     );

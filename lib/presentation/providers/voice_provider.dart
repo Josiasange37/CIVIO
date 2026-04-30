@@ -23,8 +23,8 @@ class VoiceProvider with ChangeNotifier {
 
   Future<void> startListening(Function(String) onResult) async {
     bool available = await _speech.initialize(
-      onStatus: (val) => print('onStatus: $val'),
-      onError: (val) => print('onError: $val'),
+      onStatus: (val) => debugPrint('onStatus: $val'),
+      onError: (val) => debugPrint('onError: $val'),
     );
     
     if (available) {

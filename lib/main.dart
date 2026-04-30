@@ -11,11 +11,11 @@ import 'presentation/screens/result_screen.dart';
 import 'presentation/screens/document_generator_screen.dart';
 
 // OpenRouter API Key - Free tier: 20 requests/minute
-const String OPENROUTER_API_KEY = 'REDACTED_OPENROUTER_KEY';
+const String openRouterApiKey = 'REDACTED_OPENROUTER_KEY';
 
 void main() {
   // Initialize dependency injection
-  setupDependencies(openRouterApiKey: OPENROUTER_API_KEY);
+  setupDependencies(openRouterApiKey: openRouterApiKey);
   
   runApp(
     MultiProvider(

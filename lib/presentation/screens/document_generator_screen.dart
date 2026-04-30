@@ -36,9 +36,9 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Column(
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text('Rédiger un document', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             Text('Génération officielle automatique', style: TextStyle(fontSize: 10, color: AppColors.muted)),
           ],
@@ -120,7 +120,7 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Document généré avec succès', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
+                      const Text('Document généré avec succès', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.primaryDark)),
                       Text('Prêt à imprimer et signer', style: TextStyle(fontSize: 9, color: AppColors.primaryDark.withValues(alpha: 0.7))),
                     ],
                   ),

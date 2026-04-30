@@ -79,6 +79,7 @@ class _DialogueScreenState extends State<DialogueScreen> {
                         provider.answerQuestion(choice);
                         if (provider.state == ChatState.completed) {
                           Future.delayed(const Duration(milliseconds: 500), () {
+                            if (!context.mounted) return;
                             Navigator.pushNamed(context, '/result');
                           });
                         }
@@ -99,9 +100,9 @@ class _DialogueScreenState extends State<DialogueScreen> {
       padding: const EdgeInsets.only(top: 4),
       child: InkWell(
         onTap: () => context.read<VoiceProvider>().speak(text),
-        child: Row(
+        child: const Row(
           mainAxisSize: MainAxisSize.min,
-          children: const [
+          children: [
             Icon(Icons.volume_up, size: 14, color: AppColors.primary),
             SizedBox(width: 4),
             Text('Écouter la question', style: TextStyle(fontSize: 9, color: AppColors.primary, fontWeight: FontWeight.bold)),

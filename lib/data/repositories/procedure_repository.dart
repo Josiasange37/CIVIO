@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import '../../domain/entities/procedure.dart';
 
 abstract class IProcedureRepository {
@@ -21,7 +22,7 @@ class ProcedureRepository implements IProcedureRepository {
       _cache = data.map((json) => Procedure.fromJson(json)).toList();
       return _cache;
     } catch (e) {
-      print('Error loading procedures: $e');
+      debugPrint('Error loading procedures: $e');
       return [];
     }
   }

@@ -28,10 +28,8 @@ class AppTheme {
         seedColor: AppColors.primary,
         primary: AppColors.primary,
         secondary: AppColors.mediumGreen,
-        background: AppColors.background,
         surface: AppColors.surface,
         onPrimary: Colors.white,
-        onBackground: AppColors.text,
         onSurface: AppColors.text,
       ),
       textTheme: GoogleFonts.poppinsTextTheme().copyWith(

@@ -212,7 +212,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Fonctionnement hybride',
             style: TextStyle(
               fontSize: 11,
@@ -220,7 +220,7 @@ class HomeScreen extends StatelessWidget {
               color: AppColors.primaryDark,
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             'EKEMA fonctionne avec ou sans connexion. Les réponses IA sont disponibles en ligne, les procédures de base toujours accessibles.',
             style: TextStyle(
