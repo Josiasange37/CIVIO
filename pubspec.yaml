@@ -19,8 +19,8 @@ dependencies:
   latlong2: ^0.9.0
   geolocator: ^10.1.0
   permission_handler: ^11.0.1
-  pdf: ^3.10.8
-  printing: ^5.11.0
+  # pdf: ^3.10.8        # Temporarily disabled for Linux build (PDFium download fails)
+  # printing: ^5.11.0    # Temporarily disabled for Linux build (PDFium download fails)
   share_plus: ^7.2.1
   intl: ^0.18.1
   font_awesome_flutter: ^10.6.0
@@ -40,16 +40,16 @@ flutter:
     - assets/json/procedures.json
     - assets/json/mock_cni.json
     - assets/json/mock_ens.json
-    - assets/map/
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
-    - family: Fraunces
-      fonts:
-        - asset: assets/fonts/Fraunces-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Fraunces-Bold.ttf
-          weight: 700
+    # - assets/map/
+  # fonts:
+  #   - family: Poppins
+  #     fonts:
+  #       - asset: assets/fonts/Poppins-Regular.ttf
+  #       - asset: assets/fonts/Poppins-Bold.ttf
+  #         weight: 700
+  #   - family: Fraunces
+  #     fonts:
+  #       - asset: assets/fonts/Fraunces-SemiBold.ttf
+  #         weight: 600
+  #       - asset: assets/fonts/Fraunces-Bold.ttf
+  #         weight: 700

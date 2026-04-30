@@ -1,77 +1,88 @@
+# This file controls Flutter-level build steps. It should not be edited.
 cmake_minimum_required(VERSION 3.10)
 
-set(WRAPPER_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
+set(EPHEMERAL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ephemeral")
 
-# === Global include for flutter_linux headers ===
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ephemeral/flutter_linux")
-add_compile_options(-I"${CMAKE_CURRENT_SOURCE_DIR}/ephemeral/flutter_linux")
+# Configuration provided via flutter tool.
+include(${EPHEMERAL_DIR}/generated_config.cmake)
+
+# TODO: Move the rest of this into files in ephemeral. See
+# https://github.com/flutter/flutter/issues/57146.
+
+# Serves the same purpose as list(TRANSFORM ... PREPEND ...),
+# which isn't available in 3.10.
+function(list_prepend LIST_NAME PREFIX)
+    set(NEW_LIST "")
+    foreach(element ${${LIST_NAME}})
+        list(APPEND NEW_LIST "${PREFIX}${element}")
+    endforeach(element)
+    set(${LIST_NAME} "${NEW_LIST}" PARENT_SCOPE)
+endfunction()
 
 # === Flutter Library ===
-set(FLUTTER_LIBRARY "${CMAKE_BINARY_DIR}/flutter/libflutter_linux_gtk.so")
+# System-level dependencies.
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
+pkg_check_modules(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
+pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
+
+set(FLUTTER_LIBRARY "${EPHEMERAL_DIR}/libflutter_linux_gtk.so")
 
 # Published to parent scope for install step.
 set(FLUTTER_LIBRARY ${FLUTTER_LIBRARY} PARENT_SCOPE)
-set(FLUTTER_ICU_DATA_FILE "${CMAKE_BINARY_DIR}/flutter/icudtl.dat" PARENT_SCOPE)
+set(FLUTTER_ICU_DATA_FILE "${EPHEMERAL_DIR}/icudtl.dat" PARENT_SCOPE)
 set(PROJECT_BUILD_DIR "${PROJECT_DIR}/build/" PARENT_SCOPE)
+set(AOT_LIBRARY "${PROJECT_DIR}/build/lib/libapp.so" PARENT_SCOPE)
 
-# === Sources ===
-set(WRAPPER_SOURCES
-  "flutter_wrapper_plugin_registrant.cc"
+list(APPEND FLUTTER_LIBRARY_HEADERS
+  "fl_basic_message_channel.h"
+  "fl_binary_codec.h"
+  "fl_binary_messenger.h"
+  "fl_dart_project.h"
+  "fl_engine.h"
+  "fl_json_message_codec.h"
+  "fl_json_method_codec.h"
+  "fl_message_codec.h"
+  "fl_method_call.h"
+  "fl_method_channel.h"
+  "fl_method_codec.h"
+  "fl_method_response.h"
+  "fl_plugin_registrar.h"
+  "fl_plugin_registry.h"
+  "fl_standard_message_codec.h"
+  "fl_standard_method_codec.h"
+  "fl_string_codec.h"
+  "fl_value.h"
+  "fl_view.h"
+  "flutter_linux.h"
 )
-
-# === Headers ===
-set(WRAPPER_HEADERS
-  "flutter_wrapper_plugin_registrant.h"
+list_prepend(FLUTTER_LIBRARY_HEADERS "${EPHEMERAL_DIR}/flutter_linux/")
+add_library(flutter INTERFACE)
+target_include_directories(flutter INTERFACE
+  "${EPHEMERAL_DIR}"
 )
-
-list(APPEND WRAPPER_SOURCES ${WRAPPER_HEADERS})
-add_library(flutter_wrapper_plugin STATIC ${WRAPPER_SOURCES})
-target_link_libraries(flutter_wrapper_plugin PUBLIC flutter)
-set_target_properties(flutter_wrapper_plugin PROPERTIES
-  POSITION_INDEPENDENT_CODE ON)
-
-set(FLUTTER_GENERATED_PLUGIN_DIR "${CMAKE_BINARY_DIR}/generated_plugins")
-
-# === Plugin Registry ===
-list(APPEND PLUGIN_SOURCES
-  "${FLUTTER_GENERATED_PLUGIN_DIR}/generated_plugin_registrant.cc"
+target_link_libraries(flutter INTERFACE "${FLUTTER_LIBRARY}")
+target_link_libraries(flutter INTERFACE
+  PkgConfig::GTK
+  PkgConfig::GLIB
+  PkgConfig::GIO
 )
+add_dependencies(flutter flutter_assemble)
 
-# Wrapper sources needed for plugins
-target_sources(flutter_wrapper_plugin PUBLIC
-  ${WRAPPER_SOURCES}
+# === Flutter tool backend ===
+# _phony_ is a non-existent file to force this command to run every time,
+# since currently there's no way to get a full input/output list from the
+# flutter tool.
+add_custom_command(
+  OUTPUT ${FLUTTER_LIBRARY} ${FLUTTER_LIBRARY_HEADERS}
+    ${CMAKE_CURRENT_BINARY_DIR}/_phony_
+  COMMAND ${CMAKE_COMMAND} -E env
+    ${FLUTTER_TOOL_ENVIRONMENT}
+    "${FLUTTER_ROOT}/packages/flutter_tools/bin/tool_backend.sh"
+      ${FLUTTER_TARGET_PLATFORM} ${CMAKE_BUILD_TYPE}
+  VERBATIM
 )
-
-target_include_directories(flutter_wrapper_plugin PUBLIC
-  "${FLUTTER_GENERATED_PLUGIN_DIR}"
-  "${CMAKE_CURRENT_SOURCE_DIR}/ephemeral/flutter_linux"
+add_custom_target(flutter_assemble DEPENDS
+  "${FLUTTER_LIBRARY}"
+  ${FLUTTER_LIBRARY_HEADERS}
 )
-
-# === Dependency Imports ===
-include(FindPkgConfig)
-
-# GTK
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
-
-# === Build Bundle ===
-function(build_flutter_bundle target_name)
-  set(BUNDLE_DIR "${CMAKE_BINARY_DIR}/bundle")
-  set(DATA_DIR "${BUNDLE_DIR}/data")
-  set(FLUTTER_ASSETS_DIR "${DATA_DIR}/flutter_assets")
-  
-  add_custom_target(${target_name} ALL
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${FLUTTER_ASSETS_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-      "${PROJECT_DIR}/build/flutter_assets"
-      ${FLUTTER_ASSETS_DIR}
-    COMMENT "Building Flutter bundle"
-  )
-endfunction()
-
-# === Install Bundle ===
-function(install_flutter_bundle target_name)
-  install(TARGETS ${target_name} RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
-  install(DIRECTORY "${PROJECT_BUILD_DIR}/flutter_assets" DESTINATION "${CMAKE_INSTALL_PREFIX}/data")
-  install(FILES "${FLUTTER_ICU_DATA_FILE}" DESTINATION "${CMAKE_INSTALL_PREFIX}/data" RENAME "icudtl.dat")
-endfunction()
