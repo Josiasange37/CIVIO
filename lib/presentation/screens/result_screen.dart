@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../providers/procedure_provider.dart';
 import '../widgets/design_system/design_system.dart';
+import '../widgets/animations/animations.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
@@ -14,6 +15,15 @@ class ResultScreen extends StatefulWidget {
 class _ResultScreenState extends State<ResultScreen> {
   final Map<int, bool> _completedSteps = {};
   int? _expandedIndex = 0;
+  bool _showCelebrate = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _showCelebrate = false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,62 +33,76 @@ class _ResultScreenState extends State<ResultScreen> {
     if (procedure == null) return const Scaffold(body: Center(child: Text('Erreur')));
 
     return Scaffold(
-      backgroundColor: EkemaColors.subtle,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(child: _buildHero(context, procedure)),
-          SliverToBoxAdapter(child: _buildStatsRow(procedure)),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.xl, EkemaSpacing.lg, 120),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                Text(
-                  'Itinéraire de votre démarche',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22),
+      backgroundColor: const Color(0xFF131F24),
+      bottomNavigationBar: _buildBottomSheet(context),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: _buildHero(context, procedure)),
+              SliverToBoxAdapter(child: _buildStatsRow(procedure)),
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.xl, EkemaSpacing.lg, 120),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    StaggerFadeSlide(
+                      index: 0,
+                      child: MascotSpeechBubble(
+                        text: 'Bravo ! Voici votre plan personnalisé. Cochez chaque étape terminée.',
+                        mascot: const DuoMascot(size: 64, mood: 'celebrate'),
+                      ),
+                    ),
+                    const SizedBox(height: EkemaSpacing.xl),
+                    ...procedure.steps.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final step = entry.value;
+                      final expanded = _expandedIndex == index;
+                      final completed = _completedSteps[index] ?? false;
+                      return StepAccordionCard(
+                        index: index + 1,
+                        title: step.title,
+                        description: step.description,
+                        cost: step.cost,
+                        time: step.time,
+                        isExpanded: expanded,
+                        isCompleted: completed,
+                        onTap: () => setState(() => _expandedIndex = expanded ? null : index),
+                        onToggleComplete: () => setState(() => _completedSteps[index] = !completed),
+                      );
+                    }),
+                    const SizedBox(height: EkemaSpacing.xxl),
+                    _buildDocumentsCard(procedure),
+                  ]),
                 ),
-                const SizedBox(height: EkemaSpacing.sm),
-                Text(
-                  'Touchez une étape pour voir le détail. Cochez au fur et à mesure.',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: EkemaColors.textSecondary),
-                ),
-                const SizedBox(height: EkemaSpacing.xl),
-                ...procedure.steps.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final step = entry.value;
-                  final expanded = _expandedIndex == index;
-                  final completed = _completedSteps[index] ?? false;
-                  return StepAccordionCard(
-                    index: index + 1,
-                    title: step.title,
-                    description: step.description,
-                    cost: step.cost,
-                    time: step.time,
-                    isExpanded: expanded,
-                    isCompleted: completed,
-                    onTap: () => setState(() => _expandedIndex = expanded ? null : index),
-                    onToggleComplete: () => setState(() => _completedSteps[index] = !completed),
-                  );
-                }),
-                const SizedBox(height: EkemaSpacing.xxl),
-                _buildDocumentsCard(procedure),
-              ]),
-            ),
+              ),
+            ],
           ),
+          if (_showCelebrate)
+            Container(
+              color: Colors.black54,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const DuoMascot(size: 120, mood: 'celebrate'),
+                    const SizedBox(height: 24),
+                    DuoXpToast(xp: 50, onDone: () => setState(() => _showCelebrate = false)),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
-      bottomNavigationBar: _buildBottomSheet(context),
     );
   }
 
   Widget _buildHero(BuildContext context, dynamic procedure) {
     return Container(
-      height: 280,
+      height: 220,
       width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF222222), Color(0xFF444444), Color(0xFFFF385C)],
+          colors: [Color(0xFF58CC02), Color(0xFF46A302), Color(0xFF2B7A0B)],
         ),
       ),
       child: SafeArea(
@@ -236,7 +260,7 @@ class _ResultScreenState extends State<ResultScreen> {
       ),
       child: Row(
         children: [
-          _circleBtn(Icons.map_outlined),
+          _circleBtn(Icons.map_outlined, onTap: () => Navigator.pushNamed(context, '/map')),
           const SizedBox(width: EkemaSpacing.sm),
           _circleBtn(Icons.phone_outlined),
           const SizedBox(width: EkemaSpacing.md),
@@ -255,16 +279,19 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  Widget _circleBtn(IconData icon) {
-    return Container(
-      width: 52,
-      height: 52,
-      decoration: BoxDecoration(
-        color: EkemaColors.subtle,
-        shape: BoxShape.circle,
-        border: Border.all(color: EkemaColors.border),
+  Widget _circleBtn(IconData icon, {VoidCallback? onTap}) {
+    return BouncyPress(
+      onTap: onTap,
+      child: Container(
+        width: 52,
+        height: 52,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1F2C33),
+          shape: BoxShape.circle,
+          border: Border.all(color: const Color(0xFF37464F), width: 2),
+        ),
+        child: Icon(icon, color: Colors.white),
       ),
-      child: Icon(icon, color: EkemaColors.textPrimary),
     );
   }
 }

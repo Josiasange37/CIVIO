@@ -13,8 +13,8 @@ class FloatingNavBar extends StatelessWidget {
 
   static const _items = [
     (Icons.home_rounded, 'Accueil'),
-    (Icons.forum_outlined, 'Dialogue'),
-    (Icons.map_outlined, 'Plan'),
+    (Icons.forum_outlined, 'Chat IA'),
+    (Icons.map_outlined, 'Carte'),
     (Icons.edit_document, 'Rédiger'),
   ];
 

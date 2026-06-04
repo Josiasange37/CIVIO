@@ -9,14 +9,15 @@ import 'presentation/screens/home_screen.dart';
 import 'presentation/screens/dialogue_screen.dart';
 import 'presentation/screens/result_screen.dart';
 import 'presentation/screens/document_generator_screen.dart';
+import 'presentation/screens/ai_chat_screen.dart';
+import 'presentation/screens/offline_map_screen.dart';
 
 // OpenRouter API Key - Free tier: 20 requests/minute
 const String openRouterApiKey = 'REDACTED_OPENROUTER_KEY';
 
 void main() {
-  // Initialize dependency injection
   setupDependencies(openRouterApiKey: openRouterApiKey);
-  
+
   runApp(
     MultiProvider(
       providers: [
@@ -44,6 +45,11 @@ class EkemaApp extends StatelessWidget {
         '/dialogue': (context) => const DialogueScreen(),
         '/result': (context) => const ResultScreen(),
         '/document-generator': (context) => const DocumentGeneratorScreen(),
+        '/ai-chat': (context) => const AIChatScreen(),
+        '/map': (context) {
+          final procedure = context.read<ProcedureProvider>().selectedProcedure;
+          return OfflineMapScreen(locations: procedure?.locations ?? []);
+        },
       },
     );
   }

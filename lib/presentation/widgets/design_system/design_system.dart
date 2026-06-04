@@ -1,6 +1,6 @@
 export 'category_grid_tile.dart';
 export 'category_rail.dart';
-export 'chat_choice_card.dart';
+export 'duo_choice_card.dart';
 export 'ekema_bottom_nav.dart';
 export 'ekema_search_pill.dart';
 export 'ekema_tag.dart';

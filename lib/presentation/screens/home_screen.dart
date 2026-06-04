@@ -4,6 +4,7 @@ import '../../core/theme/app_theme.dart';
 import '../providers/procedure_provider.dart';
 import 'history_screen.dart';
 import 'settings_screen.dart';
+import '../widgets/animations/animations.dart';
 import '../widgets/design_system/design_system.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -76,21 +77,29 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Vos démarches,\ncomme un séjour premium.',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontSize: 28,
-                          height: 1.15,
-                          letterSpacing: -0.8,
-                        ),
+                  StaggerFadeSlide(
+                    index: 0,
+                    child: Text(
+                      'Vos démarches,\ncomme un séjour premium.',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontSize: 28,
+                            height: 1.15,
+                            letterSpacing: -0.8,
+                          ),
+                    ),
                   ),
                   const SizedBox(height: EkemaSpacing.xl),
-                  SegmentedSearchBar(
-                    onTap: () => _openCniDialogue(context),
-                    onVoiceTap: () => _openCniDialogue(context),
+                  StaggerFadeSlide(
+                    index: 1,
+                    child: SegmentedSearchBar(
+                      onTap: () => _openCniDialogue(context),
+                      onVoiceTap: () => Navigator.pushNamed(context, '/ai-chat'),
+                    ),
                   ),
                   const SizedBox(height: EkemaSpacing.xxl),
-                  FeatureSpotlightCard(
+                  StaggerFadeSlide(
+                    index: 2,
+                    child: FeatureSpotlightCard(
                     badge: 'Tendance · Yaoundé',
                     title: 'Carte Nationale\nd\'Identité',
                     subtitle: 'Guide pas à pas · 100% hors ligne · IDCAM',
@@ -98,15 +107,56 @@ class _HomeScreenState extends State<HomeScreen> {
                     gradient: const [Color(0xFFFF385C), Color(0xFFE31C5F), Color(0xFFBD1E59)],
                     icon: Icons.badge_outlined,
                     onTap: () => _openCniDialogue(context),
+                    ),
                   ),
                   const SizedBox(height: EkemaSpacing.xxl),
-                  FilterChipRow(
+                  StaggerFadeSlide(
+                    index: 3,
+                    child: BouncyPress(
+                      onTap: () => Navigator.pushNamed(context, '/ai-chat'),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(EkemaSpacing.lg),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1F2C33),
+                          borderRadius: BorderRadius.circular(EkemaRadius.lg),
+                          border: Border.all(color: const Color(0xFF37464F), width: 2),
+                          boxShadow: const [
+                            BoxShadow(color: Color(0xFF37464F), blurRadius: 0, offset: Offset(0, 4)),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            const DuoMascot(size: 56, mood: 'happy'),
+                            const SizedBox(width: EkemaSpacing.lg),
+                            const Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Chat IA EKEMA', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
+                                  Text('Posez n\'importe quelle question', style: TextStyle(color: Colors.white54, fontSize: 13)),
+                                ],
+                              ),
+                            ),
+                            const Icon(Icons.chevron_right, color: Color(0xFF58CC02)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: EkemaSpacing.xxl),
+                  StaggerFadeSlide(
+                    index: 4,
+                    child: FilterChipRow(
                     labels: const ['Populaires', 'CNI', 'Concours', 'Bourses', 'Entreprise'],
                     selectedIndex: _filterIndex,
                     onSelected: (i) => setState(() => _filterIndex = i),
+                    ),
                   ),
                   const SizedBox(height: EkemaSpacing.xl),
-                  Row(
+                  StaggerFadeSlide(
+                    index: 5,
+                    child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -122,10 +172,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+                  ),
                   const SizedBox(height: EkemaSpacing.lg),
-                  SizedBox(
-                    height: 280,
-                    child: ListView(
+                  StaggerFadeSlide(
+                    index: 6,
+                    child: SizedBox(
+                      height: 280,
+                      child: ListView(
                       scrollDirection: Axis.horizontal,
                       clipBehavior: Clip.none,
                       children: [
@@ -159,20 +212,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
+                  ),
                   const SizedBox(height: EkemaSpacing.xxl),
-                  Text(
-                    'Parcourir par thème',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20),
+                  StaggerFadeSlide(
+                    index: 7,
+                    child: Text(
+                      'Parcourir par thème',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20),
+                    ),
                   ),
                   const SizedBox(height: EkemaSpacing.lg),
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: EkemaSpacing.md,
-                    crossAxisSpacing: EkemaSpacing.md,
-                    childAspectRatio: 0.92,
-                    children: [
+                  StaggerFadeSlide(
+                    index: 8,
+                    child: GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: EkemaSpacing.md,
+                      crossAxisSpacing: EkemaSpacing.md,
+                      childAspectRatio: 0.92,
+                      children: [
                       CategoryGridTile(
                         title: 'CNI & Passeport',
                         subtitle: 'IDCAM · PASSCAM',
@@ -201,16 +260,53 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+                  ),
                   const SizedBox(height: EkemaSpacing.xxl),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(EkemaSpacing.xl),
-                    decoration: BoxDecoration(
-                      color: EkemaColors.canvas,
-                      borderRadius: BorderRadius.circular(EkemaRadius.lg),
-                      boxShadow: EkemaShadows.md,
+                  StaggerFadeSlide(
+                    index: 9,
+                    child: BouncyPress(
+                      onTap: () => Navigator.pushNamed(context, '/map'),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(EkemaSpacing.xl),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(colors: [Color(0xFF1CB0F6), Color(0xFF1899D6)]),
+                          borderRadius: BorderRadius.circular(EkemaRadius.lg),
+                          boxShadow: const [
+                            BoxShadow(color: Color(0xFF1899D6), blurRadius: 0, offset: Offset(0, 4)),
+                          ],
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(Icons.map_rounded, color: Colors.white, size: 32),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Carte interactive', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 17)),
+                                  Text('Trouvez les bureaux administratifs', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                                ],
+                              ),
+                            ),
+                            Icon(Icons.chevron_right, color: Colors.white),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: Row(
+                  ),
+                  const SizedBox(height: EkemaSpacing.lg),
+                  StaggerFadeSlide(
+                    index: 10,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(EkemaSpacing.xl),
+                      decoration: BoxDecoration(
+                        color: EkemaColors.canvas,
+                        borderRadius: BorderRadius.circular(EkemaRadius.lg),
+                        boxShadow: EkemaShadows.md,
+                      ),
+                      child: Row(
                       children: [
                         Container(
                           width: 56,
@@ -244,6 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
+                  ),
                 ],
               ),
             ),
@@ -262,15 +359,10 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         break;
       case 1:
-        _openCniDialogue(context);
+        Navigator.pushNamed(context, '/ai-chat');
         break;
       case 2:
-        final provider = context.read<ProcedureProvider>();
-        if (provider.selectedProcedure != null && provider.state == ChatState.completed) {
-          Navigator.pushNamed(context, '/result');
-        } else {
-          _openCniDialogue(context);
-        }
+        Navigator.pushNamed(context, '/map');
         break;
       case 3:
         Navigator.pushNamed(context, '/document-generator');
