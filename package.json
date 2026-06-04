@@ -1,0 +1,15 @@
+{
+  "name": "civio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dev tooling for Civio (Firebase emulators for Linux/desktop local dev).",
+  "scripts": {
+    "emulators": "firebase emulators:start --project civio-ba41e",
+    "emulators:import": "firebase emulators:start --project civio-ba41e --import ./emulator-data",
+    "emulators:export": "firebase emulators:export ./emulator-data --project civio-ba41e",
+    "seed": "node ./firestore-seed/seed.cjs"
+  },
+  "devDependencies": {
+    "firebase-tools": "^13.29.1"
+  }
+}

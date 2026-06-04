@@ -17,6 +17,7 @@ import 'presentation/widgets/demo_mode_banner.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'firebase_options.dart';
 
 // OpenRouter API Key - Free tier: 20 requests/minute
@@ -54,9 +55,15 @@ Future<void> _initializeFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    FirebaseFirestore.instance.settings = const Settings(
-      persistenceEnabled: true,
-    );
+
+    if (AppConfig.isDesktopEmulatorHost && AppConfig.useEmulatorByDefault) {
+      await _connectToEmulators();
+    } else {
+      FirebaseFirestore.instance.settings = const Settings(
+        persistenceEnabled: true,
+      );
+    }
+
     AppConfig.firebaseEnabled = true;
     debugPrint('Civio: Firebase initialized successfully.');
   } catch (e, st) {
@@ -65,6 +72,32 @@ Future<void> _initializeFirebase() async {
     debugPrint('  Error: $e');
     debugPrint('  Stack: $st');
   }
+}
+
+Future<void> _connectToEmulators() async {
+  const host = AppConfig.emulatorHost;
+  const authPort = AppConfig.authEmulatorPort;
+  const fsPort = AppConfig.firestoreEmulatorPort;
+
+  try {
+    await FirebaseAuth.instance.useAuthEmulator(host, authPort);
+  } catch (e) {
+    debugPrint('Civio: useAuthEmulator failed: $e');
+  }
+
+  try {
+    FirebaseFirestore.instance
+        .useFirestoreEmulator(host, fsPort, sslEnabled: false);
+  } catch (e) {
+    debugPrint('Civio: useFirestoreEmulator failed: $e');
+  }
+
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: false,
+  );
+
+  debugPrint('Civio: connected to local Firebase Emulator '
+      '(auth=$host:$authPort, firestore=$host:$fsPort).');
 }
 
 class CivioApp extends StatelessWidget {

@@ -1,61 +1,39 @@
-# Environment variables
-.env
+# Node / npm
+node_modules/
+npm-debug.log
+.npm/
 
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-.idea/
-.project
-.settings/
-.vscode/
-*.iml
+# Firebase emulator data
+emulator-data/
+ui-debug.log
+firebase-debug.log
+firestore-debug.log
+pubsub-debug.log
+database-debug.log
 
-# Flutter/Dart
+# Flutter
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
+build/
 .pub-cache/
 .pub/
-build/
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Linux
+build/linux/
 
 # Android
-*.apk
-*.ap_
-*.dex
-*.keystore
-bin/
-gen/
+build/app/
+.gradle/
 local.properties
-proguard-project.txt
-proguard-rules.pro
-tests/
 
-# iOS
-*.mode1v3
-*.mode2v3
-*.perspectivev3
-*.pbxuser
-DerivedData/
-build/
-DerivedData/
-*.moved-aside
-*.xccheckout
-*.xcworkspace
-!default.xcworkspace
-xcuserdata/
-!default.xcuserdatad
-Frameworks/
-Podfile.lock
-Pods/
-ServiceDefinitions.json
-
-# Web
-.web/
+# Secrets / env
+.env
+.env.local
+*.key
+*.pem

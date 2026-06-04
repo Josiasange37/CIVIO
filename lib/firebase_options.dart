@@ -13,20 +13,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
       case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return linux;
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -57,5 +46,16 @@ class DefaultFirebaseOptions {
     projectId: 'civio-ba41e',
     storageBucket: 'civio-ba41e.firebasestorage.app',
     iosBundleId: 'com.civio.civio',
+  );
+
+  // Used for Linux / macOS / Windows desktop dev with the local Firebase
+  // Emulator (see firebase.json). The emulator does not validate apiKey or
+  // appId — any non-empty string is fine — so we mirror the web values.
+  static const FirebaseOptions linux = FirebaseOptions(
+    apiKey: 'AIzaSyDuwQTnsbzX0NJScGrxWk1eIdThZktNxzo',
+    appId: '1:458071945684:web:f1a86cb44146980226e641',
+    messagingSenderId: '458071945684',
+    projectId: 'civio-ba41e',
+    storageBucket: 'civio-ba41e.firebasestorage.app',
   );
 }
