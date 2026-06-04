@@ -42,7 +42,7 @@ class _ResultScreenState extends State<ResultScreen> {
               SliverToBoxAdapter(child: _buildHero(context, procedure)),
               SliverToBoxAdapter(child: _buildStatsRow(procedure)),
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.xl, EkemaSpacing.lg, 120),
+                padding: const EdgeInsets.fromLTRB(CivioSpacing.lg, CivioSpacing.xl, CivioSpacing.lg, 120),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     const StaggerFadeSlide(
@@ -52,7 +52,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         mascot: DuoMascot(size: 64, mood: 'celebrate'),
                       ),
                     ),
-                    const SizedBox(height: EkemaSpacing.xl),
+                    const SizedBox(height: CivioSpacing.xl),
                     ...procedure.steps.asMap().entries.map((entry) {
                       final index = entry.key;
                       final step = entry.value;
@@ -70,7 +70,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         onToggleComplete: () => setState(() => _completedSteps[index] = !completed),
                       );
                     }),
-                    const SizedBox(height: EkemaSpacing.xxl),
+                    const SizedBox(height: CivioSpacing.xxl),
                     _buildDocumentsCard(procedure),
                   ]),
                 ),
@@ -108,7 +108,7 @@ class _ResultScreenState extends State<ResultScreen> {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.all(EkemaSpacing.xl),
+          padding: const EdgeInsets.all(CivioSpacing.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -123,7 +123,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                      borderRadius: BorderRadius.circular(CivioRadius.pill),
                     ),
                     child: const Row(
                       children: [
@@ -163,11 +163,11 @@ class _ResultScreenState extends State<ResultScreen> {
     return Transform.translate(
       offset: const Offset(0, -28),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.lg),
+        padding: const EdgeInsets.symmetric(horizontal: CivioSpacing.lg),
         child: Row(
           children: [
             Expanded(child: _statCard(Icons.format_list_numbered, '${steps.length} étapes', 'Parcours')),
-            const SizedBox(width: EkemaSpacing.md),
+            const SizedBox(width: CivioSpacing.md),
             Expanded(
               child: _statCard(
                 Icons.payments_outlined,
@@ -175,7 +175,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 'Coût estimé',
               ),
             ),
-            const SizedBox(width: EkemaSpacing.md),
+            const SizedBox(width: CivioSpacing.md),
             Expanded(
               child: _statCard(
                 Icons.schedule,
@@ -191,24 +191,24 @@ class _ResultScreenState extends State<ResultScreen> {
 
   Widget _statCard(IconData icon, String value, String label) {
     return Container(
-      padding: const EdgeInsets.all(EkemaSpacing.lg),
+      padding: const EdgeInsets.all(CivioSpacing.lg),
       decoration: BoxDecoration(
-        color: EkemaColors.canvas,
-        borderRadius: BorderRadius.circular(EkemaRadius.md),
-        boxShadow: EkemaShadows.md,
+        color: CivioColors.canvas,
+        borderRadius: BorderRadius.circular(CivioRadius.md),
+        boxShadow: CivioShadows.md,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: EkemaColors.brand),
-          const SizedBox(height: EkemaSpacing.sm),
+          Icon(icon, size: 20, color: CivioColors.brand),
+          const SizedBox(height: CivioSpacing.sm),
           Text(
             value,
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          Text(label, style: const TextStyle(fontSize: 11, color: EkemaColors.textSecondary)),
+          Text(label, style: const TextStyle(fontSize: 11, color: CivioColors.textSecondary)),
         ],
       ),
     );
@@ -217,29 +217,29 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget _buildDocumentsCard(dynamic procedure) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(EkemaSpacing.xl),
+      padding: const EdgeInsets.all(CivioSpacing.xl),
       decoration: BoxDecoration(
-        color: EkemaColors.canvas,
-        borderRadius: BorderRadius.circular(EkemaRadius.lg),
-        boxShadow: EkemaShadows.md,
+        color: CivioColors.canvas,
+        borderRadius: BorderRadius.circular(CivioRadius.lg),
+        boxShadow: CivioShadows.md,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('Documents à préparer', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-          const SizedBox(height: EkemaSpacing.lg),
+          const SizedBox(height: CivioSpacing.lg),
           ...(procedure.documents as List).map<Widget>((doc) {
             return Container(
-              margin: const EdgeInsets.only(bottom: EkemaSpacing.sm),
-              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              margin: const EdgeInsets.only(bottom: CivioSpacing.sm),
+              padding: const EdgeInsets.all(CivioSpacing.lg),
               decoration: BoxDecoration(
-                color: EkemaColors.infoLight,
-                borderRadius: BorderRadius.circular(EkemaRadius.sm),
+                color: CivioColors.infoLight,
+                borderRadius: BorderRadius.circular(CivioRadius.sm),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.description_outlined, color: EkemaColors.info),
-                  const SizedBox(width: EkemaSpacing.md),
+                  const Icon(Icons.description_outlined, color: CivioColors.info),
+                  const SizedBox(width: CivioSpacing.md),
                   Expanded(child: Text(doc, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
                 ],
               ),
@@ -252,24 +252,24 @@ class _ResultScreenState extends State<ResultScreen> {
 
   Widget _buildBottomSheet(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.lg, EkemaSpacing.lg, EkemaSpacing.xl),
+      padding: const EdgeInsets.fromLTRB(CivioSpacing.lg, CivioSpacing.lg, CivioSpacing.lg, CivioSpacing.xl),
       decoration: BoxDecoration(
-        color: EkemaColors.canvas,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(EkemaRadius.lg)),
-        boxShadow: EkemaShadows.lg,
+        color: CivioColors.canvas,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(CivioRadius.lg)),
+        boxShadow: CivioShadows.lg,
       ),
       child: Row(
         children: [
           _circleBtn(Icons.map_outlined, onTap: () => Navigator.pushNamed(context, '/map')),
-          const SizedBox(width: EkemaSpacing.sm),
+          const SizedBox(width: CivioSpacing.sm),
           _circleBtn(Icons.phone_outlined),
-          const SizedBox(width: EkemaSpacing.md),
+          const SizedBox(width: CivioSpacing.md),
           Expanded(
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/document-generator'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 18),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(EkemaRadius.sm)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CivioRadius.sm)),
               ),
               child: const Text('Générer un document'),
             ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458071945684",
+    "project_id": "civio-ba41e",
+    "storage_bucket": "civio-ba41e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458071945684:android:f1a86cb44146980226e641",
+        "android_client_info": {
+          "package_name": "com.civio.civio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuwQTnsbzX0NJScGrxWk1eIdThZktNxzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

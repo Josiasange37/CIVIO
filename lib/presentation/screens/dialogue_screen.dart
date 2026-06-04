@@ -76,7 +76,7 @@ class _DialogueScreenState extends State<DialogueScreen> {
                 Expanded(
                   child: ListView.builder(
                     controller: _scrollController,
-                    padding: const EdgeInsets.all(EkemaSpacing.lg),
+                    padding: const EdgeInsets.all(CivioSpacing.lg),
                     itemCount: provider.currentQuestionIndex + 1,
                     itemBuilder: (context, index) {
                       final question = procedure.questions[index];
@@ -106,7 +106,7 @@ class _DialogueScreenState extends State<DialogueScreen> {
                             ),
                           ),
                           if (index == provider.currentQuestionIndex) ...[
-                            const SizedBox(height: EkemaSpacing.lg),
+                            const SizedBox(height: CivioSpacing.lg),
                             ...question.options.asMap().entries.map((e) {
                               return StaggerFadeSlide(
                                 index: e.key + 2,
@@ -119,7 +119,7 @@ class _DialogueScreenState extends State<DialogueScreen> {
                               );
                             }),
                           ],
-                          const SizedBox(height: EkemaSpacing.xxl),
+                          const SizedBox(height: CivioSpacing.xxl),
                         ],
                       );
                     },
@@ -143,7 +143,7 @@ class _DialogueScreenState extends State<DialogueScreen> {
 
   Widget _buildLessonHeader(BuildContext context, dynamic procedure, ProcedureProvider provider) {
     return Container(
-      padding: const EdgeInsets.all(EkemaSpacing.lg),
+      padding: const EdgeInsets.all(CivioSpacing.lg),
       decoration: const BoxDecoration(
         color: Color(0xFF1F2C33),
         border: Border(bottom: BorderSide(color: Color(0xFF37464F), width: 2)),
@@ -190,8 +190,8 @@ class _DialogueScreenState extends State<DialogueScreen> {
   Widget _buildVoiceDock(BuildContext context) {
     final voice = context.watch<VoiceProvider>();
     return Container(
-      margin: const EdgeInsets.all(EkemaSpacing.lg),
-      padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.lg, vertical: EkemaSpacing.md),
+      margin: const EdgeInsets.all(CivioSpacing.lg),
+      padding: const EdgeInsets.symmetric(horizontal: CivioSpacing.lg, vertical: CivioSpacing.md),
       decoration: BoxDecoration(
         color: const Color(0xFF1F2C33),
         borderRadius: BorderRadius.circular(20),

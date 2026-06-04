@@ -74,7 +74,7 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> with TickerProvider
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.ekema.app',
+                userAgentPackageName: 'com.civio.app',
               ),
               MarkerLayer(
                 markers: List.generate(locs.length, (i) {
@@ -99,7 +99,7 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> with TickerProvider
           ),
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              padding: const EdgeInsets.all(CivioSpacing.lg),
               child: Row(
                 children: [
                   BouncyPress(
@@ -114,8 +114,8 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> with TickerProvider
           ),
           const Positioned(
             top: 100,
-            left: EkemaSpacing.lg,
-            right: EkemaSpacing.lg,
+            left: CivioSpacing.lg,
+            right: CivioSpacing.lg,
             child: StaggerFadeSlide(
               index: 0,
               child: MascotSpeechBubble(
@@ -147,7 +147,7 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> with TickerProvider
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(EkemaSpacing.lg),
+                      padding: const EdgeInsets.all(CivioSpacing.lg),
                       child: Row(
                         children: [
                           const Icon(Icons.place, color: Color(0xFF58CC02), size: 22),
@@ -206,7 +206,7 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> with TickerProvider
         color: const Color(0xFF1F2C33),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: const Color(0xFF37464F), width: 2),
-        boxShadow: EkemaShadows.md,
+        boxShadow: CivioShadows.md,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -247,12 +247,12 @@ class _MapPin extends StatelessWidget {
           width: active ? 44 : 36,
           height: active ? 44 : 36,
           decoration: BoxDecoration(
-            color: active ? const Color(0xFF58CC02) : EkemaColors.brand,
+            color: active ? const Color(0xFF58CC02) : CivioColors.brand,
             shape: BoxShape.circle,
             border: Border.all(color: Colors.white, width: 3),
             boxShadow: [
               BoxShadow(
-                color: (active ? const Color(0xFF58CC02) : EkemaColors.brand).withValues(alpha: 0.5),
+                color: (active ? const Color(0xFF58CC02) : CivioColors.brand).withValues(alpha: 0.5),
                 blurRadius: 12,
                 spreadRadius: active ? 4 : 0,
               ),
@@ -281,7 +281,7 @@ class _OfficeCard extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.elasticOut,
-      padding: const EdgeInsets.all(EkemaSpacing.xl),
+      padding: const EdgeInsets.all(CivioSpacing.xl),
       decoration: BoxDecoration(
         color: selected ? const Color(0xFFD7FFB8) : const Color(0xFF131F24),
         borderRadius: BorderRadius.circular(20),

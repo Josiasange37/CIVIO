@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 
-enum EkemaTagVariant { cost, time, doc, defaultTag }
+enum CivioTagVariant { cost, time, doc, defaultTag }
 
-class EkemaTag extends StatelessWidget {
+class CivioTag extends StatelessWidget {
   final IconData icon;
   final String label;
-  final EkemaTagVariant variant;
+  final CivioTagVariant variant;
 
-  const EkemaTag({
+  const CivioTag({
     super.key,
     required this.icon,
     required this.label,
-    this.variant = EkemaTagVariant.defaultTag,
+    this.variant = CivioTagVariant.defaultTag,
   });
 
   (Color bg, Color fg) get _colors => switch (variant) {
-        EkemaTagVariant.cost => (EkemaColors.warningLight, EkemaColors.warning),
-        EkemaTagVariant.time => (EkemaColors.brandLight, EkemaColors.brand),
-        EkemaTagVariant.doc => (EkemaColors.infoLight, EkemaColors.info),
-        EkemaTagVariant.defaultTag => (EkemaColors.subtle, EkemaColors.textSecondary),
+        CivioTagVariant.cost => (CivioColors.warningLight, CivioColors.warning),
+        CivioTagVariant.time => (CivioColors.brandLight, CivioColors.brand),
+        CivioTagVariant.doc => (CivioColors.infoLight, CivioColors.info),
+        CivioTagVariant.defaultTag => (CivioColors.subtle, CivioColors.textSecondary),
       };
 
   @override
@@ -29,7 +29,7 @@ class EkemaTag extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(EkemaRadius.pill),
+        borderRadius: BorderRadius.circular(CivioRadius.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

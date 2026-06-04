@@ -111,7 +111,7 @@ class _AIChatScreenState extends State<AIChatScreen> with TickerProviderStateMix
     };
 
     return Container(
-      padding: const EdgeInsets.all(EkemaSpacing.lg),
+      padding: const EdgeInsets.all(CivioSpacing.lg),
       child: Column(
         children: [
           Row(
@@ -160,7 +160,7 @@ class _AIChatScreenState extends State<AIChatScreen> with TickerProviderStateMix
 
   Widget _buildWelcome(BuildContext context, AIChatProvider chat) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(EkemaSpacing.lg),
+      padding: const EdgeInsets.all(CivioSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -171,7 +171,7 @@ class _AIChatScreenState extends State<AIChatScreen> with TickerProviderStateMix
               mascot: DuoMascot(size: 80, mood: chat.isOnline ? 'happy' : 'thinking'),
             ),
           ),
-          const SizedBox(height: EkemaSpacing.xxl),
+          const SizedBox(height: CivioSpacing.xxl),
           const StaggerFadeSlide(
             index: 1,
             child: Text(
@@ -179,7 +179,7 @@ class _AIChatScreenState extends State<AIChatScreen> with TickerProviderStateMix
               style: TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w700),
             ),
           ),
-          const SizedBox(height: EkemaSpacing.md),
+          const SizedBox(height: CivioSpacing.md),
           ...List.generate(_quickPrompts.length, (i) {
             final (prompt, icon) = _quickPrompts[i];
             return StaggerFadeSlide(
@@ -201,7 +201,7 @@ class _AIChatScreenState extends State<AIChatScreen> with TickerProviderStateMix
 
     return ListView.builder(
       controller: _scroll,
-      padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.lg, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: CivioSpacing.lg, vertical: 8),
       itemCount: chat.messages.length + (chat.isLoading ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == chat.messages.length && chat.isLoading) {

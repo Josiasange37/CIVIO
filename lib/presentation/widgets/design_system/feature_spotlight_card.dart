@@ -30,13 +30,13 @@ class FeatureSpotlightCard extends StatelessWidget {
         height: 220,
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(EkemaRadius.lg),
+          borderRadius: BorderRadius.circular(CivioRadius.lg),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: gradient,
           ),
-          boxShadow: EkemaShadows.lg,
+          boxShadow: CivioShadows.lg,
         ),
         child: Stack(
           children: [
@@ -46,7 +46,7 @@ class FeatureSpotlightCard extends StatelessWidget {
               child: Icon(icon, size: 140, color: Colors.white.withValues(alpha: 0.15)),
             ),
             Padding(
-              padding: const EdgeInsets.all(EkemaSpacing.xl),
+              padding: const EdgeInsets.all(CivioSpacing.xl),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -54,7 +54,7 @@ class FeatureSpotlightCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.22),
-                      borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                      borderRadius: BorderRadius.circular(CivioRadius.pill),
                     ),
                     child: Text(
                       badge,
@@ -86,12 +86,12 @@ class FeatureSpotlightCard extends StatelessWidget {
                       height: 1.35,
                     ),
                   ),
-                  const SizedBox(height: EkemaSpacing.lg),
+                  const SizedBox(height: CivioSpacing.lg),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(EkemaRadius.sm),
+                      borderRadius: BorderRadius.circular(CivioRadius.sm),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -99,13 +99,13 @@ class FeatureSpotlightCard extends StatelessWidget {
                         Text(
                           ctaLabel,
                           style: const TextStyle(
-                            color: EkemaColors.textPrimary,
+                            color: CivioColors.textPrimary,
                             fontWeight: FontWeight.w800,
                             fontSize: 14,
                           ),
                         ),
                         const SizedBox(width: 6),
-                        const Icon(Icons.arrow_forward_rounded, size: 18, color: EkemaColors.brand),
+                        const Icon(Icons.arrow_forward_rounded, size: 18, color: CivioColors.brand),
                       ],
                     ),
                   ),

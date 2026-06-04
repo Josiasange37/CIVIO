@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// Airbnb-inspired premium token system for Civio v2.
-class EkemaColors {
-  EkemaColors._();
+class CivioColors {
+  CivioColors._();
 
   static const Color brand = Color(0xFFFF385C);
   static const Color brandHover = Color(0xFFE31C5F);
@@ -32,8 +32,8 @@ class EkemaColors {
   static const Color categoryWrite = Color(0xFFF5F5F5);
 }
 
-class EkemaSpacing {
-  EkemaSpacing._();
+class CivioSpacing {
+  CivioSpacing._();
   static const double xs = 4;
   static const double sm = 8;
   static const double md = 12;
@@ -42,16 +42,16 @@ class EkemaSpacing {
   static const double xxl = 32;
 }
 
-class EkemaRadius {
-  EkemaRadius._();
+class CivioRadius {
+  CivioRadius._();
   static const double sm = 12;
   static const double md = 16;
   static const double lg = 24;
   static const double pill = 999;
 }
 
-class EkemaShadows {
-  EkemaShadows._();
+class CivioShadows {
+  CivioShadows._();
 
   static List<BoxShadow> get sm => [
         BoxShadow(
@@ -78,47 +78,47 @@ class EkemaShadows {
       ];
 }
 
-class EkemaTheme {
+class CivioTheme {
   static TextTheme get _textTheme {
     final base = GoogleFonts.plusJakartaSansTextTheme();
     return base.copyWith(
       displayLarge: GoogleFonts.plusJakartaSans(
         fontSize: 28,
         fontWeight: FontWeight.w800,
-        color: EkemaColors.textPrimary,
+        color: CivioColors.textPrimary,
         letterSpacing: -0.5,
       ),
       headlineMedium: GoogleFonts.plusJakartaSans(
         fontSize: 22,
         fontWeight: FontWeight.w700,
-        color: EkemaColors.textPrimary,
+        color: CivioColors.textPrimary,
       ),
       titleLarge: GoogleFonts.plusJakartaSans(
         fontSize: 18,
         fontWeight: FontWeight.w700,
-        color: EkemaColors.textPrimary,
+        color: CivioColors.textPrimary,
       ),
       titleMedium: GoogleFonts.plusJakartaSans(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: EkemaColors.textPrimary,
+        color: CivioColors.textPrimary,
       ),
       bodyLarge: GoogleFonts.plusJakartaSans(
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: EkemaColors.textPrimary,
+        color: CivioColors.textPrimary,
         height: 1.5,
       ),
       bodyMedium: GoogleFonts.plusJakartaSans(
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: EkemaColors.textPrimary,
+        color: CivioColors.textPrimary,
         height: 1.45,
       ),
       labelSmall: GoogleFonts.plusJakartaSans(
         fontSize: 11,
         fontWeight: FontWeight.w600,
-        color: EkemaColors.textSecondary,
+        color: CivioColors.textSecondary,
         letterSpacing: 0.5,
       ),
     );
@@ -127,64 +127,64 @@ class EkemaTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: EkemaColors.canvas,
+      scaffoldBackgroundColor: CivioColors.canvas,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: EkemaColors.brand,
-        primary: EkemaColors.brand,
-        onPrimary: EkemaColors.textInverse,
-        surface: EkemaColors.canvas,
-        onSurface: EkemaColors.textPrimary,
-        outline: EkemaColors.border,
+        seedColor: CivioColors.brand,
+        primary: CivioColors.brand,
+        onPrimary: CivioColors.textInverse,
+        surface: CivioColors.canvas,
+        onSurface: CivioColors.textPrimary,
+        outline: CivioColors.border,
       ),
       textTheme: _textTheme,
       appBarTheme: AppBarTheme(
-        backgroundColor: EkemaColors.canvas,
+        backgroundColor: CivioColors.canvas,
         elevation: 0,
         scrolledUnderElevation: 0,
-        foregroundColor: EkemaColors.textPrimary,
+        foregroundColor: CivioColors.textPrimary,
         titleTextStyle: GoogleFonts.plusJakartaSans(
           fontSize: 16,
           fontWeight: FontWeight.w700,
-          color: EkemaColors.textPrimary,
+          color: CivioColors.textPrimary,
         ),
       ),
       cardTheme: CardThemeData(
-        color: EkemaColors.canvas,
+        color: CivioColors.canvas,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(EkemaRadius.md),
+          borderRadius: BorderRadius.circular(CivioRadius.md),
         ),
         shadowColor: Colors.black.withValues(alpha: 0.08),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: EkemaColors.subtle,
+        fillColor: CivioColors.subtle,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(EkemaRadius.sm),
-          borderSide: const BorderSide(color: EkemaColors.border),
+          borderRadius: BorderRadius.circular(CivioRadius.sm),
+          borderSide: const BorderSide(color: CivioColors.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(EkemaRadius.sm),
-          borderSide: const BorderSide(color: EkemaColors.border),
+          borderRadius: BorderRadius.circular(CivioRadius.sm),
+          borderSide: const BorderSide(color: CivioColors.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(EkemaRadius.sm),
-          borderSide: const BorderSide(color: EkemaColors.brand, width: 1.5),
+          borderRadius: BorderRadius.circular(CivioRadius.sm),
+          borderSide: const BorderSide(color: CivioColors.brand, width: 1.5),
         ),
         hintStyle: GoogleFonts.plusJakartaSans(
-          color: EkemaColors.textSecondary,
+          color: CivioColors.textSecondary,
           fontSize: 15,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: EkemaColors.brand,
-          foregroundColor: EkemaColors.textInverse,
+          backgroundColor: CivioColors.brand,
+          foregroundColor: CivioColors.textInverse,
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(EkemaRadius.sm),
+            borderRadius: BorderRadius.circular(CivioRadius.sm),
           ),
           textStyle: GoogleFonts.plusJakartaSans(
             fontWeight: FontWeight.w700,
@@ -194,11 +194,11 @@ class EkemaTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: EkemaColors.textPrimary,
-          side: const BorderSide(color: EkemaColors.textPrimary, width: 1.5),
+          foregroundColor: CivioColors.textPrimary,
+          side: const BorderSide(color: CivioColors.textPrimary, width: 1.5),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(EkemaRadius.sm),
+            borderRadius: BorderRadius.circular(CivioRadius.sm),
           ),
           textStyle: GoogleFonts.plusJakartaSans(
             fontWeight: FontWeight.w700,
@@ -208,28 +208,28 @@ class EkemaTheme {
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return EkemaColors.brand;
-          return EkemaColors.textSecondary;
+          if (states.contains(WidgetState.selected)) return CivioColors.brand;
+          return CivioColors.textSecondary;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return EkemaColors.brand.withValues(alpha: 0.35);
+            return CivioColors.brand.withValues(alpha: 0.35);
           }
-          return EkemaColors.border;
+          return CivioColors.border;
         }),
       ),
       dividerTheme: const DividerThemeData(
-        color: EkemaColors.border,
+        color: CivioColors.border,
         thickness: 1,
       ),
     );
   }
 }
 
-/// Legacy alias — migrate imports to [EkemaColors].
-@Deprecated('Use EkemaColors instead')
-typedef AppColors = EkemaColors;
+/// Legacy alias — migrate imports to [CivioColors].
+@Deprecated('Use CivioColors instead')
+typedef AppColors = CivioColors;
 
-/// Legacy alias — migrate imports to [EkemaTheme].
-@Deprecated('Use EkemaTheme instead')
-typedef AppTheme = EkemaTheme;
+/// Legacy alias — migrate imports to [CivioTheme].
+@Deprecated('Use CivioTheme instead')
+typedef AppTheme = CivioTheme;

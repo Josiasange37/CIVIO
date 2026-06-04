@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 
-class EkemaBottomNav extends StatelessWidget {
+class CivioBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int>? onTap;
 
-  const EkemaBottomNav({
+  const CivioBottomNav({
     super.key,
     required this.currentIndex,
     this.onTap,
@@ -21,10 +21,10 @@ class EkemaBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.md, EkemaSpacing.lg, EkemaSpacing.xl),
+      padding: const EdgeInsets.fromLTRB(CivioSpacing.lg, CivioSpacing.md, CivioSpacing.lg, CivioSpacing.xl),
       decoration: BoxDecoration(
-        color: EkemaColors.canvas,
-        border: Border(top: BorderSide(color: EkemaColors.border.withValues(alpha: 0.8))),
+        color: CivioColors.canvas,
+        border: Border(top: BorderSide(color: CivioColors.border.withValues(alpha: 0.8))),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -40,16 +40,16 @@ class EkemaBottomNav extends StatelessWidget {
           final item = _items[index];
           return InkWell(
             onTap: onTap != null ? () => onTap!(index) : null,
-            borderRadius: BorderRadius.circular(EkemaRadius.pill),
+            borderRadius: BorderRadius.circular(CivioRadius.pill),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.md, vertical: EkemaSpacing.sm),
+              padding: const EdgeInsets.symmetric(horizontal: CivioSpacing.md, vertical: CivioSpacing.sm),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
                     active ? item.$2 : item.$1,
                     size: 24,
-                    color: active ? EkemaColors.brand : EkemaColors.textSecondary,
+                    color: active ? CivioColors.brand : CivioColors.textSecondary,
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -57,7 +57,7 @@ class EkemaBottomNav extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                      color: active ? EkemaColors.brand : EkemaColors.textSecondary,
+                      color: active ? CivioColors.brand : CivioColors.textSecondary,
                     ),
                   ),
                 ],

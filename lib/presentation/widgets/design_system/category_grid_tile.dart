@@ -25,16 +25,16 @@ class CategoryGridTile extends StatelessWidget {
         aspectRatio: 0.92,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(EkemaRadius.lg),
+            borderRadius: BorderRadius.circular(CivioRadius.lg),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: gradient,
             ),
-            boxShadow: EkemaShadows.sm,
+            boxShadow: CivioShadows.sm,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(EkemaSpacing.lg),
+            padding: const EdgeInsets.all(CivioSpacing.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

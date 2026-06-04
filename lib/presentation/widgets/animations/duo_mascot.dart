@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 
-/// Ekema mascot — Duolingo-style bouncing guide character.
+/// Civio mascot — Duolingo-style bouncing guide character.
 class DuoMascot extends StatefulWidget {
   final double size;
   final String? mood; // happy, thinking, celebrate
@@ -33,7 +33,7 @@ class _DuoMascotState extends State<DuoMascot> with SingleTickerProviderStateMix
   Color get _bodyColor => switch (widget.mood) {
         'celebrate' => const Color(0xFF58CC02),
         'thinking' => const Color(0xFF1CB0F6),
-        _ => EkemaColors.brand,
+        _ => CivioColors.brand,
       };
 
   @override

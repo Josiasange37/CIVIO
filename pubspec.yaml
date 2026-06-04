@@ -28,6 +28,9 @@ dependencies:
   http: ^1.1.0
   connectivity_plus: ^5.0.2
   get_it: ^7.6.4
+  firebase_core: ^4.10.0
+  cloud_firestore: ^6.5.0
+  flutter_svg: ^2.0.10
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +43,7 @@ flutter:
     - assets/json/procedures.json
     - assets/json/mock_cni.json
     - assets/json/mock_ens.json
+    - assets/civio_logo.svg
     # - assets/map/
   # fonts:
   #   - family: Poppins

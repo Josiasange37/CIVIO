@@ -28,13 +28,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EkemaColors.subtle,
+      backgroundColor: CivioColors.subtle,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 140,
             pinned: true,
-            backgroundColor: EkemaColors.brand,
+            backgroundColor: CivioColors.brand,
             foregroundColor: Colors.white,
             leading: IconButton(
               icon: const Icon(Icons.close_rounded),
@@ -45,7 +45,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [EkemaColors.brand, EkemaColors.brandHover],
+                    colors: [CivioColors.brand, CivioColors.brandHover],
                   ),
                 ),
               ),
@@ -55,7 +55,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             SliverFillRemaining(child: _buildEmptyState())
           else
             SliverPadding(
-              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              padding: const EdgeInsets.all(CivioSpacing.lg),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -64,7 +64,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     final date = DateTime.parse(item['date'] as String);
                     final (icon, gradient) = _style(type);
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: EkemaSpacing.lg),
+                      padding: const EdgeInsets.only(bottom: CivioSpacing.lg),
                       child: ProcedureListingCard(
                         title: item['title'] as String,
                         location: '${date.day}/${date.month}/${date.year} · $type',
@@ -88,7 +88,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(EkemaSpacing.xxl),
+        padding: const EdgeInsets.all(CivioSpacing.xxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -96,20 +96,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: EkemaColors.brandLight,
+                color: CivioColors.brandLight,
                 borderRadius: BorderRadius.circular(28),
               ),
-              child: const Icon(Icons.history_rounded, size: 48, color: EkemaColors.brand),
+              child: const Icon(Icons.history_rounded, size: 48, color: CivioColors.brand),
             ),
-            const SizedBox(height: EkemaSpacing.xl),
+            const SizedBox(height: CivioSpacing.xl),
             Text('Aucune démarche', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 22)),
-            const SizedBox(height: EkemaSpacing.sm),
+            const SizedBox(height: CivioSpacing.sm),
             Text(
               'Vos parcours sauvegardés\napparaîtront ici.',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: EkemaColors.textSecondary),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: CivioColors.textSecondary),
             ),
-            const SizedBox(height: EkemaSpacing.xxl),
+            const SizedBox(height: CivioSpacing.xxl),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('Explorer les démarches'),
@@ -122,11 +122,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   (IconData, List<Color>) _style(String type) {
     if (type == 'document') {
-      return (Icons.description_outlined, [EkemaColors.info, const Color(0xFF004CC4)]);
+      return (Icons.description_outlined, [CivioColors.info, const Color(0xFF004CC4)]);
     }
     if (type == 'procedure') {
-      return (Icons.assignment_outlined, [EkemaColors.brand, EkemaColors.brandHover]);
+      return (Icons.assignment_outlined, [CivioColors.brand, CivioColors.brandHover]);
     }
-    return (Icons.chat_bubble_outline, [const Color(0xFF888888), EkemaColors.textPrimary]);
+    return (Icons.chat_bubble_outline, [const Color(0xFF888888), CivioColors.textPrimary]);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
-import 'ekema_tag.dart';
+import 'civio_tag.dart';
 
 class StepAccordionCard extends StatelessWidget {
   final int index;
@@ -29,16 +29,16 @@ class StepAccordionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: EkemaSpacing.md),
+      padding: const EdgeInsets.only(bottom: CivioSpacing.md),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOutCubic,
         decoration: BoxDecoration(
-          color: EkemaColors.canvas,
-          borderRadius: BorderRadius.circular(EkemaRadius.lg),
-          boxShadow: EkemaShadows.md,
+          color: CivioColors.canvas,
+          borderRadius: BorderRadius.circular(CivioRadius.lg),
+          boxShadow: CivioShadows.md,
           border: Border.all(
-            color: isCompleted ? EkemaColors.brand : Colors.transparent,
+            color: isCompleted ? CivioColors.brand : Colors.transparent,
             width: 2,
           ),
         ),
@@ -46,9 +46,9 @@ class StepAccordionCard extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(EkemaRadius.lg),
+            borderRadius: BorderRadius.circular(CivioRadius.lg),
             child: Padding(
-              padding: const EdgeInsets.all(EkemaSpacing.xl),
+              padding: const EdgeInsets.all(CivioSpacing.xl),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -60,8 +60,8 @@ class StepAccordionCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: isCompleted
-                                ? [EkemaColors.brand, EkemaColors.brandHover]
-                                : [EkemaColors.brandLight, EkemaColors.brandLight],
+                                ? [CivioColors.brand, CivioColors.brandHover]
+                                : [CivioColors.brandLight, CivioColors.brandLight],
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -78,48 +78,48 @@ class StepAccordionCard extends StatelessWidget {
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w800,
-                                        color: EkemaColors.brand,
+                                        color: CivioColors.brand,
                                       ),
                                     ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: EkemaSpacing.lg),
+                      const SizedBox(width: CivioSpacing.lg),
                       Expanded(
                         child: Text(
                           title,
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w800,
-                            color: EkemaColors.textPrimary,
+                            color: CivioColors.textPrimary,
                           ),
                         ),
                       ),
                       Icon(
                         isExpanded ? Icons.expand_less : Icons.expand_more,
-                        color: EkemaColors.textSecondary,
+                        color: CivioColors.textSecondary,
                       ),
                     ],
                   ),
                   if (isExpanded) ...[
-                    const SizedBox(height: EkemaSpacing.lg),
+                    const SizedBox(height: CivioSpacing.lg),
                     Text(
                       description,
                       style: const TextStyle(
                         fontSize: 15,
                         height: 1.55,
-                        color: EkemaColors.textSecondary,
+                        color: CivioColors.textSecondary,
                       ),
                     ),
-                    const SizedBox(height: EkemaSpacing.lg),
+                    const SizedBox(height: CivioSpacing.lg),
                     Wrap(
-                      spacing: EkemaSpacing.sm,
-                      runSpacing: EkemaSpacing.sm,
+                      spacing: CivioSpacing.sm,
+                      runSpacing: CivioSpacing.sm,
                       children: [
                         if (cost != '0 FCFA')
-                          EkemaTag(icon: Icons.payments_outlined, label: cost, variant: EkemaTagVariant.cost),
-                        EkemaTag(icon: Icons.schedule, label: time, variant: EkemaTagVariant.time),
+                          CivioTag(icon: Icons.payments_outlined, label: cost, variant: CivioTagVariant.cost),
+                        CivioTag(icon: Icons.schedule, label: time, variant: CivioTagVariant.time),
                       ],
                     ),
                   ],

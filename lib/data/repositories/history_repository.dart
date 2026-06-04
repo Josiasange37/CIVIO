@@ -6,7 +6,7 @@ class HistoryRepository {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('ekema_history.db');
+    _database = await _initDB('civio_history.db');
     return _database!;
   }
 

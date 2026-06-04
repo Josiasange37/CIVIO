@@ -17,13 +17,13 @@ class SegmentedSearchBar extends StatelessWidget {
     return Material(
       elevation: 8,
       shadowColor: Colors.black.withValues(alpha: 0.15),
-      borderRadius: BorderRadius.circular(EkemaRadius.lg),
-      color: EkemaColors.canvas,
+      borderRadius: BorderRadius.circular(CivioRadius.lg),
+      color: CivioColors.canvas,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(EkemaRadius.lg),
+        borderRadius: BorderRadius.circular(CivioRadius.lg),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: EkemaSpacing.lg, horizontal: EkemaSpacing.xl),
+          padding: const EdgeInsets.symmetric(vertical: CivioSpacing.lg, horizontal: CivioSpacing.xl),
           child: Row(
             children: [
               Expanded(
@@ -31,14 +31,14 @@ class SegmentedSearchBar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _segment('Démarche', 'CNI, bourse, concours…'),
-                    const Divider(height: EkemaSpacing.xl),
+                    const Divider(height: CivioSpacing.xl),
                     Row(
                       children: [
                         Expanded(child: _segment('Ville', 'Yaoundé')),
-                        Container(width: 1, height: 32, color: EkemaColors.border),
+                        Container(width: 1, height: 32, color: CivioColors.border),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: EkemaSpacing.lg),
+                            padding: const EdgeInsets.only(left: CivioSpacing.lg),
                             child: _segment('Mode', 'Voix ou texte'),
                           ),
                         ),
@@ -47,9 +47,9 @@ class SegmentedSearchBar extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: EkemaSpacing.md),
+              const SizedBox(width: CivioSpacing.md),
               Material(
-                color: EkemaColors.brand,
+                color: CivioColors.brand,
                 borderRadius: BorderRadius.circular(16),
                 child: InkWell(
                   onTap: onVoiceTap,
@@ -77,14 +77,14 @@ class SegmentedSearchBar extends StatelessWidget {
           style: const TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
-            color: EkemaColors.textPrimary,
+            color: CivioColors.textPrimary,
             letterSpacing: 0.2,
           ),
         ),
         const SizedBox(height: 2),
         Text(
           value,
-          style: const TextStyle(fontSize: 13, color: EkemaColors.textSecondary),
+          style: const TextStyle(fontSize: 13, color: CivioColors.textSecondary),
           overflow: TextOverflow.ellipsis,
         ),
       ],

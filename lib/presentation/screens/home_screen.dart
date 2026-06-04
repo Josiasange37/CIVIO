@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/app_theme.dart';
 import '../providers/procedure_provider.dart';
 import 'history_screen.dart';
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EkemaColors.subtle,
+      backgroundColor: CivioColors.subtle,
       extendBody: true,
       body: CustomScrollView(
         slivers: [
@@ -35,19 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
             floating: true,
             snap: true,
             elevation: 0,
-            backgroundColor: EkemaColors.subtle,
+            backgroundColor: CivioColors.subtle,
             title: Row(
               children: [
-                Container(
-                  width: 32,
+                SvgPicture.asset(
+                  'assets/civio_logo.svg',
                   height: 32,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [EkemaColors.brand, EkemaColors.brandHover],
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.bolt, color: Colors.white, size: 18),
+                  width: 32,
                 ),
                 const SizedBox(width: 10),
                 Text(
@@ -73,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, 0, EkemaSpacing.lg, 120),
+              padding: const EdgeInsets.fromLTRB(CivioSpacing.lg, 0, CivioSpacing.lg, 120),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -88,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                     ),
                   ),
-                  const SizedBox(height: EkemaSpacing.xl),
+                  const SizedBox(height: CivioSpacing.xl),
                   StaggerFadeSlide(
                     index: 1,
                     child: SegmentedSearchBar(
@@ -96,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onVoiceTap: () => Navigator.pushNamed(context, '/ai-chat'),
                     ),
                   ),
-                  const SizedBox(height: EkemaSpacing.xxl),
+                  const SizedBox(height: CivioSpacing.xxl),
                   StaggerFadeSlide(
                     index: 2,
                     child: FeatureSpotlightCard(
@@ -109,17 +104,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => _openCniDialogue(context),
                     ),
                   ),
-                  const SizedBox(height: EkemaSpacing.xxl),
+                  const SizedBox(height: CivioSpacing.xxl),
                   StaggerFadeSlide(
                     index: 3,
                     child: BouncyPress(
                       onTap: () => Navigator.pushNamed(context, '/ai-chat'),
                       child: Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.all(EkemaSpacing.lg),
+                        padding: const EdgeInsets.all(CivioSpacing.lg),
                         decoration: BoxDecoration(
                           color: const Color(0xFF1F2C33),
-                          borderRadius: BorderRadius.circular(EkemaRadius.lg),
+                          borderRadius: BorderRadius.circular(CivioRadius.lg),
                           border: Border.all(color: const Color(0xFF37464F), width: 2),
                           boxShadow: const [
                             BoxShadow(color: Color(0xFF37464F), blurRadius: 0, offset: Offset(0, 4)),
@@ -128,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: const Row(
                           children: [
                             DuoMascot(size: 56, mood: 'happy'),
-                            SizedBox(width: EkemaSpacing.lg),
+                            SizedBox(width: CivioSpacing.lg),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: EkemaSpacing.xxl),
+                  const SizedBox(height: CivioSpacing.xxl),
                   StaggerFadeSlide(
                     index: 4,
                     child: FilterChipRow(
@@ -153,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onSelected: (i) => setState(() => _filterIndex = i),
                     ),
                   ),
-                  const SizedBox(height: EkemaSpacing.xl),
+                  const SizedBox(height: CivioSpacing.xl),
                   StaggerFadeSlide(
                     index: 5,
                     child: Row(
@@ -173,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   ),
-                  const SizedBox(height: EkemaSpacing.lg),
+                  const SizedBox(height: CivioSpacing.lg),
                   StaggerFadeSlide(
                     index: 6,
                     child: SizedBox(
@@ -191,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Icons.badge_outlined,
                           onTap: () => _openCniDialogue(context),
                         ),
-                        const SizedBox(width: EkemaSpacing.lg),
+                        const SizedBox(width: CivioSpacing.lg),
                         const ProcedureListingCard(
                           title: 'Concours ENS 2026',
                           location: 'National · MINESUP',
@@ -200,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           headerGradient: [Color(0xFF9B6DFF), Color(0xFF7B2FF7)],
                           icon: Icons.school_outlined,
                         ),
-                        const SizedBox(width: EkemaSpacing.lg),
+                        const SizedBox(width: CivioSpacing.lg),
                         const ProcedureListingCard(
                           title: 'Création d\'entreprise',
                           location: 'CFCE · Guichet unique',
@@ -213,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   ),
-                  const SizedBox(height: EkemaSpacing.xxl),
+                  const SizedBox(height: CivioSpacing.xxl),
                   StaggerFadeSlide(
                     index: 7,
                     child: Text(
@@ -221,15 +216,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20),
                     ),
                   ),
-                  const SizedBox(height: EkemaSpacing.lg),
+                  const SizedBox(height: CivioSpacing.lg),
                   StaggerFadeSlide(
                     index: 8,
                     child: GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       crossAxisCount: 2,
-                      mainAxisSpacing: EkemaSpacing.md,
-                      crossAxisSpacing: EkemaSpacing.md,
+                      mainAxisSpacing: CivioSpacing.md,
+                      crossAxisSpacing: CivioSpacing.md,
                       childAspectRatio: 0.92,
                       children: [
                       CategoryGridTile(
@@ -261,17 +256,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   ),
-                  const SizedBox(height: EkemaSpacing.xxl),
+                  const SizedBox(height: CivioSpacing.xxl),
                   StaggerFadeSlide(
                     index: 9,
                     child: BouncyPress(
                       onTap: () => Navigator.pushNamed(context, '/map'),
                       child: Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.all(EkemaSpacing.xl),
+                        padding: const EdgeInsets.all(CivioSpacing.xl),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(colors: [Color(0xFF1CB0F6), Color(0xFF1899D6)]),
-                          borderRadius: BorderRadius.circular(EkemaRadius.lg),
+                          borderRadius: BorderRadius.circular(CivioRadius.lg),
                           boxShadow: const [
                             BoxShadow(color: Color(0xFF1899D6), blurRadius: 0, offset: Offset(0, 4)),
                           ],
@@ -295,16 +290,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: EkemaSpacing.lg),
+                  const SizedBox(height: CivioSpacing.lg),
                   StaggerFadeSlide(
                     index: 10,
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(EkemaSpacing.xl),
+                      padding: const EdgeInsets.all(CivioSpacing.xl),
                       decoration: BoxDecoration(
-                        color: EkemaColors.canvas,
-                        borderRadius: BorderRadius.circular(EkemaRadius.lg),
-                        boxShadow: EkemaShadows.md,
+                        color: CivioColors.canvas,
+                        borderRadius: BorderRadius.circular(CivioRadius.lg),
+                        boxShadow: CivioShadows.md,
                       ),
                       child: Row(
                       children: [
@@ -312,12 +307,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 56,
                           height: 56,
                           decoration: BoxDecoration(
-                            color: EkemaColors.successLight,
+                            color: CivioColors.successLight,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Icon(Icons.wifi_off_rounded, color: EkemaColors.success, size: 28),
+                          child: const Icon(Icons.wifi_off_rounded, color: CivioColors.success, size: 28),
                         ),
-                        const SizedBox(width: EkemaSpacing.lg),
+                        const SizedBox(width: CivioSpacing.lg),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 'Procédures stockées localement. L\'IA en ligne est un bonus.',
                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: EkemaColors.textSecondary,
+                                      color: CivioColors.textSecondary,
                                       fontSize: 13,
                                     ),
                               ),

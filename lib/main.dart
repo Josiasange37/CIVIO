@@ -12,10 +12,21 @@ import 'presentation/screens/document_generator_screen.dart';
 import 'presentation/screens/ai_chat_screen.dart';
 import 'presentation/screens/offline_map_screen.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 // OpenRouter API Key - Free tier: 20 requests/minute
 const String openRouterApiKey = 'REDACTED_OPENROUTER_KEY';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // Activer la persistance hors-ligne pour Firestore (crucial pour votre cahier des charges)
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+  );
+
   setupDependencies(openRouterApiKey: openRouterApiKey);
 
   runApp(
@@ -25,20 +36,20 @@ void main() {
         ChangeNotifierProvider(create: (_) => VoiceProvider()..init()),
         ChangeNotifierProvider(create: (_) => AIChatProvider()..init()),
       ],
-      child: const EkemaApp(),
+      child: const CivioApp(),
     ),
   );
 }
 
-class EkemaApp extends StatelessWidget {
-  const EkemaApp({super.key});
+class CivioApp extends StatelessWidget {
+  const CivioApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Civio',
       debugShowCheckedModeBanner: false,
-      theme: EkemaTheme.lightTheme,
+      theme: CivioTheme.lightTheme,
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),

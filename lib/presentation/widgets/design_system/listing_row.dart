@@ -22,18 +22,18 @@ class ListingRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: EkemaColors.canvas,
-      borderRadius: BorderRadius.circular(EkemaRadius.md),
+      color: CivioColors.canvas,
+      borderRadius: BorderRadius.circular(CivioRadius.md),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(EkemaRadius.md),
+        borderRadius: BorderRadius.circular(CivioRadius.md),
         child: Ink(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(EkemaRadius.md),
-            boxShadow: EkemaShadows.sm,
+            borderRadius: BorderRadius.circular(CivioRadius.md),
+            boxShadow: CivioShadows.sm,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(EkemaSpacing.lg),
+            padding: const EdgeInsets.all(CivioSpacing.lg),
             child: Row(
               children: [
                 Container(
@@ -41,11 +41,11 @@ class ListingRow extends StatelessWidget {
                   height: 48,
                   decoration: BoxDecoration(
                     color: iconBackground,
-                    borderRadius: BorderRadius.circular(EkemaRadius.sm),
+                    borderRadius: BorderRadius.circular(CivioRadius.sm),
                   ),
                   child: Icon(icon, color: iconColor, size: 24),
                 ),
-                const SizedBox(width: EkemaSpacing.lg),
+                const SizedBox(width: CivioSpacing.lg),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +59,7 @@ class ListingRow extends StatelessWidget {
                         Text(
                           subtitle!,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: EkemaColors.textSecondary,
+                                color: CivioColors.textSecondary,
                                 fontSize: 13,
                               ),
                         ),
@@ -67,7 +67,7 @@ class ListingRow extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right, color: EkemaColors.textSecondary, size: 22),
+                const Icon(Icons.chevron_right, color: CivioColors.textSecondary, size: 22),
               ],
             ),
           ),

@@ -18,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EkemaColors.subtle,
+      backgroundColor: CivioColors.subtle,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -34,8 +34,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      EkemaColors.subtle,
-                      EkemaColors.brandLight.withValues(alpha: 0.5),
+                      CivioColors.subtle,
+                      CivioColors.brandLight.withValues(alpha: 0.5),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -45,11 +45,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.all(EkemaSpacing.lg),
+            padding: const EdgeInsets.all(CivioSpacing.lg),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 _profileCard(),
-                const SizedBox(height: EkemaSpacing.xl),
+                const SizedBox(height: CivioSpacing.xl),
                 const SectionHeader(title: 'Préférences'),
                 _settingsGroup([
                   _dropdownTile('Langue', _selectedLanguage, ['Français', 'Camfranglais'], (v) {
@@ -66,7 +66,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: const Text('Assistant vocal', style: TextStyle(fontWeight: FontWeight.w700)),
                     subtitle: const Text('Interaction mains libres'),
                     value: _voiceEnabled,
-                    activeThumbColor: EkemaColors.brand,
+                    activeThumbColor: CivioColors.brand,
                     onChanged: (v) => setState(() => _voiceEnabled = v),
                   ),
                   const Divider(height: 1),
@@ -84,7 +84,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [EkemaColors.brand, EkemaColors.brandHover]),
+                        gradient: const LinearGradient(colors: [CivioColors.brand, CivioColors.brandHover]),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(Icons.bolt, color: Colors.white),
@@ -93,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     subtitle: const Text('IA pour la Société — Cameroun'),
                   ),
                 ]),
-                const SizedBox(height: EkemaSpacing.xxl),
+                const SizedBox(height: CivioSpacing.xxl),
                 Center(
                   child: Text('Version 2.1.0 · Design premium', style: Theme.of(context).textTheme.labelSmall),
                 ),
@@ -107,22 +107,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _profileCard() {
     return Container(
-      padding: const EdgeInsets.all(EkemaSpacing.xl),
+      padding: const EdgeInsets.all(CivioSpacing.xl),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF222222), Color(0xFF444444)],
         ),
-        borderRadius: BorderRadius.circular(EkemaRadius.lg),
-        boxShadow: EkemaShadows.md,
+        borderRadius: BorderRadius.circular(CivioRadius.lg),
+        boxShadow: CivioShadows.md,
       ),
       child: Row(
         children: [
           const CircleAvatar(
             radius: 32,
-            backgroundColor: EkemaColors.brand,
+            backgroundColor: CivioColors.brand,
             child: Icon(Icons.person, color: Colors.white, size: 32),
           ),
-          const SizedBox(width: EkemaSpacing.lg),
+          const SizedBox(width: CivioSpacing.lg),
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,9 +141,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _settingsGroup(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
-        color: EkemaColors.canvas,
-        borderRadius: BorderRadius.circular(EkemaRadius.lg),
-        boxShadow: EkemaShadows.sm,
+        color: CivioColors.canvas,
+        borderRadius: BorderRadius.circular(CivioRadius.lg),
+        boxShadow: CivioShadows.sm,
       ),
       child: Column(children: children),
     );
@@ -161,7 +161,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         value: value,
         underline: const SizedBox.shrink(),
         items: options
-            .map((o) => DropdownMenuItem(value: o, child: Text(o, style: const TextStyle(color: EkemaColors.brand, fontWeight: FontWeight.w700))))
+            .map((o) => DropdownMenuItem(value: o, child: Text(o, style: const TextStyle(color: CivioColors.brand, fontWeight: FontWeight.w700))))
             .toList(),
         onChanged: (v) {
           if (v != null) onChanged(v);

@@ -1,4 +1,4 @@
-package com.ekema.ekema
+package com.civio.civio
 
 import io.flutter.embedding.android.FlutterActivity
 

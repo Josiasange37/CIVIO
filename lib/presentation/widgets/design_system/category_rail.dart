@@ -29,7 +29,7 @@ class CategoryRail extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: items.length,
-        separatorBuilder: (_, __) => const SizedBox(width: EkemaSpacing.md),
+        separatorBuilder: (_, __) => const SizedBox(width: CivioSpacing.md),
         itemBuilder: (context, index) => _CategoryTile(item: items[index]),
       ),
     );
@@ -68,19 +68,19 @@ class _CategoryTileState extends State<_CategoryTile> {
                 height: 72,
                 decoration: BoxDecoration(
                   color: widget.item.background,
-                  borderRadius: BorderRadius.circular(EkemaRadius.md),
-                  boxShadow: enabled ? EkemaShadows.sm : null,
+                  borderRadius: BorderRadius.circular(CivioRadius.md),
+                  boxShadow: enabled ? CivioShadows.sm : null,
                 ),
                 child: Icon(widget.item.icon, color: widget.item.iconColor, size: 28),
               ),
-              const SizedBox(height: EkemaSpacing.sm),
+              const SizedBox(height: CivioSpacing.sm),
               Text(
                 widget.item.label,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: enabled ? EkemaColors.textPrimary : EkemaColors.textSecondary,
+                      color: enabled ? CivioColors.textPrimary : CivioColors.textSecondary,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                     ),

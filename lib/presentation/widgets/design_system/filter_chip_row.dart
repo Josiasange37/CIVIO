@@ -20,7 +20,7 @@ class FilterChipRow extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: labels.length,
-        separatorBuilder: (_, __) => const SizedBox(width: EkemaSpacing.sm),
+        separatorBuilder: (_, __) => const SizedBox(width: CivioSpacing.sm),
         itemBuilder: (context, index) {
           final selected = index == selectedIndex;
           return GestureDetector(
@@ -29,10 +29,10 @@ class FilterChipRow extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
               decoration: BoxDecoration(
-                color: selected ? EkemaColors.textPrimary : EkemaColors.subtle,
-                borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                color: selected ? CivioColors.textPrimary : CivioColors.subtle,
+                borderRadius: BorderRadius.circular(CivioRadius.pill),
                 border: Border.all(
-                  color: selected ? EkemaColors.textPrimary : EkemaColors.border,
+                  color: selected ? CivioColors.textPrimary : CivioColors.border,
                 ),
               ),
               child: Text(
@@ -40,7 +40,7 @@ class FilterChipRow extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: selected ? EkemaColors.textInverse : EkemaColors.textPrimary,
+                  color: selected ? CivioColors.textInverse : CivioColors.textPrimary,
                 ),
               ),
             ),

@@ -86,12 +86,12 @@ class _DuoChoiceCardState extends State<DuoChoiceCard> with SingleTickerProvider
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: _selected ? const Color(0xFF58CC02) : EkemaColors.brandLight,
+                      color: _selected ? const Color(0xFF58CC02) : CivioColors.brandLight,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Icon(
                       _selected ? Icons.check_rounded : widget.icon,
-                      color: _selected ? Colors.white : EkemaColors.brand,
+                      color: _selected ? Colors.white : CivioColors.brand,
                       size: 26,
                     ),
                   ),
@@ -105,7 +105,7 @@ class _DuoChoiceCardState extends State<DuoChoiceCard> with SingleTickerProvider
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
-                            color: _selected ? const Color(0xFF2B7A0B) : EkemaColors.textPrimary,
+                            color: _selected ? const Color(0xFF2B7A0B) : CivioColors.textPrimary,
                           ),
                         ),
                         if (widget.subtitle != null) ...[
@@ -114,7 +114,7 @@ class _DuoChoiceCardState extends State<DuoChoiceCard> with SingleTickerProvider
                             widget.subtitle!,
                             style: TextStyle(
                               fontSize: 13,
-                              color: _selected ? const Color(0xFF4A7C23) : EkemaColors.textSecondary,
+                              color: _selected ? const Color(0xFF4A7C23) : CivioColors.textSecondary,
                             ),
                           ),
                         ],

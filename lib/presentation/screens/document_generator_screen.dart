@@ -35,13 +35,13 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EkemaColors.subtle,
+      backgroundColor: CivioColors.subtle,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 160,
             pinned: true,
-            backgroundColor: EkemaColors.textPrimary,
+            backgroundColor: CivioColors.textPrimary,
             foregroundColor: Colors.white,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
@@ -70,7 +70,7 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              padding: const EdgeInsets.all(CivioSpacing.lg),
               child: _generated ? _buildPreview() : _buildForm(),
             ),
           ),
@@ -87,18 +87,18 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
         children: [
           _formCard([
             _buildField('Nom complet', _nameController, 'Ex: Jean Dupont'),
-            const SizedBox(height: EkemaSpacing.xl),
+            const SizedBox(height: CivioSpacing.xl),
             _buildField('Université / École', _universityController, 'Ex: UY1'),
-            const SizedBox(height: EkemaSpacing.xl),
+            const SizedBox(height: CivioSpacing.xl),
             Row(
               children: [
                 Expanded(child: _buildField('Niveau', _levelController, 'Master 1')),
-                const SizedBox(width: EkemaSpacing.md),
+                const SizedBox(width: CivioSpacing.md),
                 Expanded(child: _buildField('Filière', _majorController, 'Droit')),
               ],
             ),
           ]),
-          const SizedBox(height: EkemaSpacing.xxl),
+          const SizedBox(height: CivioSpacing.xxl),
           SizedBox(
             height: 56,
             child: ElevatedButton(
@@ -119,11 +119,11 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
 
   Widget _formCard(List<Widget> children) {
     return Container(
-      padding: const EdgeInsets.all(EkemaSpacing.xl),
+      padding: const EdgeInsets.all(CivioSpacing.xl),
       decoration: BoxDecoration(
-        color: EkemaColors.canvas,
-        borderRadius: BorderRadius.circular(EkemaRadius.lg),
-        boxShadow: EkemaShadows.md,
+        color: CivioColors.canvas,
+        borderRadius: BorderRadius.circular(CivioRadius.lg),
+        boxShadow: CivioShadows.md,
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
     );
@@ -134,7 +134,7 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label.toUpperCase(), style: Theme.of(context).textTheme.labelSmall),
-        const SizedBox(height: EkemaSpacing.sm),
+        const SizedBox(height: CivioSpacing.sm),
         TextFormField(
           controller: controller,
           decoration: InputDecoration(hintText: hint),
@@ -149,13 +149,13 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
       children: [
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(EkemaSpacing.xl),
+          padding: const EdgeInsets.all(CivioSpacing.xl),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [EkemaColors.successLight, EkemaColors.successLight.withValues(alpha: 0.5)],
+              colors: [CivioColors.successLight, CivioColors.successLight.withValues(alpha: 0.5)],
             ),
-            borderRadius: BorderRadius.circular(EkemaRadius.lg),
-            border: Border.all(color: EkemaColors.success.withValues(alpha: 0.3)),
+            borderRadius: BorderRadius.circular(CivioRadius.lg),
+            border: Border.all(color: CivioColors.success.withValues(alpha: 0.3)),
           ),
           child: Row(
             children: [
@@ -163,33 +163,33 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: EkemaColors.success,
+                  color: CivioColors.success,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Icon(Icons.check_rounded, color: Colors.white),
               ),
-              const SizedBox(width: EkemaSpacing.lg),
+              const SizedBox(width: CivioSpacing.lg),
               const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Document prêt', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                    Text('Aperçu ci-dessous', style: TextStyle(color: EkemaColors.textSecondary)),
+                    Text('Aperçu ci-dessous', style: TextStyle(color: CivioColors.textSecondary)),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: EkemaSpacing.lg),
+        const SizedBox(height: CivioSpacing.lg),
         Container(
           height: 360,
           width: double.infinity,
-          padding: const EdgeInsets.all(EkemaSpacing.xl),
+          padding: const EdgeInsets.all(CivioSpacing.xl),
           decoration: BoxDecoration(
-            color: EkemaColors.canvas,
-            borderRadius: BorderRadius.circular(EkemaRadius.lg),
-            boxShadow: EkemaShadows.lg,
+            color: CivioColors.canvas,
+            borderRadius: BorderRadius.circular(CivioRadius.lg),
+            boxShadow: CivioShadows.lg,
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -200,12 +200,12 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
                   child: Text(
                     '${_nameController.text}\nYaoundé, le ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
                     textAlign: TextAlign.right,
-                    style: const TextStyle(fontSize: 12, color: EkemaColors.textSecondary),
+                    style: const TextStyle(fontSize: 12, color: CivioColors.textSecondary),
                   ),
                 ),
-                const SizedBox(height: EkemaSpacing.lg),
+                const SizedBox(height: CivioSpacing.lg),
                 const Text('DEMANDE DE BOURSE NATIONALE', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                const SizedBox(height: EkemaSpacing.lg),
+                const SizedBox(height: CivioSpacing.lg),
                 Text(
                   'Je soussignée ${_nameController.text}, étudiante en ${_levelController.text}…',
                   style: const TextStyle(fontSize: 14, height: 1.6),
@@ -214,7 +214,7 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
             ),
           ),
         ),
-        const SizedBox(height: EkemaSpacing.lg),
+        const SizedBox(height: CivioSpacing.lg),
         Row(
           children: [
             Expanded(
@@ -223,7 +223,7 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
                 child: const Text('Modifier'),
               ),
             ),
-            const SizedBox(width: EkemaSpacing.md),
+            const SizedBox(width: CivioSpacing.md),
             Expanded(
               flex: 2,
               child: ElevatedButton.icon(

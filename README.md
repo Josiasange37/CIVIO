@@ -9,7 +9,7 @@ Civio is a production-ready Flutter Android application designed to help Cameroo
 - **Official Document Generator**: Automatically generates PDF documents (A4 format) like scholarship requests or letters to the Dean, ready to sign and print.
 - **Offline Maps**: Integrated OpenStreetMap for locating administrative offices in Yaoundé and other cities.
 - **Voice Interaction**: Speech-to-Text and Text-to-Speech support for enhanced accessibility.
-- **Premium Design System**: strictly follows the `ekema.html` design tokens (Poppins/Fraunces typography, custom green palette).
+- **Premium Design System**: strictly follows the `civio.html` design tokens (Poppins/Fraunces typography, custom green palette).
 - **History & Favorites**: Uses Sqflite for local storage of past searches and generated documents.
 
 ## 🚀 Getting Started
@@ -83,6 +83,6 @@ Procedures are stored in `assets/json/procedures.json`. Example structure:
 
 Created for **GCD4F 2026 — IA pour la Société (Cameroun)**.
 Intended for social impact and administrative transparency.
-# ekema
-# ekema
-# ekema
+# civio
+# civio
+# civio

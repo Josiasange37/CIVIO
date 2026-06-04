@@ -42,7 +42,7 @@ class _DuoProgressBarState extends State<DuoProgressBar> with SingleTickerProvid
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
               widget.label,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: EkemaColors.textSecondary),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: CivioColors.textSecondary),
             ),
           ),
         Stack(

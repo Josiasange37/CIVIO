@@ -25,9 +25,9 @@ class FloatingNavBar extends StatelessWidget {
       child: Container(
         height: 64,
         decoration: BoxDecoration(
-          color: EkemaColors.textPrimary,
-          borderRadius: BorderRadius.circular(EkemaRadius.pill),
-          boxShadow: EkemaShadows.lg,
+          color: CivioColors.textPrimary,
+          borderRadius: BorderRadius.circular(CivioRadius.pill),
+          boxShadow: CivioShadows.lg,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -42,8 +42,8 @@ class FloatingNavBar extends StatelessWidget {
                   duration: const Duration(milliseconds: 200),
                   margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                   decoration: BoxDecoration(
-                    color: active ? EkemaColors.brand : Colors.transparent,
-                    borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                    color: active ? CivioColors.brand : Colors.transparent,
+                    borderRadius: BorderRadius.circular(CivioRadius.pill),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

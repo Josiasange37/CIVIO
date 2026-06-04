@@ -1,9 +1,9 @@
 export 'category_grid_tile.dart';
 export 'category_rail.dart';
 export 'duo_choice_card.dart';
-export 'ekema_bottom_nav.dart';
-export 'ekema_search_pill.dart';
-export 'ekema_tag.dart';
+export 'civio_bottom_nav.dart';
+export 'civio_search_pill.dart';
+export 'civio_tag.dart';
 export 'feature_spotlight_card.dart';
 export 'filter_chip_row.dart';
 export 'floating_nav_bar.dart';
