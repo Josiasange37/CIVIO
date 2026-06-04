@@ -37,7 +37,7 @@ class EkemaApp extends StatelessWidget {
     return MaterialApp(
       title: 'EKEMA',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
+      theme: EkemaTheme.lightTheme,
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),

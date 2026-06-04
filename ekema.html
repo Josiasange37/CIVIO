@@ -7,12 +7,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
-    font-family: 'DM Sans', 'Segoe UI', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
     background: #0e0e1c;
     min-height: 100vh;
     display: flex;
@@ -61,22 +61,22 @@ const { useState, useEffect, useRef, useCallback } = React;
 
 /* ─── DESIGN TOKENS ─────────────────────────────────────────── */
 const C = {
-  G:   "#0B6B4A",
-  GD:  "#053D2B",
-  GL:  "#DCF2E8",
-  GM:  "#1DB872",
-  GB:  "#F0FAF5",
-  AMB: "#D97706",
-  AML: "#FEF3C7",
+  G:   "#FF385C",
+  GD:  "#E31C5F",
+  GL:  "#FFF0F3",
+  GM:  "#FF385C",
+  GB:  "#F7F7F7",
+  AMB: "#E07912",
+  AML: "#FFF8E8",
   CRL: "#DC2626",
   CRL2:"#FEE2E2",
-  IND: "#4F46E5",
-  INL: "#EEF2FF",
-  BG:  "#F5F7F6",
+  IND: "#004CC4",
+  INL: "#E8F4FF",
+  BG:  "#FFFFFF",
   SRF: "#FFFFFF",
-  TX:  "#0F1A14",
-  MT:  "#6B7280",
-  BD:  "rgba(0,0,0,0.07)",
+  TX:  "#222222",
+  MT:  "#717171",
+  BD:  "#DDDDDD",
 };
 
 /* ─── HELPERS ────────────────────────────────────────────────── */
@@ -180,23 +180,21 @@ const DOC_TYPES = [
 function ScreenHome({ go }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      {/* Header */}
+      {/* Header — white premium */}
       <div style={{
-        background: `linear-gradient(148deg, ${C.GD} 0%, ${C.G} 100%)`,
-        padding: "44px 20px 30px", color: "#fff", flexShrink: 0,
-        position: "relative", overflow: "hidden",
+        background: C.SRF,
+        padding: "44px 20px 24px", color: C.TX, flexShrink: 0,
+        position: "relative",
       }}>
-        {/* Decorative circles */}
-        <div style={{ position:"absolute", top:-30, right:-30, width:120, height:120, borderRadius:"50%", background:"rgba(255,255,255,0.04)" }}/>
-        <div style={{ position:"absolute", bottom:-20, left:40, width:80, height:80, borderRadius:"50%", background:"rgba(255,255,255,0.03)" }}/>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", position:"relative" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
           <div>
-            <div style={{ fontSize:26, fontWeight:800, letterSpacing:-0.5, fontFamily:"'Fraunces', serif" }}>EKEMA</div>
-            <div style={{ fontSize:10.5, opacity:0.6, marginTop:1, letterSpacing:0.3 }}>Vos démarches, simplifiées.</div>
+            <div style={{ fontSize:26, fontWeight:800, letterSpacing:-0.5 }}>EKEMA</div>
+            <div style={{ fontSize:11, color:C.MT, marginTop:2 }}>Vos démarches, simplifiées.</div>
           </div>
-          <div style={{ width:36, height:36, borderRadius:"50%", background:"rgba(255,255,255,0.12)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}>👤</div>
+          <div style={{ width:40, height:40, borderRadius:"50%", border:`2px solid ${C.G}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}>👤</div>
         </div>
-        <div style={{ marginTop:14, fontSize:13, opacity:0.85 }}>Bonjour 👋 Comment puis-je vous aider ?</div>
+        <div style={{ marginTop:18, fontSize:22, fontWeight:700 }}>Bonjour 👋</div>
+        <div style={{ marginTop:4, fontSize:14, color:C.MT }}>Comment puis-je vous aider ?</div>
       </div>
 
       {/* Search bar */}

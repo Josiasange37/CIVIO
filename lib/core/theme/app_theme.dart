@@ -1,99 +1,227 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppColors {
-  static const Color primary = Color(0xFF0B6B4A);
-  static const Color primaryDark = Color(0xFF053D2B);
-  static const Color primaryLight = Color(0xFFDCF2E8);
-  static const Color mediumGreen = Color(0xFF1DB872);
-  static const Color lightGreen = Color(0xFFF0FAF5);
-  static const Color amber = Color(0xFFD97706);
-  static const Color lightAmber = Color(0xFFFEF3C7);
-  static const Color coral = Color(0xFFDC2626);
-  static const Color lightCoral = Color(0xFFFEE2E2);
-  static const Color indigo = Color(0xFF4F46E5);
-  static const Color lightIndigo = Color(0xFFEEF2FF);
-  static const Color background = Color(0xFFF5F7F6);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color text = Color(0xFF0F1A14);
-  static const Color muted = Color(0xFF6B7280);
-  static const Color border = Color(0x12000000); // 0.07 alpha
+/// Airbnb-inspired premium token system for EKEMA v2.
+class EkemaColors {
+  EkemaColors._();
+
+  static const Color brand = Color(0xFFFF385C);
+  static const Color brandHover = Color(0xFFE31C5F);
+  static const Color brandLight = Color(0xFFFFF0F3);
+
+  static const Color canvas = Color(0xFFFFFFFF);
+  static const Color subtle = Color(0xFFF7F7F7);
+  static const Color border = Color(0xFFDDDDDD);
+
+  static const Color textPrimary = Color(0xFF222222);
+  static const Color textSecondary = Color(0xFF717171);
+  static const Color textInverse = Color(0xFFFFFFFF);
+
+  static const Color success = Color(0xFF008A05);
+  static const Color successLight = Color(0xFFE8F5EE);
+  static const Color warning = Color(0xFFE07912);
+  static const Color warningLight = Color(0xFFFFF8E8);
+  static const Color info = Color(0xFF004CC4);
+  static const Color infoLight = Color(0xFFE8F4FF);
+
+  static const Color categoryCni = Color(0xFFFFE8EC);
+  static const Color categoryCivil = Color(0xFFE8F4FF);
+  static const Color categoryBusiness = Color(0xFFFFF8E8);
+  static const Color categorySchool = Color(0xFFF3E8FF);
+  static const Color categoryLegal = Color(0xFFE8F5EE);
+  static const Color categoryWrite = Color(0xFFF5F5F5);
 }
 
-class AppTheme {
+class EkemaSpacing {
+  EkemaSpacing._();
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 16;
+  static const double xl = 24;
+  static const double xxl = 32;
+}
+
+class EkemaRadius {
+  EkemaRadius._();
+  static const double sm = 12;
+  static const double md = 16;
+  static const double lg = 24;
+  static const double pill = 999;
+}
+
+class EkemaShadows {
+  EkemaShadows._();
+
+  static List<BoxShadow> get sm => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.08),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
+
+  static List<BoxShadow> get md => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.12),
+          blurRadius: 20,
+          offset: const Offset(0, 6),
+        ),
+      ];
+}
+
+class EkemaTheme {
+  static TextTheme get _textTheme {
+    final base = GoogleFonts.plusJakartaSansTextTheme();
+    return base.copyWith(
+      displayLarge: GoogleFonts.plusJakartaSans(
+        fontSize: 28,
+        fontWeight: FontWeight.w800,
+        color: EkemaColors.textPrimary,
+        letterSpacing: -0.5,
+      ),
+      headlineMedium: GoogleFonts.plusJakartaSans(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        color: EkemaColors.textPrimary,
+      ),
+      titleLarge: GoogleFonts.plusJakartaSans(
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        color: EkemaColors.textPrimary,
+      ),
+      titleMedium: GoogleFonts.plusJakartaSans(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: EkemaColors.textPrimary,
+      ),
+      bodyLarge: GoogleFonts.plusJakartaSans(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: EkemaColors.textPrimary,
+        height: 1.5,
+      ),
+      bodyMedium: GoogleFonts.plusJakartaSans(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: EkemaColors.textPrimary,
+        height: 1.45,
+      ),
+      labelSmall: GoogleFonts.plusJakartaSans(
+        fontSize: 11,
+        fontWeight: FontWeight.w600,
+        color: EkemaColors.textSecondary,
+        letterSpacing: 0.5,
+      ),
+    );
+  }
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
+      scaffoldBackgroundColor: EkemaColors.canvas,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
-        secondary: AppColors.mediumGreen,
-        surface: AppColors.surface,
-        onPrimary: Colors.white,
-        onSurface: AppColors.text,
+        seedColor: EkemaColors.brand,
+        primary: EkemaColors.brand,
+        onPrimary: EkemaColors.textInverse,
+        surface: EkemaColors.canvas,
+        onSurface: EkemaColors.textPrimary,
+        outline: EkemaColors.border,
       ),
-      textTheme: GoogleFonts.poppinsTextTheme().copyWith(
-        displayLarge: GoogleFonts.fraunces(
-          fontWeight: FontWeight.w800,
-          color: AppColors.text,
-        ),
-        headlineMedium: GoogleFonts.fraunces(
+      textTheme: _textTheme,
+      appBarTheme: AppBarTheme(
+        backgroundColor: EkemaColors.canvas,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        foregroundColor: EkemaColors.textPrimary,
+        titleTextStyle: GoogleFonts.plusJakartaSans(
+          fontSize: 16,
           fontWeight: FontWeight.w700,
-          color: AppColors.text,
-        ),
-        titleLarge: GoogleFonts.poppins(
-          fontWeight: FontWeight.w700,
-          color: AppColors.text,
-        ),
-        bodyLarge: GoogleFonts.poppins(
-          fontSize: 14,
-          color: AppColors.text,
-        ),
-        bodyMedium: GoogleFonts.poppins(
-          fontSize: 12,
-          color: AppColors.text,
-        ),
-        labelSmall: GoogleFonts.poppins(
-          fontSize: 10,
-          color: AppColors.muted,
-          fontWeight: FontWeight.w600,
+          color: EkemaColors.textPrimary,
         ),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.surface,
+        color: EkemaColors.canvas,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.border, width: 1),
+          borderRadius: BorderRadius.circular(EkemaRadius.md),
         ),
+        shadowColor: Colors.black.withValues(alpha: 0.08),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: EkemaColors.subtle,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border, width: 1),
+          borderRadius: BorderRadius.circular(EkemaRadius.sm),
+          borderSide: const BorderSide(color: EkemaColors.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border, width: 1),
+          borderRadius: BorderRadius.circular(EkemaRadius.sm),
+          borderSide: const BorderSide(color: EkemaColors.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1),
+          borderRadius: BorderRadius.circular(EkemaRadius.sm),
+          borderSide: const BorderSide(color: EkemaColors.brand, width: 1.5),
         ),
-        hintStyle: const TextStyle(color: AppColors.muted, fontSize: 13),
+        hintStyle: GoogleFonts.plusJakartaSans(
+          color: EkemaColors.textSecondary,
+          fontSize: 15,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          backgroundColor: EkemaColors.brand,
+          foregroundColor: EkemaColors.textInverse,
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(EkemaRadius.sm),
+          ),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontWeight: FontWeight.w700,
+            fontSize: 15,
+          ),
         ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: EkemaColors.textPrimary,
+          side: const BorderSide(color: EkemaColors.textPrimary, width: 1.5),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(EkemaRadius.sm),
+          ),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontWeight: FontWeight.w700,
+            fontSize: 15,
+          ),
+        ),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return EkemaColors.brand;
+          return EkemaColors.textSecondary;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return EkemaColors.brand.withValues(alpha: 0.35);
+          }
+          return EkemaColors.border;
+        }),
+      ),
+      dividerTheme: const DividerThemeData(
+        color: EkemaColors.border,
+        thickness: 1,
       ),
     );
   }
 }
+
+/// Legacy alias — migrate imports to [EkemaColors].
+@Deprecated('Use EkemaColors instead')
+typedef AppColors = EkemaColors;
+
+/// Legacy alias — migrate imports to [EkemaTheme].
+@Deprecated('Use EkemaTheme instead')
+typedef AppTheme = EkemaTheme;

@@ -24,38 +24,53 @@ class _DialogueScreenState extends State<DialogueScreen> {
     }
 
     return Scaffold(
+      backgroundColor: EkemaColors.canvas,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: AppColors.text, size: 28),
+          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(procedure.title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-            const Text('Dialogue intelligent', style: TextStyle(fontSize: 10, color: AppColors.muted)),
+            Text(
+              procedure.title,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 15),
+            ),
+            Text(
+              'Dialogue intelligent',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: EkemaColors.textSecondary,
+                    fontSize: 12,
+                  ),
+            ),
           ],
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Chip(
-              label: Text('${provider.currentQuestionIndex}/${procedure.questions.length} questions'),
-              labelStyle: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.primaryDark),
-              backgroundColor: AppColors.primaryLight,
-              side: BorderSide.none,
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+          Container(
+            margin: const EdgeInsets.only(right: EkemaSpacing.lg),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: EkemaColors.brandLight,
+              borderRadius: BorderRadius.circular(EkemaRadius.pill),
+            ),
+            child: Text(
+              '${provider.currentQuestionIndex + 1}/${procedure.questions.length}',
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: EkemaColors.brand,
+              ),
             ),
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4),
+          preferredSize: const Size.fromHeight(3),
           child: LinearProgressIndicator(
             value: provider.progress,
-            backgroundColor: AppColors.border,
-            color: AppColors.primary,
+            backgroundColor: EkemaColors.subtle,
+            color: EkemaColors.brand,
+            minHeight: 3,
           ),
         ),
       ),
@@ -64,7 +79,7 @@ class _DialogueScreenState extends State<DialogueScreen> {
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(EkemaSpacing.lg),
               itemCount: provider.currentQuestionIndex + 1,
               itemBuilder: (context, index) {
                 final question = procedure.questions[index];
@@ -73,7 +88,7 @@ class _DialogueScreenState extends State<DialogueScreen> {
                   children: [
                     _buildBotBubble(question.text),
                     _buildSpeakButton(context, question.text),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: EkemaSpacing.lg),
                     if (index == provider.currentQuestionIndex)
                       _buildChoices(question.options, (choice) {
                         provider.answerQuestion(choice);
@@ -84,6 +99,7 @@ class _DialogueScreenState extends State<DialogueScreen> {
                           });
                         }
                       }),
+                    const SizedBox(height: EkemaSpacing.xl),
                   ],
                 );
               },
@@ -97,16 +113,27 @@ class _DialogueScreenState extends State<DialogueScreen> {
 
   Widget _buildSpeakButton(BuildContext context, String text) {
     return Padding(
-      padding: const EdgeInsets.only(top: 4),
+      padding: const EdgeInsets.only(top: EkemaSpacing.sm, left: EkemaSpacing.sm),
       child: InkWell(
         onTap: () => context.read<VoiceProvider>().speak(text),
-        child: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.volume_up, size: 14, color: AppColors.primary),
-            SizedBox(width: 4),
-            Text('Écouter la question', style: TextStyle(fontSize: 9, color: AppColors.primary, fontWeight: FontWeight.bold)),
-          ],
+        borderRadius: BorderRadius.circular(EkemaRadius.pill),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.volume_up_rounded, size: 16, color: EkemaColors.brand.withValues(alpha: 0.9)),
+              const SizedBox(width: 4),
+              Text(
+                'Écouter',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: EkemaColors.brand,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -114,84 +141,104 @@ class _DialogueScreenState extends State<DialogueScreen> {
 
   Widget _buildBotBubble(String text) {
     return Container(
-      constraints: const BoxConstraints(maxWidth: 300),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      constraints: const BoxConstraints(maxWidth: 320),
+      padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.lg, vertical: EkemaSpacing.md),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: EkemaColors.subtle,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(4),
-          topRight: Radius.circular(14),
-          bottomLeft: Radius.circular(14),
-          bottomRight: Radius.circular(14),
+          topRight: Radius.circular(EkemaRadius.md),
+          bottomLeft: Radius.circular(EkemaRadius.md),
+          bottomRight: Radius.circular(EkemaRadius.md),
         ),
-        border: Border.all(color: AppColors.border, width: 0.5),
       ),
-      child: Text(text, style: const TextStyle(fontSize: 12, height: 1.5, color: AppColors.text)),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 15, height: 1.5, color: EkemaColors.textPrimary),
+      ),
     );
   }
 
   Widget _buildChoices(List<String> options, Function(String) onChoice) {
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: options.map((opt) => InkWell(
-        onTap: () => onChoice(opt),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.primaryLight,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.primary, width: 1),
-          ),
-          child: Text(
-            opt,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primaryDark,
+      spacing: EkemaSpacing.sm,
+      runSpacing: EkemaSpacing.sm,
+      children: options.map((opt) {
+        return Material(
+          color: EkemaColors.canvas,
+          borderRadius: BorderRadius.circular(EkemaRadius.pill),
+          child: InkWell(
+            onTap: () => onChoice(opt),
+            borderRadius: BorderRadius.circular(EkemaRadius.pill),
+            child: Ink(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                border: Border.all(color: EkemaColors.border),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.lg, vertical: EkemaSpacing.md),
+                child: Text(
+                  opt,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: EkemaColors.textPrimary,
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-      )).toList(),
+        );
+      }).toList(),
     );
   }
 
   Widget _buildInputBar(BuildContext context) {
     final voice = context.watch<VoiceProvider>();
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: AppColors.border, width: 0.5)),
+      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.md, EkemaSpacing.lg, EkemaSpacing.xl),
+      decoration: BoxDecoration(
+        color: EkemaColors.canvas,
+        border: Border(top: BorderSide(color: EkemaColors.border.withValues(alpha: 0.6))),
+        boxShadow: EkemaShadows.sm,
       ),
       child: Row(
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.lg, vertical: EkemaSpacing.md),
               decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(20),
+                color: EkemaColors.subtle,
+                borderRadius: BorderRadius.circular(EkemaRadius.pill),
               ),
               child: Text(
-                voice.isListening ? 'Écoute en cours...' : 'Répondre ou parler...', 
-                style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                voice.isListening ? 'Écoute en cours…' : 'Répondre ou parler…',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: EkemaColors.textSecondary,
+                ),
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          InkWell(
-            onTap: () => voice.isListening 
-                ? voice.stopListening() 
-                : voice.startListening((res) => context.read<ProcedureProvider>().answerQuestion(res)),
-            child: Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                color: voice.isListening ? Colors.red : AppColors.primary, 
-                shape: BoxShape.circle,
+          const SizedBox(width: EkemaSpacing.md),
+          Material(
+            color: voice.isListening ? Colors.red : EkemaColors.brand,
+            shape: const CircleBorder(),
+            elevation: 3,
+            child: InkWell(
+              onTap: () => voice.isListening
+                  ? voice.stopListening()
+                  : voice.startListening((res) => context.read<ProcedureProvider>().answerQuestion(res)),
+              customBorder: const CircleBorder(),
+              child: SizedBox(
+                width: 48,
+                height: 48,
+                child: Icon(
+                  voice.isListening ? Icons.stop_rounded : Icons.mic,
+                  color: EkemaColors.textInverse,
+                  size: 22,
+                ),
               ),
-              child: Icon(voice.isListening ? Icons.stop : Icons.mic, color: Colors.white, size: 20),
             ),
           ),
         ],

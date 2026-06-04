@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../widgets/design_system/design_system.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -17,121 +18,98 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: EkemaColors.subtle,
       appBar: AppBar(
-        title: const Text('Paramètres', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(icon: const Icon(Icons.close, color: AppColors.text), onPressed: () => Navigator.pop(context)),
+        title: const Text('Paramètres'),
+        leading: IconButton(
+          icon: const Icon(Icons.close, size: 24),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(EkemaSpacing.lg),
         children: [
-          _buildSectionHeader('PRÉFÉRENCES'),
-          _buildLanguageTile(),
-          _buildCityTile(),
-          const SizedBox(height: 16),
-          _buildSectionHeader('FONCTIONNALITÉS'),
-          _buildVoiceTile(),
-          _buildDarkModeTile(),
-          const SizedBox(height: 16),
-          _buildSectionHeader('À PROPOS'),
-          _buildAboutTile(),
-          _buildVersionTile(),
+          const SectionHeader(title: 'Préférences'),
+          _settingsCard([
+            _buildDropdownTile('Langue', _selectedLanguage, ['Français', 'Camfranglais'], (v) {
+              setState(() => _selectedLanguage = v);
+            }),
+            const Divider(height: 1),
+            _buildDropdownTile('Ville par défaut', _selectedCity, ['Yaoundé', 'Douala', 'Bafoussam', 'Garoua'], (v) {
+              setState(() => _selectedCity = v);
+            }),
+          ]),
+          const SectionHeader(title: 'Fonctionnalités'),
+          _settingsCard([
+            SwitchListTile(
+              title: const Text('Assistant vocal'),
+              subtitle: const Text('Parler pour interagir avec EKEMA'),
+              value: _voiceEnabled,
+              activeThumbColor: EkemaColors.brand,
+              onChanged: (v) => setState(() => _voiceEnabled = v),
+            ),
+            const Divider(height: 1),
+            SwitchListTile(
+              title: const Text('Mode sombre'),
+              subtitle: const Text('Bientôt disponible'),
+              value: _darkMode,
+              activeThumbColor: EkemaColors.brand,
+              onChanged: null,
+            ),
+          ]),
+          const SectionHeader(title: 'À propos'),
+          _settingsCard([
+            const ListTile(
+              title: Text('EKEMA — Projet GCD4F 2026'),
+              subtitle: Text('Innovation IA pour la Société au Cameroun'),
+            ),
+          ]),
+          const SizedBox(height: EkemaSpacing.xl),
+          Center(
+            child: Text(
+              'Version 2.0.0 · Design premium\n100% hors ligne',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8, top: 16, left: 4),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: AppColors.muted, letterSpacing: 0.7),
+  Widget _settingsCard(List<Widget> children) {
+    return Container(
+      decoration: BoxDecoration(
+        color: EkemaColors.canvas,
+        borderRadius: BorderRadius.circular(EkemaRadius.md),
+        boxShadow: EkemaShadows.sm,
       ),
+      child: Column(children: children),
     );
   }
 
-  Widget _buildLanguageTile() {
-    return Card(
-      child: ListTile(
-        title: const Text('Langue', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-        trailing: DropdownButton<String>(
-          value: _selectedLanguage,
-          underline: Container(),
-          onChanged: (String? newValue) => setState(() => _selectedLanguage = newValue!),
-          items: ['Français', 'Camfranglais'].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary)),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCityTile() {
-    return Card(
-      child: ListTile(
-        title: const Text('Ville par défaut', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-        trailing: DropdownButton<String>(
-          value: _selectedCity,
-          underline: Container(),
-          onChanged: (String? newValue) => setState(() => _selectedCity = newValue!),
-          items: ['Yaoundé', 'Douala', 'Bafoussam', 'Garoua'].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary)),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildVoiceTile() {
-    return Card(
-      child: SwitchListTile(
-        title: const Text('Assistant Vocal', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-        subtitle: const Text('Parler pour interagir avec EKEMA', style: TextStyle(fontSize: 10)),
-        value: _voiceEnabled,
-        activeThumbColor: AppColors.primary,
-        onChanged: (v) => setState(() => _voiceEnabled = v),
-      ),
-    );
-  }
-
-  Widget _buildDarkModeTile() {
-    return Card(
-      child: SwitchListTile(
-        title: const Text('Mode sombre', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-        value: _darkMode,
-        activeThumbColor: AppColors.primary,
-        onChanged: (v) => setState(() => _darkMode = v),
-      ),
-    );
-  }
-
-  Widget _buildAboutTile() {
-    return const Card(
-      child: ListTile(
-        title: Text('EKEMA — Projet GCD4F 2026', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-        subtitle: Text('Innovation IA pour la Société au Cameroun', style: TextStyle(fontSize: 10)),
-      ),
-    );
-  }
-
-  Widget _buildVersionTile() {
-    return const Padding(
-      padding: EdgeInsets.all(16),
-      child: Center(
-        child: Text(
-          'Version 1.0.0 (Build 20260330)\n100% Hors Ligne',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 9, color: AppColors.muted),
-        ),
+  Widget _buildDropdownTile(
+    String title,
+    String value,
+    List<String> options,
+    ValueChanged<String> onChanged,
+  ) {
+    return ListTile(
+      title: Text(title, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 15)),
+      trailing: DropdownButton<String>(
+        value: value,
+        underline: const SizedBox.shrink(),
+        items: options
+            .map(
+              (o) => DropdownMenuItem(
+                value: o,
+                child: Text(o, style: const TextStyle(fontWeight: FontWeight.w700, color: EkemaColors.brand)),
+              ),
+            )
+            .toList(),
+        onChanged: (v) {
+          if (v != null) onChanged(v);
+        },
       ),
     );
   }

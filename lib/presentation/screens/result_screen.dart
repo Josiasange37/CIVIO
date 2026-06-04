@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../providers/procedure_provider.dart';
+import '../widgets/design_system/design_system.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
@@ -21,103 +22,85 @@ class _ResultScreenState extends State<ResultScreen> {
     if (procedure == null) return const Scaffold(body: Center(child: Text('Erreur')));
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: EkemaColors.subtle,
       body: Column(
         children: [
           _buildHeader(context, procedure),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              padding: const EdgeInsets.all(EkemaSpacing.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'VOTRE PLAN PERSONNALISÉ',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.muted,
-                      letterSpacing: 0.7,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
+                  const SectionHeader(title: 'Votre plan personnalisé'),
                   ...procedure.steps.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final step = entry.value;
-                    return _buildStepCard(index, step);
-                  }).toList(),
-                  const SizedBox(height: 24),
+                    return _buildStepCard(entry.key, entry.value);
+                  }),
+                  const SizedBox(height: EkemaSpacing.xl),
                   _buildDocumentSection(procedure),
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomActions(),
+      bottomNavigationBar: _buildBottomActions(context),
     );
   }
 
   Widget _buildHeader(BuildContext context, dynamic procedure) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 60, 20, 32),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primaryDark, AppColors.primary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
+      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, 56, EkemaSpacing.lg, EkemaSpacing.xl),
+      color: EkemaColors.canvas,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IconButton(
             padding: EdgeInsets.zero,
             alignment: Alignment.centerLeft,
-            icon: const Icon(Icons.close, color: Colors.white, size: 28),
+            icon: const Icon(Icons.close, size: 26),
             onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: EkemaSpacing.sm),
           Text(
             procedure.title,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-              fontSize: 22,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(height: EkemaSpacing.sm),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: EkemaColors.successLight,
+              borderRadius: BorderRadius.circular(EkemaRadius.pill),
+            ),
+            child: const Text(
+              '100% hors ligne',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: EkemaColors.success,
+              ),
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'Plan généré 100% hors ligne',
-            style: TextStyle(color: Colors.white60, fontSize: 11),
-          ),
-          const SizedBox(height: 16),
+          const SizedBox(height: EkemaSpacing.lg),
           Row(
             children: [
-              _buildBadge(Icons.attach_money, 'Env. ${procedure.steps[0].cost}'),
-              const SizedBox(width: 8),
-              _buildBadge(Icons.calendar_today, 'Délai ${procedure.steps[procedure.steps.length-1].time}'),
+              if (procedure.steps.isNotEmpty)
+                EkemaTag(
+                  icon: Icons.payments_outlined,
+                  label: 'Env. ${procedure.steps[0].cost}',
+                  variant: EkemaTagVariant.cost,
+                ),
+              const SizedBox(width: EkemaSpacing.sm),
+              if (procedure.steps.isNotEmpty)
+                EkemaTag(
+                  icon: Icons.schedule,
+                  label: 'Délai ${procedure.steps.last.time}',
+                  variant: EkemaTagVariant.time,
+                ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBadge(IconData icon, String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 12, color: Colors.white),
-          const SizedBox(width: 6),
-          Text(
-            text,
-            style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700),
           ),
         ],
       ),
@@ -126,91 +109,90 @@ class _ResultScreenState extends State<ResultScreen> {
 
   Widget _buildStepCard(int index, dynamic step) {
     final isCompleted = _completedSteps[index] ?? false;
-    return InkWell(
-      onTap: () => setState(() => _completedSteps[index] = !isCompleted),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isCompleted ? AppColors.primary : AppColors.border,
-              width: isCompleted ? 2 : 1,
-            ),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: isCompleted ? AppColors.primary : AppColors.background,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.primary, width: 2),
-                ),
-                child: Center(
-                  child: isCompleted
-                      ? const Icon(Icons.check, color: Colors.white, size: 14)
-                      : Text(
-                          '${index + 1}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: EkemaSpacing.md),
+      child: Material(
+        color: EkemaColors.canvas,
+        borderRadius: BorderRadius.circular(EkemaRadius.md),
+        child: InkWell(
+          onTap: () => setState(() => _completedSteps[index] = !isCompleted),
+          borderRadius: BorderRadius.circular(EkemaRadius.md),
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(EkemaRadius.md),
+              boxShadow: EkemaShadows.sm,
+              border: Border.all(
+                color: isCompleted ? EkemaColors.brand : Colors.transparent,
+                width: 2,
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      step.title,
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.text),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: isCompleted ? EkemaColors.brand : EkemaColors.brandLight,
+                      shape: BoxShape.circle,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      step.description,
-                      style: const TextStyle(fontSize: 11, height: 1.5, color: AppColors.muted),
+                    child: Center(
+                      child: isCompleted
+                          ? const Icon(Icons.check, color: EkemaColors.textInverse, size: 18)
+                          : Text(
+                              '${index + 1}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: EkemaColors.brand,
+                              ),
+                            ),
                     ),
-                    const SizedBox(height: 8),
-                    Row(
+                  ),
+                  const SizedBox(width: EkemaSpacing.lg),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (step.cost != "0 FCFA") ...[
-                          _buildTag(Icons.account_balance_wallet, step.cost, AppColors.lightAmber, AppColors.amber),
-                          const SizedBox(width: 6),
-                        ],
-                        _buildTag(Icons.schedule, step.time, AppColors.primaryLight, AppColors.primaryDark),
+                        Text(
+                          step.title,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 15),
+                        ),
+                        const SizedBox(height: EkemaSpacing.xs),
+                        Text(
+                          step.description,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: EkemaColors.textSecondary,
+                              ),
+                        ),
+                        const SizedBox(height: EkemaSpacing.md),
+                        Wrap(
+                          spacing: EkemaSpacing.sm,
+                          runSpacing: EkemaSpacing.sm,
+                          children: [
+                            if (step.cost != '0 FCFA')
+                              EkemaTag(
+                                icon: Icons.account_balance_wallet_outlined,
+                                label: step.cost,
+                                variant: EkemaTagVariant.cost,
+                              ),
+                            EkemaTag(
+                              icon: Icons.schedule,
+                              label: step.time,
+                              variant: EkemaTagVariant.time,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildTag(IconData icon, String label, Color bg, Color text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
-      child: Row(
-        children: [
-          Icon(icon, size: 10, color: text),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: text),
-          ),
-        ],
       ),
     );
   }
@@ -219,61 +201,58 @@ class _ResultScreenState extends State<ResultScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'DOCUMENTS À PRÉPARER',
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            color: AppColors.muted,
-            letterSpacing: 0.7,
-          ),
-        ),
-        const SizedBox(height: 12),
+        const SectionHeader(title: 'Documents à préparer'),
         Container(
-          padding: const EdgeInsets.all(16),
+          width: double.infinity,
+          padding: const EdgeInsets.all(EkemaSpacing.lg),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border, width: 1),
+            color: EkemaColors.canvas,
+            borderRadius: BorderRadius.circular(EkemaRadius.md),
+            boxShadow: EkemaShadows.sm,
           ),
           child: Column(
-            children: (procedure.documents as List).map((doc) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                children: [
-                  const Icon(Icons.description, size: 14, color: AppColors.primary),
-                  const SizedBox(width: 10),
-                  Expanded(child: Text(doc, style: const TextStyle(fontSize: 12, color: AppColors.text))),
-                ],
-              ),
-            )).toList(),
+            children: (procedure.documents as List).map<Widget>((doc) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: EkemaSpacing.md),
+                child: Row(
+                  children: [
+                    const Icon(Icons.description_outlined, size: 20, color: EkemaColors.info),
+                    const SizedBox(width: EkemaSpacing.md),
+                    Expanded(
+                      child: Text(
+                        doc,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildBottomActions() {
+  Widget _buildBottomActions(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: AppColors.border, width: 1)),
+      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.md, EkemaSpacing.lg, EkemaSpacing.xl),
+      decoration: BoxDecoration(
+        color: EkemaColors.canvas,
+        border: Border(top: BorderSide(color: EkemaColors.border.withValues(alpha: 0.8))),
+        boxShadow: EkemaShadows.sm,
       ),
       child: Row(
         children: [
-          _buildCircleAction(Icons.map_outlined, 'Carte'),
-          const SizedBox(width: 8),
-          _buildCircleAction(Icons.phone_outlined, 'Appeler'),
-          const SizedBox(width: 12),
+          _buildCircleAction(Icons.map_outlined),
+          const SizedBox(width: EkemaSpacing.sm),
+          _buildCircleAction(Icons.phone_outlined),
+          const SizedBox(width: EkemaSpacing.md),
           Expanded(
             child: ElevatedButton.icon(
               onPressed: () {},
-              icon: const Icon(Icons.share, size: 18),
-              label: const Text('PARTAGER'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF25D366), // WhatsApp Green
-              ),
+              icon: const Icon(Icons.ios_share, size: 18),
+              label: const Text('Partager'),
             ),
           ),
         ],
@@ -281,23 +260,16 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  Widget _buildCircleAction(IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: AppColors.background,
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.border, width: 1),
-          ),
-          child: Icon(icon, size: 20, color: AppColors.text),
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700)),
-      ],
+  Widget _buildCircleAction(IconData icon) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: EkemaColors.subtle,
+        shape: BoxShape.circle,
+        border: Border.all(color: EkemaColors.border),
+      ),
+      child: Icon(icon, size: 22, color: EkemaColors.textPrimary),
     );
   }
 }
