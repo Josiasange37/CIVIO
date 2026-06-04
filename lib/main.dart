@@ -16,7 +16,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // OpenRouter API Key - Free tier: 20 requests/minute
-const String openRouterApiKey = 'REDACTED_OPENROUTER_KEY';
+// Set via: flutter run --dart-define=OPENROUTER_API_KEY=sk-or-v1-...
+const String openRouterApiKey = String.fromEnvironment('OPENROUTER_API_KEY', defaultValue: '');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
