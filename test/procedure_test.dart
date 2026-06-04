@@ -1,6 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:civio/domain/entities/procedure.dart';
 import 'package:civio/presentation/providers/procedure_provider.dart';
+import 'package:civio/data/repositories/procedure_repository.dart';
+
+class _NoOpProcedureRepository implements IProcedureRepository {
+  @override
+  Future<List<Procedure>> getProcedures() async => [];
+  @override
+  Future<Procedure?> getProcedureById(String id) async => null;
+  @override
+  Future<List<Procedure>> searchProcedures(String query) async => [];
+}
 
 void main() {
   group('Procedure Logic Tests', () {
@@ -29,7 +39,9 @@ void main() {
     });
 
     test('ProcedureProvider state transition', () {
-      final provider = ProcedureProvider();
+      final provider = ProcedureProvider(
+        repository: _NoOpProcedureRepository(),
+      );
       final procedure = Procedure(
         id: "id",
         category: "cat",

@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { auth, db } from "@/lib/firebase";
+import { signInWithPhoneNumber, RecaptchaVerifier, ConfirmationResult } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,38 +13,80 @@ export default function LoginPage() {
   const [step, setStep] = useState<"phone" | "code">("phone");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const recaptchaRef = useRef<HTMLDivElement>(null);
+  const verifierRef = useRef<RecaptchaVerifier | null>(null);
 
-  const handleSendCode = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (!verifierRef.current && recaptchaRef.current) {
+      verifierRef.current = new RecaptchaVerifier(auth, recaptchaRef.current, {
+        size: "invisible",
+        callback: () => {},
+      });
+    }
+
+    return () => {
+      verifierRef.current?.clear();
+      verifierRef.current = null;
+    };
+  }, []);
+
+  const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phoneNumber) {
       setError("Veuillez saisir votre numéro de téléphone");
       return;
     }
+
     setLoading(true);
     setError("");
 
-    // Simulate sending SMS
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const fullNumber = `+237${phoneNumber.replace(/\s/g, "")}`;
+      if (!verifierRef.current) {
+        verifierRef.current = new RecaptchaVerifier(auth, recaptchaRef.current!, {
+          size: "invisible",
+          callback: () => {},
+        });
+      }
+      const result = await signInWithPhoneNumber(auth, fullNumber, verifierRef.current);
+      setConfirmationResult(result);
       setStep("code");
-    }, 1200);
+    } catch (err: any) {
+      setError(err.message || "Erreur d'envoi du code. Vérifiez le numéro.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVerifyCode = (e: React.FormEvent) => {
+  const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!verificationCode) {
       setError("Veuillez entrer le code de validation");
       return;
     }
+
     setLoading(true);
     setError("");
 
-    // Simulated verification
-    setTimeout(() => {
-      setLoading(false);
-      // Redirect to dashboard
+    try {
+      if (!confirmationResult) throw new Error("Aucune confirmation en cours");
+      const userCred = await confirmationResult.confirm(verificationCode);
+
+      await setDoc(doc(db, "admin_users", userCred.user.uid), {
+        phone: userCred.user.phoneNumber,
+        lastLogin: new Date().toISOString(),
+        email: userCred.user.email || "",
+      }, { merge: true });
+
       router.push("/");
-    }, 1500);
+    } catch (err: any) {
+      setError(err.message || "Code invalide. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,7 +118,6 @@ export default function LoginPage() {
             alignItems: "stretch",
           }}
         >
-          {/* Logo / Header */}
           <div style={{ textAlign: "center", marginBottom: 32 }}>
             <div
               style={{
@@ -131,6 +175,8 @@ export default function LoginPage() {
               {error}
             </div>
           )}
+
+          <div ref={recaptchaRef} />
 
           {step === "phone" ? (
             <form onSubmit={handleSendCode} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -249,7 +295,6 @@ export default function LoginPage() {
             </form>
           )}
 
-          {/* Test Token indicator */}
           <div
             style={{
               marginTop: 28,
@@ -261,7 +306,7 @@ export default function LoginPage() {
               lineHeight: "1.4",
             }}
           >
-            Jeton de test pour la vérification chargé
+            Authentification par téléphone via Firebase
           </div>
         </div>
       </div>

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     "admin",
     "Cameroun",
     "procédures administratives",
-    "GCD4F",
+    "Xyberclan",
   ],
 };
 

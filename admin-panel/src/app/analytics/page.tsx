@@ -5,85 +5,181 @@ import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 import { MiniLineChart, MiniBarChart } from "@/components/Charts";
 import { db } from "@/lib/firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 
-interface MetricStats {
-  dailyVisits: string;
-  dailyVisitsChange: string;
-  assistanceRate: string;
-  assistanceRateChange: string;
-  writingNeeds: string;
-  writingNeedsChange: string;
-  stampSavings: string;
-  stampSavingsChange: string;
+const FR_MONTHS: Record<string, number> = {
+  jan: 0, janv: 0, janvier: 0,
+  fév: 1, fev: 1, févr: 1, fevr: 1, février: 1, fevrier: 1,
+  mar: 2, mars: 2,
+  avr: 3, avril: 3,
+  mai: 4,
+  juin: 5,
+  juil: 6, juillet: 6,
+  août: 7, aout: 7,
+  sep: 8, sept: 8, septembre: 8,
+  oct: 9, octobre: 9,
+  nov: 10, novembre: 10,
+  déc: 11, dec: 11, décembre: 11, decembre: 11,
+};
+
+const MONTH_LABELS = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
+
+function parseFrenchDate(s: string): Date | null {
+  if (!s || typeof s !== "string") return null;
+  const m = s.match(/(\d{1,2})\s+([A-Za-zéûôîâèù]+)\s+(\d{4})/i);
+  if (!m) return null;
+  const day = parseInt(m[1], 10);
+  const monthKey = m[2].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const month = FR_MONTHS[monthKey];
+  const year = parseInt(m[3], 10);
+  if (month === undefined || isNaN(day) || isNaN(year)) return null;
+  return new Date(year, month, day);
 }
 
-interface EfficiencyDetail {
-  title: string;
-  badge: string;
-  desc: string;
-}
-
-interface EfficiencyStats {
-  cniDelay: EfficiencyDetail;
-  offlineUse: EfficiencyDetail;
-  docValidation: EfficiencyDetail;
+function fmtNum(n: number): string {
+  if (n === null || n === undefined || isNaN(n)) return "0";
+  return n.toLocaleString("fr-FR").replace(/,/g, " ");
 }
 
 export default function AnalyticsPage() {
   const [monthlySyncData, setMonthlySyncData] = useState<number[]>([]);
   const [regionBreakdown, setRegionBreakdown] = useState<any[]>([]);
-  const [stats, setStats] = useState<MetricStats>({
+  const [stats, setStats] = useState({
     dailyVisits: "0",
-    dailyVisitsChange: "",
-    assistanceRate: "0%",
-    assistanceRateChange: "",
+    dailyVisitsChange: "—",
+    assistanceRate: "—",
+    assistanceRateChange: "—",
     writingNeeds: "0",
-    writingNeedsChange: "",
-    stampSavings: "0",
-    stampSavingsChange: ""
+    writingNeedsChange: "—",
+    stampSavings: "0 FCFA",
+    stampSavingsChange: "—",
   });
-  const [efficiency, setEfficiency] = useState<EfficiencyStats>({
-    cniDelay: { title: "Délai Moyen d'Établissement CNI", badge: "", desc: "" },
-    offlineUse: { title: "Utilisation Hors-Ligne Locale", badge: "", desc: "" },
-    docValidation: { title: "Validation Documentaire", badge: "", desc: "" }
+  const [efficiency, setEfficiency] = useState({
+    cniDelay: { title: "Délai Moyen d'Établissement CNI", badge: "—", desc: "Aucune procédure enregistrée." },
+    offlineUse: { title: "Utilisation Hors-Ligne Locale", badge: "—", desc: "Aucune donnée d'utilisation." },
+    docValidation: { title: "Validation Documentaire", badge: "—", desc: "Aucun document généré." },
   });
 
   useEffect(() => {
-    // 1. Monthly Sync Data
-    const unsubSync = onSnapshot(doc(db, "analytics", "monthly_sync"), (docSnap) => {
-      if (docSnap.exists()) {
-        setMonthlySyncData(docSnap.data().values || []);
-      }
-    });
+    const unsubs: (() => void)[] = [];
 
-    // 2. Region Breakdown
-    const unsubRegions = onSnapshot(doc(db, "analytics", "region_breakdown"), (docSnap) => {
-      if (docSnap.exists()) {
-        setRegionBreakdown(docSnap.data().values || []);
-      }
-    });
+    unsubs.push(onSnapshot(collection(db, "documents"), (snap) => {
+      const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as any));
+      const total = snap.size;
+      const completed = docs.filter((d) => d.status === "completed").length;
+      const rate = total > 0 ? (completed / total) * 100 : 0;
 
-    // 3. Stats Document
-    const unsubStats = onSnapshot(doc(db, "analytics", "stats"), (docSnap) => {
-      if (docSnap.exists()) {
-        setStats(docSnap.data() as MetricStats);
-      }
-    });
+      setStats((prev) => ({
+        ...prev,
+        writingNeeds: fmtNum(total),
+        stampSavings: `${fmtNum(total * 1000)} FCFA`,
+        docValidationRate: rate,
+      }));
 
-    // 4. Efficiency Document
-    const unsubEfficiency = onSnapshot(doc(db, "analytics", "efficiency"), (docSnap) => {
-      if (docSnap.exists()) {
-        setEfficiency(docSnap.data() as EfficiencyStats);
+      const last24 = new Array(24).fill(0);
+      const now = new Date();
+      for (const docItem of docs) {
+        const dt = parseFrenchDate(docItem.dateGenerated);
+        if (!dt) continue;
+        const monthsAgo = (now.getFullYear() - dt.getFullYear()) * 12 + (now.getMonth() - dt.getMonth());
+        if (monthsAgo >= 0 && monthsAgo < 24) last24[23 - monthsAgo] += 1;
       }
-    });
+      setMonthlySyncData(last24);
 
-    return () => {
-      unsubSync();
-      unsubRegions();
-      unsubStats();
-      unsubEfficiency();
-    };
+      setEfficiency((prev) => ({
+        ...prev,
+        docValidation: {
+          title: "Validation Documentaire",
+          badge: total > 0 ? `${rate.toFixed(1)}%` : "—",
+          desc: total > 0
+            ? `${fmtNum(completed)} documents validés sur ${fmtNum(total)} générés — calculé à partir de la collection documents.`
+            : "Aucun document généré pour le moment.",
+        },
+      }));
+    }));
+
+    unsubs.push(onSnapshot(collection(db, "citizens"), (snap) => {
+      const citizens = snap.docs.map((d) => ({ id: d.id, ...d.data() } as any));
+
+      const regionCounts: Record<string, number> = {};
+      for (const c of citizens) {
+        const r = c.region || "Inconnue";
+        regionCounts[r] = (regionCounts[r] || 0) + 1;
+      }
+      const regions = Object.entries(regionCounts)
+        .map(([name, count]) => ({ name, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 6)
+        .map((r) => ({ value: r.count, label: r.name }));
+      setRegionBreakdown(regions);
+    }));
+
+    unsubs.push(onSnapshot(collection(db, "procedures"), (snap) => {
+      const procs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as any));
+      const cniProcs = procs.filter((p) =>
+        /cni|carte|identité|identite|passeport/i.test(p.title || "") || /Identité/i.test(p.category || "")
+      );
+      if (cniProcs.length > 0) {
+        const parseTimeline = (t: string): number => {
+          if (!t) return 0;
+          const m = t.match(/(\d+)\s*(h|j|sem|mois)/i);
+          if (!m) return 0;
+          const n = parseInt(m[1], 10);
+          const u = m[2].toLowerCase();
+          if (u === "h") return n / 24;
+          if (u === "j") return n;
+          if (u === "sem") return n * 7;
+          if (u === "mois") return n * 30;
+          return 0;
+        };
+        const avgDays = cniProcs.reduce((acc, p) => acc + parseTimeline(p.timeline || ""), 0) / cniProcs.length;
+        setEfficiency((prev) => ({
+          ...prev,
+          cniDelay: {
+            title: "Délai Moyen d'Établissement CNI",
+            badge: `${avgDays.toFixed(0)} j`,
+            desc: `Moyenne calculée sur ${cniProcs.length} procédure(s) liée(s) à l'identité / passeport dans la base.`,
+          },
+        }));
+      } else {
+        setEfficiency((prev) => ({
+          ...prev,
+          cniDelay: {
+            title: "Délai Moyen d'Établissement CNI",
+            badge: "—",
+            desc: "Aucune procédure d'identité ou passeport enregistrée.",
+          },
+        }));
+      }
+    }));
+
+    unsubs.push(onSnapshot(collection(db, "recentActivity"), (snap) => {
+      const acts = snap.docs.map((d) => ({ id: d.id, ...d.data() } as any));
+      const total = acts.length;
+      const completed = acts.filter((a) => a.status === "completed").length;
+      const rate = total > 0 ? (completed / total) * 100 : 0;
+
+      setStats((prev) => ({
+        ...prev,
+        dailyVisits: total > 0 ? (total / 7).toFixed(1) : "0",
+        dailyVisitsChange: total > 0 ? `${total} interactions / 7 j` : "—",
+        assistanceRate: total > 0 ? `${rate.toFixed(1)}%` : "—",
+        assistanceRateChange: total > 0 ? `${completed} terminées` : "—",
+      }));
+
+      setEfficiency((prev) => ({
+        ...prev,
+        offlineUse: {
+          title: "Utilisation Hors-Ligne Locale",
+          badge: total > 0 ? `${total} act.` : "—",
+          desc: total > 0
+            ? `${fmtNum(total)} interactions enregistrées (${fmtNum(completed)} terminées, ${fmtNum(acts.filter((a) => a.status === "pending").length)} en attente, ${fmtNum(acts.filter((a) => a.status === "error").length)} en erreur).`
+            : "Aucune activité enregistrée pour le moment.",
+        },
+      }));
+    }));
+
+    return () => unsubs.forEach((u) => u());
   }, []);
 
   return (
@@ -92,7 +188,6 @@ export default function AnalyticsPage() {
       <main className="main-content">
         <TopBar />
         <div className="page-container">
-          {/* Header */}
           <div className="page-header animate-fade-in-up">
             <div>
               <h1 className="page-title">Analyses et Rapports</h1>
@@ -102,7 +197,6 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Quick Analytical Stats */}
           <div
             className="stagger"
             style={{
@@ -150,27 +244,30 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Detailed Charts Row */}
           <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 24, marginBottom: 32 }}>
-            {/* Sync Trends (Line) */}
             <div className="chart-container animate-fade-in-up" style={{ padding: 24 }}>
               <div className="chart-header">
                 <div>
                   <div className="chart-title">Volume des Synchronisations de Données</div>
                   <p style={{ fontSize: 13, color: "var(--text-tertiary)", marginTop: 4 }}>
-                    Mises à jour mensuelles de la base de connaissances Civio (2025 - 2026)
+                    Documents générés par mois (24 derniers mois)
                   </p>
                 </div>
               </div>
-              <MiniLineChart
-                data={monthlySyncData}
-                color="#06b6d4"
-                glow="rgba(6,182,212,0.3)"
-                height={240}
-              />
+              {monthlySyncData.some((v) => v > 0) ? (
+                <MiniLineChart
+                  data={monthlySyncData}
+                  color="#06b6d4"
+                  glow="rgba(6,182,212,0.3)"
+                  height={240}
+                />
+              ) : (
+                <div style={{ height: 240, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-tertiary)", fontSize: 14 }}>
+                  Aucun document généré — courbe vide.
+                </div>
+              )}
             </div>
 
-            {/* Region breakdown (Bar) */}
             <div className="chart-container animate-fade-in-up" style={{ padding: 24 }}>
               <div className="chart-header">
                 <div>
@@ -180,22 +277,26 @@ export default function AnalyticsPage() {
                   </p>
                 </div>
               </div>
-              <MiniBarChart
-                data={regionBreakdown}
-                color="#10b981"
-                glow="rgba(16,185,129,0.3)"
-                height={240}
-              />
+              {regionBreakdown.length > 0 ? (
+                <MiniBarChart
+                  data={regionBreakdown}
+                  color="#10b981"
+                  glow="rgba(16,185,129,0.3)"
+                  height={240}
+                />
+              ) : (
+                <div style={{ height: 240, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-tertiary)", fontSize: 14 }}>
+                  Aucun utilisateur enregistré — répartition vide.
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Efficiency Comparison Section (Liquid Glass) */}
           <div className="glass-card animate-fade-in-up" style={{ padding: 24 }}>
             <h3 style={{ fontFamily: "Outfit", fontSize: 18, fontWeight: 600, marginBottom: 20 }}>
               Comparaison de l&apos;efficacité administrative
             </h3>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-              {/* Box 1 */}
               <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", border: "1px solid var(--glass-border)", borderRadius: "var(--radius-lg)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                   <span style={{ fontWeight: 600, color: "white" }}>{efficiency.cniDelay.title}</span>
@@ -206,7 +307,6 @@ export default function AnalyticsPage() {
                 </p>
               </div>
 
-              {/* Box 2 */}
               <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", border: "1px solid var(--glass-border)", borderRadius: "var(--radius-lg)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                   <span style={{ fontWeight: 600, color: "white" }}>{efficiency.offlineUse.title}</span>
@@ -217,7 +317,6 @@ export default function AnalyticsPage() {
                 </p>
               </div>
 
-              {/* Box 3 */}
               <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", border: "1px solid var(--glass-border)", borderRadius: "var(--radius-lg)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                   <span style={{ fontWeight: 600, color: "white" }}>{efficiency.docValidation.title}</span>

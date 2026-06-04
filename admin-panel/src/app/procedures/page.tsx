@@ -134,7 +134,14 @@ export default function ProceduresPage() {
             <div className="glass-card" style={{ padding: "16px 20px" }}>
               <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Moyenne Coût</div>
               <div style={{ fontFamily: "Outfit", fontSize: 24, fontWeight: 700, color: "var(--accent-amber)", marginTop: 4 }}>
-                ~25 000 FCFA
+                {(() => {
+                  const costs = procedures.map(p => {
+                    const num = parseInt((p.cost || "").replace(/\s/g, "").replace(/[^0-9]/g, ""));
+                    return isNaN(num) ? 0 : num;
+                  }).filter(c => c > 0);
+                  const avg = costs.length > 0 ? Math.round(costs.reduce((a, b) => a + b, 0) / costs.length) : 0;
+                  return avg > 0 ? `~${avg.toLocaleString()} FCFA` : "—";
+                })()}
               </div>
             </div>
           </div>

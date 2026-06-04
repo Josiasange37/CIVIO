@@ -1,24 +1,27 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/procedure.dart';
 import 'ai_service.dart';
 
-/// Fallback AI service that uses local JSON procedures
+/// Fallback AI service that uses Firestore procedures
 /// Used when offline or when OpenRouter is unavailable
 class FallbackAIService implements AIService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<Procedure> _procedures = [];
   bool _initialized = false;
 
   @override
-  String get modelName => 'local-json-fallback';
+  String get modelName => 'firestore-fallback';
 
   Future<void> _init() async {
     if (_initialized) return;
-    
+
     try {
-      final String response = await rootBundle.loadString('assets/json/procedures.json');
-      final List<dynamic> data = jsonDecode(response);
-      _procedures = data.map((json) => Procedure.fromJson(json)).toList();
+      final snapshot = await _firestore
+          .collection('procedures')
+          .get(const GetOptions(source: Source.serverAndCache));
+      _procedures = snapshot.docs
+          .map((doc) => Procedure.fromJson({...doc.data(), 'id': doc.id}))
+          .toList();
       _initialized = true;
     } catch (e) {
       _procedures = [];
@@ -38,18 +41,16 @@ class FallbackAIService implements AIService {
   }) async {
     await _init();
 
-    // Simple keyword matching to find relevant procedure
     final lowerMessage = userMessage.toLowerCase();
-    
-    // Try to find a matching procedure
+
     Procedure? matchedProcedure;
-    
+
     for (final procedure in _procedures) {
       final title = procedure.title.toLowerCase();
       final category = procedure.category.toLowerCase();
       final description = procedure.description.toLowerCase();
-      
-      if (lowerMessage.contains(title) || 
+
+      if (lowerMessage.contains(title) ||
           lowerMessage.contains(category) ||
           title.contains(lowerMessage) ||
           description.contains(lowerMessage.split(' ').first)) {
@@ -59,22 +60,23 @@ class FallbackAIService implements AIService {
     }
 
     if (matchedProcedure == null) {
-      // Generic response when no procedure matches
+      if (_procedures.isEmpty) {
+        return "Je suis Civio, votre assistant administratif pour le Cameroun.\n\nAucune procédure n'est disponible pour le moment. Veuillez réessayer plus tard.";
+      }
       return """Je suis Civio, votre assistant administratif pour le Cameroun.
 
 Je peux vous aider avec les procédures suivantes :
-${ _procedures.map((p) => "• ${p.title}").join('\n') }
+${_procedures.map((p) => "• ${p.title}").join('\n')}
 
 Pour obtenir des informations détaillées, veuillez sélectionner une procédure depuis la page d'accueil.""";
     }
 
-    // Generate response based on the matched procedure
     final buffer = StringBuffer();
     buffer.writeln('**${matchedProcedure.title}**');
     buffer.writeln();
     buffer.writeln(matchedProcedure.description);
     buffer.writeln();
-    
+
     if (matchedProcedure.documents.isNotEmpty) {
       buffer.writeln('**Documents nécessaires :**');
       for (final doc in matchedProcedure.documents) {
@@ -82,7 +84,7 @@ Pour obtenir des informations détaillées, veuillez sélectionner une procédur
       }
       buffer.writeln();
     }
-    
+
     if (matchedProcedure.steps.isNotEmpty) {
       buffer.writeln('**Étapes principales :**');
       for (var i = 0; i < matchedProcedure.steps.length; i++) {
@@ -98,7 +100,6 @@ Pour obtenir des informations détaillées, veuillez sélectionner une procédur
     return buffer.toString();
   }
 
-  /// Gets a procedure by ID for detailed guidance
   Future<Procedure?> getProcedureById(String id) async {
     await _init();
     try {
@@ -108,7 +109,6 @@ Pour obtenir des informations détaillées, veuillez sélectionner une procédur
     }
   }
 
-  /// Gets all available procedures
   Future<List<Procedure>> getAllProcedures() async {
     await _init();
     return _procedures;

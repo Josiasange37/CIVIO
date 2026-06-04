@@ -19,6 +19,7 @@ const mockProcedures = [
     successRate: "92%",
     status: "active",
     stepsCount: 4,
+    views: 2840,
   },
   {
     title: "Passeport Biométrique",
@@ -29,6 +30,7 @@ const mockProcedures = [
     successRate: "98%",
     status: "active",
     stepsCount: 5,
+    views: 1681,
   },
   {
     title: "Acte de Naissance",
@@ -39,6 +41,7 @@ const mockProcedures = [
     successRate: "95%",
     status: "completed",
     stepsCount: 2,
+    views: 924,
   },
   {
     title: "Création SARL",
@@ -49,6 +52,7 @@ const mockProcedures = [
     successRate: "88%",
     status: "pending",
     stepsCount: 6,
+    views: 1345,
   },
   {
     title: "Demande de Bourse MINESUP",
@@ -59,8 +63,21 @@ const mockProcedures = [
     successRate: "75%",
     status: "active",
     stepsCount: 4,
+    views: 1891,
+  },
+  {
+    title: "Concours ENS Yaoundé",
+    category: "Académique",
+    cost: "15 000 FCFA",
+    timeline: "1 mois",
+    difficulty: "Difficile",
+    successRate: "82%",
+    status: "active",
+    stepsCount: 4,
+    views: 1000,
   },
 ];
+
 
 const mockOffices = [
   {
@@ -293,13 +310,14 @@ async function seedCollection(colName, dataArr) {
   const colRef = collection(db, colName);
   const existing = await getDocs(colRef);
   
-  if (existing.size === 0) {
-    console.log(`Seeding ${colName}...`);
-    for (const item of dataArr) {
-      await addDoc(colRef, item);
-    }
-  } else {
-    console.log(`${colName} already seeded.`);
+  console.log(`Clearing existing documents in ${colName}...`);
+  for (const doc of existing.docs) {
+    await deleteDoc(doc.ref);
+  }
+  
+  console.log(`Seeding ${colName}...`);
+  for (const item of dataArr) {
+    await addDoc(colRef, item);
   }
 }
 

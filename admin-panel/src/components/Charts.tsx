@@ -32,6 +32,10 @@ export function MiniLineChart({
     return () => obs.disconnect();
   }, []);
 
+  if (data.length === 0) {
+    return <svg width="100%" height={height} style={{ display: "block" }} />;
+  }
+
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;

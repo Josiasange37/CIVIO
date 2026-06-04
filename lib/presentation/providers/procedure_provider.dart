@@ -5,7 +5,10 @@ import '../../data/repositories/procedure_repository.dart';
 enum ChatState { idle, searching, talking, completed }
 
 class ProcedureProvider with ChangeNotifier {
-  final IProcedureRepository _repository = ProcedureRepository();
+  final IProcedureRepository _repository;
+
+  ProcedureProvider({IProcedureRepository? repository})
+      : _repository = repository ?? ProcedureRepository();
   
   List<Procedure> _procedures = [];
   List<Procedure> _searchResults = [];

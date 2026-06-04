@@ -40,9 +40,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/json/procedures.json
-    - assets/json/mock_cni.json
-    - assets/json/mock_ens.json
     - assets/civio_logo.svg
     # - assets/map/
   # fonts:

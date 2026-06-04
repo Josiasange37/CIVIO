@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot } from "firebase/firestore";
 
 interface Citizen {
   id: string;
@@ -15,93 +17,113 @@ interface Citizen {
   avatarColor: string;
 }
 
-const mockCitizens: Citizen[] = [
-  {
-    id: "cit-1",
-    name: "Amadou Bouba",
-    region: "Extrême-Nord (Maroua)",
-    joinedDate: "12 Mai 2026",
-    lastActive: "Il y a 2 min",
-    completedProcedures: 3,
-    status: "active",
-    avatarColor: "#10b981",
-  },
-  {
-    id: "cit-2",
-    name: "Marie Ngono",
-    region: "Centre (Yaoundé)",
-    joinedDate: "18 Mai 2026",
-    lastActive: "Il y a 5 min",
-    completedProcedures: 1,
-    status: "active",
-    avatarColor: "#8b5cf6",
-  },
-  {
-    id: "cit-3",
-    name: "Paul Ekambi",
-    region: "Littoral (Douala)",
-    joinedDate: "02 Avr 2026",
-    lastActive: "Il y a 12 min",
-    completedProcedures: 5,
-    status: "active",
-    avatarColor: "#06b6d4",
-  },
-  {
-    id: "cit-4",
-    name: "Fatou Diallo",
-    region: "Adamaoua (Ngaoundéré)",
-    joinedDate: "20 Avr 2026",
-    lastActive: "Il y a 18 min",
-    completedProcedures: 2,
-    status: "inactive",
-    avatarColor: "#f59e0b",
-  },
-  {
-    id: "cit-5",
-    name: "Jean-Pierre Tabi",
-    region: "Sud (Ebolowa)",
-    joinedDate: "01 Juin 2026",
-    lastActive: "Il y a 25 min",
-    completedProcedures: 0,
-    status: "active",
-    avatarColor: "#f43f5e",
-  },
-  {
-    id: "cit-6",
-    name: "Aïssatou Moussa",
-    region: "Nord (Garoua)",
-    joinedDate: "10 Mai 2026",
-    lastActive: "Il y a 32 min",
-    completedProcedures: 4,
-    status: "inactive",
-    avatarColor: "#3b82f6",
-  },
-  {
-    id: "cit-7",
-    name: "Samuel Eto'o Mbappé",
-    region: "Littoral (Douala)",
-    joinedDate: "29 Mai 2026",
-    lastActive: "Il y a 1 heure",
-    completedProcedures: 2,
-    status: "active",
-    avatarColor: "#10b981",
-  },
-  {
-    id: "cit-8",
-    name: "Florence Atangana",
-    region: "Centre (Yaoundé)",
-    joinedDate: "04 Mai 2026",
-    lastActive: "Il y a 2 heures",
-    completedProcedures: 7,
-    status: "active",
-    avatarColor: "#8b5cf6",
-  },
-];
+const FR_MONTHS: Record<string, number> = {
+  jan: 0, janv: 0, janvier: 0,
+  fév: 1, fev: 1, févr: 1, fevr: 1, février: 1, fevrier: 1,
+  mar: 2, mars: 2,
+  avr: 3, avril: 3,
+  mai: 4,
+  juin: 5,
+  juil: 6, juillet: 6,
+  août: 7, aout: 7,
+  sep: 8, sept: 8, septembre: 8,
+  oct: 9, octobre: 9,
+  nov: 10, novembre: 10,
+  déc: 11, dec: 11, décembre: 11, decembre: 11,
+};
+
+function parseFrenchDate(s: string): Date | null {
+  if (!s || typeof s !== "string") return null;
+  const m = s.match(/(\d{1,2})\s+([A-Za-zéûôîâèù]+)\s+(\d{4})/i);
+  if (!m) return null;
+  const day = parseInt(m[1], 10);
+  const monthKey = m[2].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const month = FR_MONTHS[monthKey];
+  const year = parseInt(m[3], 10);
+  if (month === undefined || isNaN(day) || isNaN(year)) return null;
+  return new Date(year, month, day);
+}
+
+const avatarColors = ["#10b981", "#8b5cf6", "#06b6d4", "#f59e0b", "#f43f5e", "#3b82f6", "#10b981", "#8b5cf6"];
 
 export default function UsersPage() {
-  const [citizens, setCitizens] = useState<Citizen[]>(mockCitizens);
+  const [citizens, setCitizens] = useState<Citizen[]>([]);
+  const [userStats, setUserStats] = useState({
+    registered: "0",
+    registeredChange: "—",
+    activeToday: "0",
+    activeTodayChange: "—",
+    offlineSessions: "0%",
+    offlineSessionsChange: "—",
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("Toutes");
+
+  useEffect(() => {
+    const unsubCitizens = onSnapshot(collection(db, "citizens"), (snap) => {
+      const list = snap.docs.map((doc, i) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data.name || "",
+          region: data.region || "",
+          joinedDate: data.joinedDate || "",
+          lastActive: data.lastActive || "",
+          completedProcedures: data.completedProcedures || 0,
+          status: data.status || "active",
+          avatarColor: avatarColors[i % avatarColors.length],
+        } as Citizen;
+      });
+      setCitizens(list);
+
+      const total = list.length;
+      const inactive = list.filter((c) => c.status === "inactive").length;
+      const offlinePct = total > 0 ? (inactive / total) * 100 : 0;
+
+      const now = new Date();
+      const todayStr = now.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+      const activeToday = list.filter((c) => {
+        const la = (c.lastActive || "").toLowerCase();
+        if (!la) return false;
+        if (la.includes("il y a")) {
+          const m = la.match(/il y a\s+(\d+)\s+(min|h|heure|heures|jour|jours)/);
+          if (!m) return false;
+          const n = parseInt(m[1], 10);
+          const u = m[2].toLowerCase();
+          if (u.startsWith("min") || u.startsWith("h") || u.startsWith("heure")) return true;
+          if (u.startsWith("jour") && n === 1) return true;
+          return false;
+        }
+        return c.lastActive === todayStr;
+      }).length;
+
+      const thisMonth = now.getMonth();
+      const thisYear = now.getFullYear();
+      const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+      const lastMonthYear = thisMonth === 0 ? thisYear - 1 : thisYear;
+      let thisM = 0, lastM = 0;
+      for (const c of list) {
+        const dt = parseFrenchDate(c.joinedDate);
+        if (!dt) continue;
+        if (dt.getMonth() === thisMonth && dt.getFullYear() === thisYear) thisM += 1;
+        if (dt.getMonth() === lastMonth && dt.getFullYear() === lastMonthYear) lastM += 1;
+      }
+      const regChange = lastM === 0
+        ? (thisM > 0 ? `+${thisM} ce mois` : "—")
+        : `${thisM - lastM >= 0 ? "+" : ""}${thisM - lastM} ce mois`;
+
+      setUserStats({
+        registered: total.toLocaleString("fr-FR").replace(/,/g, " "),
+        registeredChange: regChange,
+        activeToday: activeToday.toLocaleString("fr-FR").replace(/,/g, " "),
+        activeTodayChange: total > 0 ? `${Math.round((activeToday / total) * 100)}% du total` : "—",
+        offlineSessions: `${offlinePct.toFixed(1)}%`,
+        offlineSessionsChange: `${inactive} inactif(s)`,
+      });
+    });
+
+    return () => unsubCitizens();
+  }, []);
 
   const regions = [
     "Toutes",
@@ -126,7 +148,6 @@ export default function UsersPage() {
       <main className="main-content">
         <TopBar />
         <div className="page-container">
-          {/* Header */}
           <div className="page-header animate-fade-in-up">
             <div>
               <h1 className="page-title">Utilisateurs Actifs</h1>
@@ -136,7 +157,6 @@ export default function UsersPage() {
             </div>
           </div>
 
-          {/* Quick Stats Grid */}
           <div
             className="stagger"
             style={{
@@ -149,33 +169,32 @@ export default function UsersPage() {
             <div className="glass-card" style={{ padding: 24 }}>
               <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Citoyens Enregistrés</div>
               <div style={{ fontFamily: "Outfit", fontSize: 32, fontWeight: 700, color: "white", marginTop: 8 }}>
-                12 847
+                {userStats.registered}
               </div>
               <div style={{ fontSize: 12, color: "var(--accent-emerald)", marginTop: 8 }}>
-                +1 240 cette semaine
+                {userStats.registeredChange}
               </div>
             </div>
             <div className="glass-card" style={{ padding: 24 }}>
               <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Actifs Aujourd&apos;hui</div>
               <div style={{ fontFamily: "Outfit", fontSize: 32, fontWeight: 700, color: "white", marginTop: 8 }}>
-                2 451
+                {userStats.activeToday}
               </div>
               <div style={{ fontSize: 12, color: "var(--accent-cyan)", marginTop: 8 }}>
-                +8% d&apos;augmentation
+                {userStats.activeTodayChange}
               </div>
             </div>
             <div className="glass-card" style={{ padding: 24 }}>
               <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Sessions Hors-ligne</div>
               <div style={{ fontFamily: "Outfit", fontSize: 32, fontWeight: 700, color: "white", marginTop: 8 }}>
-                78.2%
+                {userStats.offlineSessions}
               </div>
               <div style={{ fontSize: 12, color: "var(--text-tertiary)", marginTop: 8 }}>
-                Assistance locale complète
+                {userStats.offlineSessionsChange}
               </div>
             </div>
           </div>
 
-          {/* Filtering Bar */}
           <div
             className="animate-fade-in-up"
             style={{
@@ -187,7 +206,6 @@ export default function UsersPage() {
               flexWrap: "wrap",
             }}
           >
-            {/* Search */}
             <div style={{ position: "relative", flex: 1, minWidth: 260 }}>
               <input
                 type="text"
@@ -228,7 +246,6 @@ export default function UsersPage() {
               </svg>
             </div>
 
-            {/* Region Select */}
             <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
               {regions.map((reg) => (
                 <button
@@ -250,7 +267,6 @@ export default function UsersPage() {
             </div>
           </div>
 
-          {/* Citizen Table List in Glass Card Container */}
           <div className="chart-container animate-fade-in-up" style={{ padding: 0, overflow: "hidden" }}>
             <div className="chart-header" style={{ padding: "20px 24px 16px" }}>
               <div>
