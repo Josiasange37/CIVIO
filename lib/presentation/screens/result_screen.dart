@@ -13,6 +13,7 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   final Map<int, bool> _completedSteps = {};
+  int? _expandedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -23,236 +24,230 @@ class _ResultScreenState extends State<ResultScreen> {
 
     return Scaffold(
       backgroundColor: EkemaColors.subtle,
-      body: Column(
-        children: [
-          _buildHeader(context, procedure),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(EkemaSpacing.lg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SectionHeader(title: 'Votre plan personnalisé'),
-                  ...procedure.steps.asMap().entries.map((entry) {
-                    return _buildStepCard(entry.key, entry.value);
-                  }),
-                  const SizedBox(height: EkemaSpacing.xl),
-                  _buildDocumentSection(procedure),
-                  const SizedBox(height: 100),
-                ],
-              ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(child: _buildHero(context, procedure)),
+          SliverToBoxAdapter(child: _buildStatsRow(procedure)),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.xl, EkemaSpacing.lg, 120),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                Text(
+                  'Itinéraire de votre démarche',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22),
+                ),
+                const SizedBox(height: EkemaSpacing.sm),
+                Text(
+                  'Touchez une étape pour voir le détail. Cochez au fur et à mesure.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: EkemaColors.textSecondary),
+                ),
+                const SizedBox(height: EkemaSpacing.xl),
+                ...procedure.steps.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final step = entry.value;
+                  final expanded = _expandedIndex == index;
+                  final completed = _completedSteps[index] ?? false;
+                  return StepAccordionCard(
+                    index: index + 1,
+                    title: step.title,
+                    description: step.description,
+                    cost: step.cost,
+                    time: step.time,
+                    isExpanded: expanded,
+                    isCompleted: completed,
+                    onTap: () => setState(() => _expandedIndex = expanded ? null : index),
+                    onToggleComplete: () => setState(() => _completedSteps[index] = !completed),
+                  );
+                }),
+                const SizedBox(height: EkemaSpacing.xxl),
+                _buildDocumentsCard(procedure),
+              ]),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomActions(context),
+      bottomNavigationBar: _buildBottomSheet(context),
     );
   }
 
-  Widget _buildHeader(BuildContext context, dynamic procedure) {
+  Widget _buildHero(BuildContext context, dynamic procedure) {
     return Container(
+      height: 280,
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, 56, EkemaSpacing.lg, EkemaSpacing.xl),
-      color: EkemaColors.canvas,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          IconButton(
-            padding: EdgeInsets.zero,
-            alignment: Alignment.centerLeft,
-            icon: const Icon(Icons.close, size: 26),
-            onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
-          ),
-          const SizedBox(height: EkemaSpacing.sm),
-          Text(
-            procedure.title,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: EkemaSpacing.sm),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: EkemaColors.successLight,
-              borderRadius: BorderRadius.circular(EkemaRadius.pill),
-            ),
-            child: const Text(
-              '100% hors ligne',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: EkemaColors.success,
-              ),
-            ),
-          ),
-          const SizedBox(height: EkemaSpacing.lg),
-          Row(
-            children: [
-              if (procedure.steps.isNotEmpty)
-                EkemaTag(
-                  icon: Icons.payments_outlined,
-                  label: 'Env. ${procedure.steps[0].cost}',
-                  variant: EkemaTagVariant.cost,
-                ),
-              const SizedBox(width: EkemaSpacing.sm),
-              if (procedure.steps.isNotEmpty)
-                EkemaTag(
-                  icon: Icons.schedule,
-                  label: 'Délai ${procedure.steps.last.time}',
-                  variant: EkemaTagVariant.time,
-                ),
-            ],
-          ),
-        ],
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF222222), Color(0xFF444444), Color(0xFFFF385C)],
+        ),
       ),
-    );
-  }
-
-  Widget _buildStepCard(int index, dynamic step) {
-    final isCompleted = _completedSteps[index] ?? false;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: EkemaSpacing.md),
-      child: Material(
-        color: EkemaColors.canvas,
-        borderRadius: BorderRadius.circular(EkemaRadius.md),
-        child: InkWell(
-          onTap: () => setState(() => _completedSteps[index] = !isCompleted),
-          borderRadius: BorderRadius.circular(EkemaRadius.md),
-          child: Ink(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(EkemaRadius.md),
-              boxShadow: EkemaShadows.sm,
-              border: Border.all(
-                color: isCompleted ? EkemaColors.brand : Colors.transparent,
-                width: 2,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(EkemaSpacing.lg),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.all(EkemaSpacing.xl),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: isCompleted ? EkemaColors.brand : EkemaColors.brandLight,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: isCompleted
-                          ? const Icon(Icons.check, color: EkemaColors.textInverse, size: 18)
-                          : Text(
-                              '${index + 1}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: EkemaColors.brand,
-                              ),
-                            ),
-                    ),
+                  IconButton(
+                    onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
+                    icon: const Icon(Icons.close_rounded, color: Colors.white),
                   ),
-                  const SizedBox(width: EkemaSpacing.lg),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                    ),
+                    child: const Row(
                       children: [
-                        Text(
-                          step.title,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 15),
-                        ),
-                        const SizedBox(height: EkemaSpacing.xs),
-                        Text(
-                          step.description,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: EkemaColors.textSecondary,
-                              ),
-                        ),
-                        const SizedBox(height: EkemaSpacing.md),
-                        Wrap(
-                          spacing: EkemaSpacing.sm,
-                          runSpacing: EkemaSpacing.sm,
-                          children: [
-                            if (step.cost != '0 FCFA')
-                              EkemaTag(
-                                icon: Icons.account_balance_wallet_outlined,
-                                label: step.cost,
-                                variant: EkemaTagVariant.cost,
-                              ),
-                            EkemaTag(
-                              icon: Icons.schedule,
-                              label: step.time,
-                              variant: EkemaTagVariant.time,
-                            ),
-                          ],
-                        ),
+                        Icon(Icons.offline_bolt, color: Colors.white, size: 16),
+                        SizedBox(width: 4),
+                        Text('100% hors ligne', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12)),
                       ],
                     ),
                   ),
                 ],
               ),
-            ),
+              const Spacer(),
+              Text(
+                procedure.title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w800,
+                  height: 1.1,
+                  letterSpacing: -0.8,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Plan personnalisé généré pour vous',
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 15),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildDocumentSection(dynamic procedure) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SectionHeader(title: 'Documents à préparer'),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(EkemaSpacing.lg),
-          decoration: BoxDecoration(
-            color: EkemaColors.canvas,
-            borderRadius: BorderRadius.circular(EkemaRadius.md),
-            boxShadow: EkemaShadows.sm,
-          ),
-          child: Column(
-            children: (procedure.documents as List).map<Widget>((doc) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: EkemaSpacing.md),
-                child: Row(
-                  children: [
-                    const Icon(Icons.description_outlined, size: 20, color: EkemaColors.info),
-                    const SizedBox(width: EkemaSpacing.md),
-                    Expanded(
-                      child: Text(
-                        doc,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
+  Widget _buildStatsRow(dynamic procedure) {
+    final steps = procedure.steps as List;
+    return Transform.translate(
+      offset: const Offset(0, -28),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.lg),
+        child: Row(
+          children: [
+            Expanded(child: _statCard(Icons.format_list_numbered, '${steps.length} étapes', 'Parcours')),
+            const SizedBox(width: EkemaSpacing.md),
+            Expanded(
+              child: _statCard(
+                Icons.payments_outlined,
+                steps.isNotEmpty ? steps.first.cost : '—',
+                'Coût estimé',
+              ),
+            ),
+            const SizedBox(width: EkemaSpacing.md),
+            Expanded(
+              child: _statCard(
+                Icons.schedule,
+                steps.isNotEmpty ? steps.last.time : '—',
+                'Délai',
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
-  Widget _buildBottomActions(BuildContext context) {
+  Widget _statCard(IconData icon, String value, String label) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.md, EkemaSpacing.lg, EkemaSpacing.xl),
+      padding: const EdgeInsets.all(EkemaSpacing.lg),
       decoration: BoxDecoration(
         color: EkemaColors.canvas,
-        border: Border(top: BorderSide(color: EkemaColors.border.withValues(alpha: 0.8))),
-        boxShadow: EkemaShadows.sm,
+        borderRadius: BorderRadius.circular(EkemaRadius.md),
+        boxShadow: EkemaShadows.md,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 20, color: EkemaColors.brand),
+          const SizedBox(height: EkemaSpacing.sm),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(label, style: const TextStyle(fontSize: 11, color: EkemaColors.textSecondary)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDocumentsCard(dynamic procedure) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(EkemaSpacing.xl),
+      decoration: BoxDecoration(
+        color: EkemaColors.canvas,
+        borderRadius: BorderRadius.circular(EkemaRadius.lg),
+        boxShadow: EkemaShadows.md,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Documents à préparer', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+          const SizedBox(height: EkemaSpacing.lg),
+          ...(procedure.documents as List).map<Widget>((doc) {
+            return Container(
+              margin: const EdgeInsets.only(bottom: EkemaSpacing.sm),
+              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              decoration: BoxDecoration(
+                color: EkemaColors.infoLight,
+                borderRadius: BorderRadius.circular(EkemaRadius.sm),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.description_outlined, color: EkemaColors.info),
+                  const SizedBox(width: EkemaSpacing.md),
+                  Expanded(child: Text(doc, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                ],
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomSheet(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.lg, EkemaSpacing.lg, EkemaSpacing.xl),
+      decoration: BoxDecoration(
+        color: EkemaColors.canvas,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(EkemaRadius.lg)),
+        boxShadow: EkemaShadows.lg,
       ),
       child: Row(
         children: [
-          _buildCircleAction(Icons.map_outlined),
+          _circleBtn(Icons.map_outlined),
           const SizedBox(width: EkemaSpacing.sm),
-          _buildCircleAction(Icons.phone_outlined),
+          _circleBtn(Icons.phone_outlined),
           const SizedBox(width: EkemaSpacing.md),
           Expanded(
-            child: ElevatedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.ios_share, size: 18),
-              label: const Text('Partager'),
+            child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/document-generator'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(EkemaRadius.sm)),
+              ),
+              child: const Text('Générer un document'),
             ),
           ),
         ],
@@ -260,16 +255,16 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  Widget _buildCircleAction(IconData icon) {
+  Widget _circleBtn(IconData icon) {
     return Container(
-      width: 48,
-      height: 48,
+      width: 52,
+      height: 52,
       decoration: BoxDecoration(
         color: EkemaColors.subtle,
         shape: BoxShape.circle,
         border: Border.all(color: EkemaColors.border),
       ),
-      child: Icon(icon, size: 22, color: EkemaColors.textPrimary),
+      child: Icon(icon, color: EkemaColors.textPrimary),
     );
   }
 }

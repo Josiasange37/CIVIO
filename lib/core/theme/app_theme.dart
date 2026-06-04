@@ -68,6 +68,14 @@ class EkemaShadows {
           offset: const Offset(0, 6),
         ),
       ];
+
+  static List<BoxShadow> get lg => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.18),
+          blurRadius: 32,
+          offset: const Offset(0, 12),
+        ),
+      ];
 }
 
 class EkemaTheme {

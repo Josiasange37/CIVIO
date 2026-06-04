@@ -6,8 +6,15 @@ import 'history_screen.dart';
 import 'settings_screen.dart';
 import '../widgets/design_system/design_system.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _filterIndex = 0;
 
   void _openCniDialogue(BuildContext context) {
     final provider = context.read<ProcedureProvider>();
@@ -19,163 +26,235 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EkemaColors.canvas,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTopBar(context),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: EkemaSpacing.lg),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: EkemaSpacing.lg),
-                    Text(
-                      'Bonjour 👋',
-                      style: Theme.of(context).textTheme.headlineMedium,
+      backgroundColor: EkemaColors.subtle,
+      extendBody: true,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            floating: true,
+            snap: true,
+            elevation: 0,
+            backgroundColor: EkemaColors.subtle,
+            title: Row(
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [EkemaColors.brand, EkemaColors.brandHover],
                     ),
-                    const SizedBox(height: EkemaSpacing.xs),
-                    Text(
-                      'Comment puis-je vous aider aujourd\'hui ?',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: EkemaColors.textSecondary,
-                          ),
-                    ),
-                    const SizedBox(height: EkemaSpacing.xl),
-                    EkemaSearchPill(
-                      onSearch: (q) => context.read<ProcedureProvider>().search(q),
-                      onVoiceTap: () {},
-                    ),
-                    const SectionHeader(title: 'Explorer'),
-                    CategoryRail(items: _categories(context)),
-                    const SectionHeader(title: 'Reprendre'),
-                    ..._recentItems(context),
-                    const SizedBox(height: EkemaSpacing.md),
-                    Center(
-                      child: TextButton(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.bolt, color: Colors.white, size: 18),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  'EKEMA',
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.notifications_none_rounded),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.person_outline_rounded),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                ),
+              ),
+              const SizedBox(width: 4),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, 0, EkemaSpacing.lg, 120),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Vos démarches,\ncomme un séjour premium.',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontSize: 28,
+                          height: 1.15,
+                          letterSpacing: -0.8,
+                        ),
+                  ),
+                  const SizedBox(height: EkemaSpacing.xl),
+                  SegmentedSearchBar(
+                    onTap: () => _openCniDialogue(context),
+                    onVoiceTap: () => _openCniDialogue(context),
+                  ),
+                  const SizedBox(height: EkemaSpacing.xxl),
+                  FeatureSpotlightCard(
+                    badge: 'Tendance · Yaoundé',
+                    title: 'Carte Nationale\nd\'Identité',
+                    subtitle: 'Guide pas à pas · 100% hors ligne · IDCAM',
+                    ctaLabel: 'Commencer la démarche',
+                    gradient: const [Color(0xFFFF385C), Color(0xFFE31C5F), Color(0xFFBD1E59)],
+                    icon: Icons.badge_outlined,
+                    onTap: () => _openCniDialogue(context),
+                  ),
+                  const SizedBox(height: EkemaSpacing.xxl),
+                  FilterChipRow(
+                    labels: const ['Populaires', 'CNI', 'Concours', 'Bourses', 'Entreprise'],
+                    selectedIndex: _filterIndex,
+                    onSelected: (i) => setState(() => _filterIndex = i),
+                  ),
+                  const SizedBox(height: EkemaSpacing.xl),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Procédures à découvrir',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20),
+                      ),
+                      TextButton(
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const HistoryScreen()),
                         ),
-                        child: const Text('Voir tout l\'historique'),
+                        child: const Text('Historique'),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: EkemaSpacing.lg),
+                  SizedBox(
+                    height: 280,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
+                      children: [
+                        ProcedureListingCard(
+                          title: 'CNI — Première demande',
+                          location: 'Yaoundé · IDCAM',
+                          duration: '2–4 sem.',
+                          cost: '20 000 F',
+                          headerGradient: const [Color(0xFFFF6B8A), Color(0xFFFF385C)],
+                          icon: Icons.badge_outlined,
+                          onTap: () => _openCniDialogue(context),
+                        ),
+                        const SizedBox(width: EkemaSpacing.lg),
+                        ProcedureListingCard(
+                          title: 'Concours ENS 2026',
+                          location: 'National · MINESUP',
+                          duration: '3 mois',
+                          cost: '5 000 F',
+                          headerGradient: const [Color(0xFF9B6DFF), Color(0xFF7B2FF7)],
+                          icon: Icons.school_outlined,
+                        ),
+                        const SizedBox(width: EkemaSpacing.lg),
+                        ProcedureListingCard(
+                          title: 'Création d\'entreprise',
+                          location: 'CFCE · Guichet unique',
+                          duration: '48 h',
+                          cost: 'Variable',
+                          headerGradient: const [Color(0xFFFFB347), Color(0xFFE07912)],
+                          icon: Icons.business_center_outlined,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: EkemaSpacing.xl),
-                    const OfflinePill(),
-                    const SizedBox(height: EkemaSpacing.xl),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: EkemaSpacing.xxl),
+                  Text(
+                    'Parcourir par thème',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20),
+                  ),
+                  const SizedBox(height: EkemaSpacing.lg),
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: EkemaSpacing.md,
+                    crossAxisSpacing: EkemaSpacing.md,
+                    childAspectRatio: 0.92,
+                    children: [
+                      CategoryGridTile(
+                        title: 'CNI & Passeport',
+                        subtitle: 'IDCAM · PASSCAM',
+                        icon: Icons.badge_outlined,
+                        gradient: const [Color(0xFFFF385C), Color(0xFFE31C5F)],
+                        onTap: () => _openCniDialogue(context),
+                      ),
+                      CategoryGridTile(
+                        title: 'Actes civils',
+                        subtitle: 'Naissance · Mariage',
+                        icon: Icons.description_outlined,
+                        gradient: const [Color(0xFF4A90FF), Color(0xFF004CC4)],
+                      ),
+                      CategoryGridTile(
+                        title: 'Concours & Études',
+                        subtitle: 'ENS · Bourses',
+                        icon: Icons.school_outlined,
+                        gradient: const [Color(0xFF9B6DFF), Color(0xFF7B2FF7)],
+                      ),
+                      CategoryGridTile(
+                        title: 'Rédiger un document',
+                        subtitle: 'Lettres · PDF officiel',
+                        icon: Icons.edit_document,
+                        gradient: const [Color(0xFF444444), Color(0xFF222222)],
+                        onTap: () => Navigator.pushNamed(context, '/document-generator'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: EkemaSpacing.xxl),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(EkemaSpacing.xl),
+                    decoration: BoxDecoration(
+                      color: EkemaColors.canvas,
+                      borderRadius: BorderRadius.circular(EkemaRadius.lg),
+                      boxShadow: EkemaShadows.md,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: EkemaColors.successLight,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Icon(Icons.wifi_off_rounded, color: EkemaColors.success, size: 28),
+                        ),
+                        const SizedBox(width: EkemaSpacing.lg),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Toujours disponible',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Procédures stockées localement. L\'IA en ligne est un bonus.',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: EkemaColors.textSecondary,
+                                      fontSize: 13,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: EkemaBottomNav(
-        currentIndex: 0,
-        onTap: (index) => _onNavTap(context, index),
-      ),
-    );
-  }
-
-  Widget _buildTopBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.md, EkemaSpacing.lg, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'EKEMA',
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 26),
-          ),
-          InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SettingsScreen()),
-            ),
-            borderRadius: BorderRadius.circular(EkemaRadius.pill),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: EkemaColors.brand, width: 2),
-                color: EkemaColors.subtle,
-              ),
-              child: const Icon(Icons.person_outline, color: EkemaColors.textPrimary),
             ),
           ),
         ],
       ),
+      bottomNavigationBar: FloatingNavBar(
+        currentIndex: 0,
+        onTap: (index) => _onNavTap(context, index),
+      ),
     );
-  }
-
-  List<CategoryItem> _categories(BuildContext context) {
-    return [
-      CategoryItem(
-        icon: Icons.badge_outlined,
-        label: 'CNI / Passeport',
-        background: EkemaColors.categoryCni,
-        iconColor: EkemaColors.brand,
-        onTap: () => _openCniDialogue(context),
-      ),
-      CategoryItem(
-        icon: Icons.description_outlined,
-        label: 'Actes civils',
-        background: EkemaColors.categoryCivil,
-        iconColor: EkemaColors.info,
-      ),
-      CategoryItem(
-        icon: Icons.business_outlined,
-        label: 'Entreprise',
-        background: EkemaColors.categoryBusiness,
-        iconColor: EkemaColors.warning,
-      ),
-      CategoryItem(
-        icon: Icons.school_outlined,
-        label: 'Concours',
-        background: EkemaColors.categorySchool,
-        iconColor: const Color(0xFF7B2FF7),
-      ),
-      CategoryItem(
-        icon: Icons.balance_outlined,
-        label: 'Judiciaire',
-        background: EkemaColors.categoryLegal,
-        iconColor: EkemaColors.success,
-      ),
-      CategoryItem(
-        icon: Icons.edit_note,
-        label: 'Rédiger',
-        background: EkemaColors.categoryWrite,
-        iconColor: EkemaColors.textPrimary,
-        onTap: () => Navigator.pushNamed(context, '/document-generator'),
-      ),
-    ];
-  }
-
-  List<Widget> _recentItems(BuildContext context) {
-    final items = [
-      ('Renouvellement CNI', 'Il y a 2 jours', Icons.badge_outlined, EkemaColors.categoryCni, EkemaColors.brand),
-      ('Concours ENS 2026', 'Il y a 5 jours', Icons.school_outlined, EkemaColors.categorySchool, const Color(0xFF7B2FF7)),
-      ('Demande de bourse', 'Il y a 1 semaine', Icons.description_outlined, EkemaColors.categoryCivil, EkemaColors.info),
-    ];
-
-    return items
-        .map(
-          (item) => Padding(
-            padding: const EdgeInsets.only(bottom: EkemaSpacing.md),
-            child: ListingRow(
-              icon: item.$3,
-              iconBackground: item.$4,
-              iconColor: item.$5,
-              title: item.$1,
-              subtitle: item.$2,
-              onTap: item.$1.contains('CNI') ? () => _openCniDialogue(context) : null,
-            ),
-          ),
-        )
-        .toList();
   }
 
   void _onNavTap(BuildContext context, int index) {

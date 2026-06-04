@@ -11,7 +11,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _voiceEnabled = true;
-  bool _darkMode = false;
+  final bool _darkMode = false;
   String _selectedLanguage = 'Français';
   String _selectedCity = 'Yaoundé';
 
@@ -19,57 +19,85 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: EkemaColors.subtle,
-      appBar: AppBar(
-        title: const Text('Paramètres'),
-        leading: IconButton(
-          icon: const Icon(Icons.close, size: 24),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(EkemaSpacing.lg),
-        children: [
-          const SectionHeader(title: 'Préférences'),
-          _settingsCard([
-            _buildDropdownTile('Langue', _selectedLanguage, ['Français', 'Camfranglais'], (v) {
-              setState(() => _selectedLanguage = v);
-            }),
-            const Divider(height: 1),
-            _buildDropdownTile('Ville par défaut', _selectedCity, ['Yaoundé', 'Douala', 'Bafoussam', 'Garoua'], (v) {
-              setState(() => _selectedCity = v);
-            }),
-          ]),
-          const SectionHeader(title: 'Fonctionnalités'),
-          _settingsCard([
-            SwitchListTile(
-              title: const Text('Assistant vocal'),
-              subtitle: const Text('Parler pour interagir avec EKEMA'),
-              value: _voiceEnabled,
-              activeThumbColor: EkemaColors.brand,
-              onChanged: (v) => setState(() => _voiceEnabled = v),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 120,
+            pinned: true,
+            title: const Text('Paramètres'),
+            leading: IconButton(
+              icon: const Icon(Icons.close_rounded),
+              onPressed: () => Navigator.pop(context),
             ),
-            const Divider(height: 1),
-            SwitchListTile(
-              title: const Text('Mode sombre'),
-              subtitle: const Text('Bientôt disponible'),
-              value: _darkMode,
-              activeThumbColor: EkemaColors.brand,
-              onChanged: null,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      EkemaColors.subtle,
+                      EkemaColors.brandLight.withValues(alpha: 0.5),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
             ),
-          ]),
-          const SectionHeader(title: 'À propos'),
-          _settingsCard([
-            const ListTile(
-              title: Text('EKEMA — Projet GCD4F 2026'),
-              subtitle: Text('Innovation IA pour la Société au Cameroun'),
-            ),
-          ]),
-          const SizedBox(height: EkemaSpacing.xl),
-          Center(
-            child: Text(
-              'Version 2.0.0 · Design premium\n100% hors ligne',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelSmall,
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(EkemaSpacing.lg),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                _profileCard(),
+                const SizedBox(height: EkemaSpacing.xl),
+                const SectionHeader(title: 'Préférences'),
+                _settingsGroup([
+                  _dropdownTile('Langue', _selectedLanguage, ['Français', 'Camfranglais'], (v) {
+                    setState(() => _selectedLanguage = v);
+                  }),
+                  const Divider(height: 1),
+                  _dropdownTile('Ville', _selectedCity, ['Yaoundé', 'Douala', 'Bafoussam', 'Garoua'], (v) {
+                    setState(() => _selectedCity = v);
+                  }),
+                ]),
+                const SectionHeader(title: 'Fonctionnalités'),
+                _settingsGroup([
+                  SwitchListTile(
+                    title: const Text('Assistant vocal', style: TextStyle(fontWeight: FontWeight.w700)),
+                    subtitle: const Text('Interaction mains libres'),
+                    value: _voiceEnabled,
+                    activeThumbColor: EkemaColors.brand,
+                    onChanged: (v) => setState(() => _voiceEnabled = v),
+                  ),
+                  const Divider(height: 1),
+                  SwitchListTile(
+                    title: const Text('Mode sombre'),
+                    subtitle: const Text('Bientôt disponible'),
+                    value: _darkMode,
+                    onChanged: null,
+                  ),
+                ]),
+                const SectionHeader(title: 'À propos'),
+                _settingsGroup([
+                  ListTile(
+                    leading: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(colors: [EkemaColors.brand, EkemaColors.brandHover]),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.bolt, color: Colors.white),
+                    ),
+                    title: const Text('EKEMA · GCD4F 2026', style: TextStyle(fontWeight: FontWeight.w800)),
+                    subtitle: const Text('IA pour la Société — Cameroun'),
+                  ),
+                ]),
+                const SizedBox(height: EkemaSpacing.xxl),
+                Center(
+                  child: Text('Version 2.1.0 · Design premium', style: Theme.of(context).textTheme.labelSmall),
+                ),
+              ]),
             ),
           ),
         ],
@@ -77,35 +105,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _settingsCard(List<Widget> children) {
+  Widget _profileCard() {
+    return Container(
+      padding: const EdgeInsets.all(EkemaSpacing.xl),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF222222), Color(0xFF444444)],
+        ),
+        borderRadius: BorderRadius.circular(EkemaRadius.lg),
+        boxShadow: EkemaShadows.md,
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 32,
+            backgroundColor: EkemaColors.brand,
+            child: const Icon(Icons.person, color: Colors.white, size: 32),
+          ),
+          const SizedBox(width: EkemaSpacing.lg),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Citoyen·ne', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800)),
+                Text('Yaoundé, Cameroun', style: TextStyle(color: Colors.white70, fontSize: 14)),
+              ],
+            ),
+          ),
+          Icon(Icons.chevron_right, color: Colors.white.withValues(alpha: 0.6)),
+        ],
+      ),
+    );
+  }
+
+  Widget _settingsGroup(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
         color: EkemaColors.canvas,
-        borderRadius: BorderRadius.circular(EkemaRadius.md),
+        borderRadius: BorderRadius.circular(EkemaRadius.lg),
         boxShadow: EkemaShadows.sm,
       ),
       child: Column(children: children),
     );
   }
 
-  Widget _buildDropdownTile(
+  Widget _dropdownTile(
     String title,
     String value,
     List<String> options,
     ValueChanged<String> onChanged,
   ) {
     return ListTile(
-      title: Text(title, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 15)),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
       trailing: DropdownButton<String>(
         value: value,
         underline: const SizedBox.shrink(),
         items: options
-            .map(
-              (o) => DropdownMenuItem(
-                value: o,
-                child: Text(o, style: const TextStyle(fontWeight: FontWeight.w700, color: EkemaColors.brand)),
-              ),
-            )
+            .map((o) => DropdownMenuItem(value: o, child: Text(o, style: const TextStyle(color: EkemaColors.brand, fontWeight: FontWeight.w700))))
             .toList(),
         onChanged: (v) {
           if (v != null) onChanged(v);

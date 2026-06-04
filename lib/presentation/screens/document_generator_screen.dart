@@ -36,59 +36,96 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: EkemaColors.subtle,
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Rédiger un document', style: Theme.of(context).textTheme.titleMedium),
-            Text(
-              'Génération officielle automatique',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: EkemaColors.textSecondary,
-                    fontSize: 12,
-                  ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 160,
+            pinned: true,
+            backgroundColor: EkemaColors.textPrimary,
+            foregroundColor: Colors.white,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+              onPressed: () => Navigator.pop(context),
             ),
-          ],
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text('Rédiger', style: TextStyle(fontWeight: FontWeight.w800)),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF222222), Color(0xFF444444)],
+                  ),
+                ),
+                child: const Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 56),
+                    child: Text(
+                      'Générez une lettre officielle\nprête à imprimer',
+                      style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              child: _generated ? _buildPreview() : _buildForm(),
+            ),
+          ),
+        ],
       ),
-      body: _generated ? _buildPreview() : _buildForm(),
     );
   }
 
   Widget _buildForm() {
     return Form(
       key: _formKey,
-      child: ListView(
-        padding: const EdgeInsets.all(EkemaSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildField('Nom complet', _nameController, 'Ex: Jean Dupont'),
-          const SizedBox(height: EkemaSpacing.lg),
-          _buildField('Université / École', _universityController, 'Ex: UY1'),
-          const SizedBox(height: EkemaSpacing.lg),
-          Row(
-            children: [
-              Expanded(child: _buildField('Niveau', _levelController, 'Ex: Master 1')),
-              const SizedBox(width: EkemaSpacing.md),
-              Expanded(child: _buildField('Filière', _majorController, 'Ex: Droit')),
-            ],
-          ),
+          _formCard([
+            _buildField('Nom complet', _nameController, 'Ex: Jean Dupont'),
+            const SizedBox(height: EkemaSpacing.xl),
+            _buildField('Université / École', _universityController, 'Ex: UY1'),
+            const SizedBox(height: EkemaSpacing.xl),
+            Row(
+              children: [
+                Expanded(child: _buildField('Niveau', _levelController, 'Master 1')),
+                const SizedBox(width: EkemaSpacing.md),
+                Expanded(child: _buildField('Filière', _majorController, 'Droit')),
+              ],
+            ),
+          ]),
           const SizedBox(height: EkemaSpacing.xxl),
-          ElevatedButton(
-            onPressed: _loading ? null : _doGenerate,
-            child: _loading
-                ? const SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(color: EkemaColors.textInverse, strokeWidth: 2),
-                  )
-                : const Text('Générer le document PDF'),
+          SizedBox(
+            height: 56,
+            child: ElevatedButton(
+              onPressed: _loading ? null : _doGenerate,
+              child: _loading
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                    )
+                  : const Text('Générer le PDF officiel'),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _formCard(List<Widget> children) {
+    return Container(
+      padding: const EdgeInsets.all(EkemaSpacing.xl),
+      decoration: BoxDecoration(
+        color: EkemaColors.canvas,
+        borderRadius: BorderRadius.circular(EkemaRadius.lg),
+        boxShadow: EkemaShadows.md,
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
     );
   }
 
@@ -96,10 +133,7 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label.toUpperCase(),
-          style: Theme.of(context).textTheme.labelSmall,
-        ),
+        Text(label.toUpperCase(), style: Theme.of(context).textTheme.labelSmall),
         const SizedBox(height: EkemaSpacing.sm),
         TextFormField(
           controller: controller,
@@ -111,136 +145,106 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
   }
 
   Widget _buildPreview() {
-    return Padding(
-      padding: const EdgeInsets.all(EkemaSpacing.lg),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(EkemaSpacing.lg),
-            decoration: BoxDecoration(
-              color: EkemaColors.successLight,
-              borderRadius: BorderRadius.circular(EkemaRadius.md),
-              border: Border.all(color: EkemaColors.success.withValues(alpha: 0.3)),
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(EkemaSpacing.xl),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [EkemaColors.successLight, EkemaColors.successLight.withValues(alpha: 0.5)],
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.check_circle, color: EkemaColors.success, size: 24),
-                const SizedBox(width: EkemaSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Document généré avec succès',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: EkemaColors.success,
-                              fontSize: 14,
-                            ),
-                      ),
-                      Text(
-                        'Prêt à imprimer et signer',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: EkemaColors.textSecondary,
-                              fontSize: 13,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            borderRadius: BorderRadius.circular(EkemaRadius.lg),
+            border: Border.all(color: EkemaColors.success.withValues(alpha: 0.3)),
           ),
-          const SizedBox(height: EkemaSpacing.lg),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(EkemaSpacing.xl),
-              decoration: BoxDecoration(
-                color: EkemaColors.canvas,
-                borderRadius: BorderRadius.circular(EkemaRadius.md),
-                boxShadow: EkemaShadows.md,
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: EkemaColors.success,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(Icons.check_rounded, color: Colors.white),
               ),
-              child: SingleChildScrollView(
+              const SizedBox(width: EkemaSpacing.lg),
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        '${_nameController.text}\nYaoundé, le ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-                        textAlign: TextAlign.right,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: EkemaColors.textSecondary,
-                              fontSize: 12,
-                            ),
-                      ),
-                    ),
-                    const SizedBox(height: EkemaSpacing.lg),
-                    const Text(
-                      'À l\'attention de M. le Ministre\nMINESUP — Yaoundé',
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: EkemaSpacing.lg),
-                    const Center(
-                      child: Text(
-                        'DEMANDE DE BOURSE NATIONALE',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, decoration: TextDecoration.underline),
-                      ),
-                    ),
-                    const SizedBox(height: EkemaSpacing.lg),
-                    Text(
-                      'Je soussignée ${_nameController.text}, étudiante en ${_levelController.text} de ${_majorController.text} à l\'${_universityController.text}, ai l\'honneur de solliciter l\'attribution d\'une bourse d\'études nationale.',
-                      style: const TextStyle(fontSize: 14, height: 1.6),
-                    ),
-                    const SizedBox(height: EkemaSpacing.md),
-                    const Text(
-                      'Désireuse de poursuivre mon parcours académique avec excellence, je me permets de porter ma candidature à votre bienveillante attention.',
-                      style: TextStyle(fontSize: 14, height: 1.6),
-                    ),
-                    const SizedBox(height: EkemaSpacing.md),
-                    const Text(
-                      'Veuillez agréer, Monsieur le Ministre, l\'expression de ma haute considération.',
-                      style: TextStyle(fontSize: 14, height: 1.6),
-                    ),
+                    Text('Document prêt', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                    Text('Aperçu ci-dessous', style: TextStyle(color: EkemaColors.textSecondary)),
                   ],
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: EkemaSpacing.lg),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () => setState(() => _generated = false),
-                  icon: const Icon(Icons.edit_outlined, size: 18),
-                  label: const Text('Modifier'),
-                ),
-              ),
-              const SizedBox(width: EkemaSpacing.md),
-              Expanded(
-                flex: 2,
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    final bytes = await PdfGenerator.generateOfficialDocument(
-                      title: 'DEMANDE DE BOURSE NATIONALE',
-                      name: _nameController.text,
-                      university: _universityController.text,
-                      level: _levelController.text,
-                      major: _majorController.text,
-                      content:
-                          'Je soussignée ${_nameController.text}, étudiante en ${_levelController.text} de ${_majorController.text} à l\'${_universityController.text}, ai l\'honneur de solliciter l\'attribution d\'une bourse d\'études nationale.\n\nDésireuse de poursuivre mon parcours académique avec excellence, je me permets de porter ma candidature à votre bienveillante attention.\n\nVeuillez agréer, Monsieur le Ministre, l\'expression de ma haute considération.',
-                    );
-                    await PdfGenerator.saveAndShare(bytes, 'demande_bourse_ekema.pdf');
-                  },
-                  icon: const Icon(Icons.download_outlined, size: 18),
-                  label: const Text('Télécharger PDF'),
                 ),
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: EkemaSpacing.lg),
+        Container(
+          height: 360,
+          width: double.infinity,
+          padding: const EdgeInsets.all(EkemaSpacing.xl),
+          decoration: BoxDecoration(
+            color: EkemaColors.canvas,
+            borderRadius: BorderRadius.circular(EkemaRadius.lg),
+            boxShadow: EkemaShadows.lg,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Text(
+                    '${_nameController.text}\nYaoundé, le ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(fontSize: 12, color: EkemaColors.textSecondary),
+                  ),
+                ),
+                const SizedBox(height: EkemaSpacing.lg),
+                const Text('DEMANDE DE BOURSE NATIONALE', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                const SizedBox(height: EkemaSpacing.lg),
+                Text(
+                  'Je soussignée ${_nameController.text}, étudiante en ${_levelController.text}…',
+                  style: const TextStyle(fontSize: 14, height: 1.6),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: EkemaSpacing.lg),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => setState(() => _generated = false),
+                child: const Text('Modifier'),
+              ),
+            ),
+            const SizedBox(width: EkemaSpacing.md),
+            Expanded(
+              flex: 2,
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  final bytes = await PdfGenerator.generateOfficialDocument(
+                    title: 'DEMANDE DE BOURSE NATIONALE',
+                    name: _nameController.text,
+                    university: _universityController.text,
+                    level: _levelController.text,
+                    major: _majorController.text,
+                    content: 'Je soussignée ${_nameController.text}…',
+                  );
+                  await PdfGenerator.saveAndShare(bytes, 'demande_bourse_ekema.pdf');
+                },
+                icon: const Icon(Icons.download_outlined),
+                label: const Text('Télécharger'),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

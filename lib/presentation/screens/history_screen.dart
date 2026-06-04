@@ -29,14 +29,59 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: EkemaColors.subtle,
-      appBar: AppBar(
-        title: const Text('Historique'),
-        leading: IconButton(
-          icon: const Icon(Icons.close, size: 24),
-          onPressed: () => Navigator.pop(context),
-        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 140,
+            pinned: true,
+            backgroundColor: EkemaColors.brand,
+            foregroundColor: Colors.white,
+            leading: IconButton(
+              icon: const Icon(Icons.close_rounded),
+              onPressed: () => Navigator.pop(context),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text('Historique', style: TextStyle(fontWeight: FontWeight.w800)),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [EkemaColors.brand, EkemaColors.brandHover],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          if (_history.isEmpty)
+            SliverFillRemaining(child: _buildEmptyState())
+          else
+            SliverPadding(
+              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = _history[index];
+                    final type = item['type'] as String;
+                    final date = DateTime.parse(item['date'] as String);
+                    final (icon, gradient) = _style(type);
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: EkemaSpacing.lg),
+                      child: ProcedureListingCard(
+                        title: item['title'] as String,
+                        location: '${date.day}/${date.month}/${date.year} · $type',
+                        duration: 'Reprendre',
+                        cost: 'Voir',
+                        headerGradient: gradient,
+                        icon: icon,
+                        width: double.infinity,
+                      ),
+                    );
+                  },
+                  childCount: _history.length,
+                ),
+              ),
+            ),
+        ],
       ),
-      body: _history.isEmpty ? _buildEmptyState() : _buildHistoryList(),
     );
   }
 
@@ -47,21 +92,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.history, size: 72, color: EkemaColors.textSecondary.withValues(alpha: 0.25)),
-            const SizedBox(height: EkemaSpacing.xl),
-            Text(
-              'Aucune démarche enregistrée',
-              style: Theme.of(context).textTheme.titleMedium,
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: EkemaColors.brandLight,
+                borderRadius: BorderRadius.circular(28),
+              ),
+              child: const Icon(Icons.history_rounded, size: 48, color: EkemaColors.brand),
             ),
+            const SizedBox(height: EkemaSpacing.xl),
+            Text('Aucune démarche', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 22)),
             const SizedBox(height: EkemaSpacing.sm),
             Text(
-              'Vos procédures et documents apparaîtront ici.',
+              'Vos parcours sauvegardés\napparaîtront ici.',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: EkemaColors.textSecondary,
-                  ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: EkemaColors.textSecondary),
             ),
-            const SizedBox(height: EkemaSpacing.xl),
+            const SizedBox(height: EkemaSpacing.xxl),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('Explorer les démarches'),
@@ -72,35 +120,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  Widget _buildHistoryList() {
-    return ListView.separated(
-      padding: const EdgeInsets.all(EkemaSpacing.lg),
-      itemCount: _history.length,
-      separatorBuilder: (_, __) => const SizedBox(height: EkemaSpacing.md),
-      itemBuilder: (context, index) {
-        final item = _history[index];
-        final type = item['type'] as String;
-        final date = DateTime.parse(item['date'] as String);
-        final (icon, bg, fg) = _typeStyle(type);
-
-        return ListingRow(
-          icon: icon,
-          iconBackground: bg,
-          iconColor: fg,
-          title: item['title'] as String,
-          subtitle: '${date.day}/${date.month}/${date.year} · $type',
-        );
-      },
-    );
-  }
-
-  (IconData, Color, Color) _typeStyle(String type) {
+  (IconData, List<Color>) _style(String type) {
     if (type == 'document') {
-      return (Icons.description_outlined, EkemaColors.infoLight, EkemaColors.info);
+      return (Icons.description_outlined, [EkemaColors.info, const Color(0xFF004CC4)]);
     }
     if (type == 'procedure') {
-      return (Icons.assignment_outlined, EkemaColors.brandLight, EkemaColors.brand);
+      return (Icons.assignment_outlined, [EkemaColors.brand, EkemaColors.brandHover]);
     }
-    return (Icons.chat_bubble_outline, EkemaColors.subtle, EkemaColors.textSecondary);
+    return (Icons.chat_bubble_outline, [const Color(0xFF888888), EkemaColors.textPrimary]);
   }
 }

@@ -16,14 +16,6 @@ class OfflineMapScreen extends StatelessWidget {
         : const LatLng(3.8667, 11.5167);
 
     return Scaffold(
-      backgroundColor: EkemaColors.canvas,
-      appBar: AppBar(
-        title: const Text('Localisation des bureaux'),
-        leading: IconButton(
-          icon: const Icon(Icons.close, size: 24),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
       body: Stack(
         children: [
           FlutterMap(
@@ -42,27 +34,37 @@ class OfflineMapScreen extends StatelessWidget {
                 markers: locations.map((loc) {
                   return Marker(
                     point: LatLng(loc.lat, loc.lon),
-                    width: 80,
-                    height: 80,
+                    width: 100,
+                    height: 100,
                     child: Column(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                            color: EkemaColors.canvas,
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: EkemaShadows.sm,
+                            color: EkemaColors.textPrimary,
+                            borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                            boxShadow: EkemaShadows.md,
                           ),
                           child: Text(
                             loc.name,
                             style: const TextStyle(
-                              fontSize: 9,
+                              fontSize: 10,
                               fontWeight: FontWeight.w700,
-                              color: EkemaColors.brand,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                        const Icon(Icons.location_on, color: EkemaColors.brand, size: 32),
+                        Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: EkemaColors.brand,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 3),
+                            boxShadow: EkemaShadows.sm,
+                          ),
+                          child: const Icon(Icons.place, color: Colors.white, size: 20),
+                        ),
                       ],
                     ),
                   );
@@ -70,49 +72,82 @@ class OfflineMapScreen extends StatelessWidget {
               ),
             ],
           ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(EkemaSpacing.lg),
+              child: Row(
+                children: [
+                  Material(
+                    color: EkemaColors.canvas,
+                    borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                    elevation: 4,
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context),
+                      borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                      child: const Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  Material(
+                    color: EkemaColors.canvas,
+                    borderRadius: BorderRadius.circular(EkemaRadius.pill),
+                    elevation: 4,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      child: Text('Bureaux à proximité', style: TextStyle(fontWeight: FontWeight.w700)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           if (locations.isNotEmpty)
             Positioned(
               left: EkemaSpacing.lg,
               right: EkemaSpacing.lg,
-              bottom: EkemaSpacing.xl,
+              bottom: EkemaSpacing.xxl,
               child: Material(
-                borderRadius: BorderRadius.circular(EkemaRadius.md),
-                elevation: 4,
+                borderRadius: BorderRadius.circular(EkemaRadius.lg),
+                elevation: 8,
                 child: Container(
-                  padding: const EdgeInsets.all(EkemaSpacing.lg),
+                  padding: const EdgeInsets.all(EkemaSpacing.xl),
                   decoration: BoxDecoration(
                     color: EkemaColors.canvas,
-                    borderRadius: BorderRadius.circular(EkemaRadius.md),
+                    borderRadius: BorderRadius.circular(EkemaRadius.lg),
                   ),
                   child: Row(
                     children: [
                       Container(
-                        width: 44,
-                        height: 44,
+                        width: 56,
+                        height: 56,
                         decoration: BoxDecoration(
-                          color: EkemaColors.brandLight,
-                          borderRadius: BorderRadius.circular(EkemaRadius.sm),
+                          gradient: const LinearGradient(colors: [EkemaColors.brand, EkemaColors.brandHover]),
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Icon(Icons.place_outlined, color: EkemaColors.brand),
+                        child: const Icon(Icons.location_on, color: Colors.white, size: 28),
                       ),
-                      const SizedBox(width: EkemaSpacing.md),
+                      const SizedBox(width: EkemaSpacing.lg),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               locations.first.name,
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 15),
+                              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
                             ),
-                            Text(
-                              'Bureau administratif',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: EkemaColors.textSecondary,
-                                    fontSize: 13,
-                                  ),
-                            ),
+                            const Text('Itinéraire · OpenStreetMap', style: TextStyle(color: EkemaColors.textSecondary)),
                           ],
                         ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                        child: const Text('Y aller'),
                       ),
                     ],
                   ),
