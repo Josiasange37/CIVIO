@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 import Image from "next/image";
 
@@ -81,7 +83,7 @@ const navSections: { title: string; items: NavItem[] }[] = [
     title: "Principal",
     items: [
       { label: "Dashboard", href: "/", icon: Icons.dashboard },
-      { label: "Procédures", href: "/procedures", icon: Icons.procedures, badge: "4" },
+      { label: "Procédures", href: "/procedures", icon: Icons.procedures },
       { label: "Utilisateurs", href: "/users", icon: Icons.users },
       { label: "Documents", href: "/documents", icon: Icons.documents },
     ],
@@ -100,6 +102,21 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [proceduresCount, setProceduresCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "procedures"),
+      (snapshot) => {
+        setProceduresCount(snapshot.size);
+      },
+      (err) => {
+        console.error("Sidebar procedures count subscription error:", err);
+        setProceduresCount(null);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
   return (
     <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
@@ -120,6 +137,10 @@ export default function Sidebar() {
                 item.href === "/"
                   ? pathname === "/"
                   : pathname.startsWith(item.href);
+              const dynamicBadge =
+                item.href === "/procedures" && proceduresCount !== null
+                  ? String(proceduresCount)
+                  : item.badge;
               return (
                 <Link
                   key={item.href}
@@ -129,7 +150,7 @@ export default function Sidebar() {
                 >
                   <span className="icon">{item.icon}</span>
                   <span>{item.label}</span>
-                  {item.badge && (
+                  {dynamicBadge && (
                     <span
                       style={{
                         marginLeft: "auto",
@@ -141,7 +162,7 @@ export default function Sidebar() {
                         borderRadius: "10px",
                       }}
                     >
-                      {item.badge}
+                      {dynamicBadge}
                     </span>
                   )}
                 </Link>
