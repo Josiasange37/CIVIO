@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../../core/config/app_config.dart';
 import '../../domain/entities/procedure.dart';
 import '../../data/repositories/procedure_repository.dart';
 
@@ -13,6 +14,8 @@ class ProcedureProvider with ChangeNotifier {
   List<Procedure> _procedures = [];
   List<Procedure> _searchResults = [];
   Procedure? _selectedProcedure;
+  bool _isLoading = true;
+  String? _loadError;
   
   ChatState _state = ChatState.idle;
   int _currentQuestionIndex = 0;
@@ -23,11 +26,26 @@ class ProcedureProvider with ChangeNotifier {
   Procedure? get selectedProcedure => _selectedProcedure;
   ChatState get state => _state;
   int get currentQuestionIndex => _currentQuestionIndex;
+  bool get isLoading => _isLoading;
+  String? get loadError => _loadError;
+  bool get isDemoMode => AppConfig.isDemoMode;
   
   Future<void> init() async {
-    _procedures = await _repository.getProcedures();
-    _searchResults = _procedures;
+    _isLoading = true;
+    _loadError = null;
     notifyListeners();
+
+    try {
+      _procedures = await _repository.getProcedures();
+      _searchResults = _procedures;
+    } catch (e) {
+      _procedures = [];
+      _searchResults = [];
+      _loadError = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void search(String query) async {
