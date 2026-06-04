@@ -112,7 +112,7 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> with TickerProvider
               ),
             ),
           ),
-          Positioned(
+          const Positioned(
             top: 100,
             left: EkemaSpacing.lg,
             right: EkemaSpacing.lg,
@@ -120,7 +120,7 @@ class _OfflineMapScreenState extends State<OfflineMapScreen> with TickerProvider
               index: 0,
               child: MascotSpeechBubble(
                 text: 'Trouvez le bureau le plus proche ! Balayez les cartes ci-dessous.',
-                mascot: const DuoMascot(size: 56, mood: 'happy'),
+                mascot: DuoMascot(size: 56, mood: 'happy'),
               ),
             ),
           ),

@@ -36,7 +36,7 @@ class EkemaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'EKEMA',
+      title: 'Civio',
       debugShowCheckedModeBanner: false,
       theme: EkemaTheme.lightTheme,
       initialRoute: '/',

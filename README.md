@@ -1,6 +1,6 @@
-# EKEMA — Offline-first Intelligent Assistant (Cameroon)
+# Civio — Offline-first Intelligent Assistant (Cameroon)
 
-EKEMA is a production-ready Flutter Android application designed to help Cameroonian citizens navigate administrative and academic procedures. It operates **100% offline**, using a local JSON knowledge base and featuring a voice-first interaction system in French and Camfranglais.
+Civio is a production-ready Flutter Android application designed to help Cameroonian citizens navigate administrative and academic procedures. It operates **100% offline**, using a local JSON knowledge base and featuring a voice-first interaction system in French and Camfranglais.
 
 ## ✨ Key Features
 

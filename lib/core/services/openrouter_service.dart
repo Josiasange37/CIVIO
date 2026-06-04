@@ -58,8 +58,8 @@ class OpenRouterService implements AIService {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $apiKey',
-          'HTTP-Referer': 'https://ekema.app',
-          'X-Title': 'EKEMA - Assistant Administratif Cameroun',
+          'HTTP-Referer': 'https://civio.app',
+          'X-Title': 'Civio - Assistant Administratif Cameroun',
         },
         body: jsonEncode({
           'model': model,

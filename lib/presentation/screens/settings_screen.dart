@@ -89,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       child: const Icon(Icons.bolt, color: Colors.white),
                     ),
-                    title: const Text('EKEMA · GCD4F 2026', style: TextStyle(fontWeight: FontWeight.w800)),
+                    title: const Text('Civio · GCD4F 2026', style: TextStyle(fontWeight: FontWeight.w800)),
                     subtitle: const Text('IA pour la Société — Cameroun'),
                   ),
                 ]),
@@ -117,10 +117,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       child: Row(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 32,
             backgroundColor: EkemaColors.brand,
-            child: const Icon(Icons.person, color: Colors.white, size: 32),
+            child: Icon(Icons.person, color: Colors.white, size: 32),
           ),
           const SizedBox(width: EkemaSpacing.lg),
           const Expanded(

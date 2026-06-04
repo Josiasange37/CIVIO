@@ -122,7 +122,7 @@ class _AIChatScreenState extends State<AIChatScreen> with TickerProviderStateMix
               ),
               const Expanded(
                 child: Text(
-                  'Chat EKEMA',
+                  'Chat Civio',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800),
                 ),
@@ -172,9 +172,9 @@ class _AIChatScreenState extends State<AIChatScreen> with TickerProviderStateMix
             ),
           ),
           const SizedBox(height: EkemaSpacing.xxl),
-          StaggerFadeSlide(
+          const StaggerFadeSlide(
             index: 1,
-            child: const Text(
+            child: Text(
               'Choisissez une question',
               style: TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w700),
             ),

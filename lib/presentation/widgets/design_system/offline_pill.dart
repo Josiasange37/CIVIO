@@ -9,7 +9,7 @@ class OfflinePill extends StatelessWidget {
     super.key,
     this.title = 'Mode hors ligne',
     this.message =
-        'EKEMA fonctionne avec ou sans connexion. Les procédures de base restent toujours accessibles.',
+        'Civio fonctionne avec ou sans connexion. Les procédures de base restent toujours accessibles.',
   });
 
   @override

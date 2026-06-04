@@ -107,9 +107,9 @@ class AIChatProvider with ChangeNotifier {
   String getWelcomeMessage() {
     switch (_mode) {
       case ChatMode.online:
-        return 'Bonjour ! Je suis EKEMA, votre assistant administratif alimenté par IA. Comment puis-je vous aider aujourd\'hui ?';
+        return 'Bonjour ! Je suis Civio, votre assistant administratif alimenté par IA. Comment puis-je vous aider aujourd\'hui ?';
       case ChatMode.offline:
-        return 'Bonjour ! Je suis EKEMA (mode hors-ligne). Je peux vous aider avec les procédures administratives de base. Comment puis-je vous aider ?';
+        return 'Bonjour ! Je suis Civio (mode hors-ligne). Je peux vous aider avec les procédures administratives de base. Comment puis-je vous aider ?';
       case ChatMode.unavailable:
         return 'Bonjour ! Le service est temporairement indisponible. Veuillez vérifier votre connexion ou réessayer plus tard.';
     }

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ekema/domain/entities/procedure.dart';
-import 'package:ekema/presentation/providers/procedure_provider.dart';
+import 'package:civio/domain/entities/procedure.dart';
+import 'package:civio/presentation/providers/procedure_provider.dart';
 
 void main() {
   group('Procedure Logic Tests', () {

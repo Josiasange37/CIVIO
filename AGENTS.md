@@ -4,7 +4,7 @@
 
 ### Product
 
-Single Flutter app (**EKEMA**) at repo root — offline-first assistant for Cameroon administrative procedures. Primary target is **Android**; **Linux desktop** is supported for local dev/Cloud Agent GUI testing.
+Single Flutter app (**Civio**, package `civio`) at repo root — offline-first assistant for Cameroon administrative procedures. Primary target is **Android**; **Linux desktop** is supported for local dev/Cloud Agent GUI testing.
 
 ### Services
 
@@ -35,7 +35,7 @@ Build with GCC (Clang default on Ubuntu 24.04 can fail to link):
 ```bash
 export CC=gcc CXX=g++
 flutter build linux --debug
-./build/linux/x64/debug/bundle/ekema
+./build/linux/x64/debug/bundle/civio
 ```
 
 `DISPLAY` is typically `:1` in Cloud Agent VMs for GUI tests.

@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'EKEMA',
+                  'Civio',
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 22),
                 ),
               ],
@@ -125,20 +125,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             BoxShadow(color: Color(0xFF37464F), blurRadius: 0, offset: Offset(0, 4)),
                           ],
                         ),
-                        child: Row(
+                        child: const Row(
                           children: [
-                            const DuoMascot(size: 56, mood: 'happy'),
-                            const SizedBox(width: EkemaSpacing.lg),
-                            const Expanded(
+                            DuoMascot(size: 56, mood: 'happy'),
+                            SizedBox(width: EkemaSpacing.lg),
+                            Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Chat IA EKEMA', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
+                                  Text('Chat IA Civio', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
                                   Text('Posez n\'importe quelle question', style: TextStyle(color: Colors.white54, fontSize: 13)),
                                 ],
                               ),
                             ),
-                            const Icon(Icons.chevron_right, color: Color(0xFF58CC02)),
+                            Icon(Icons.chevron_right, color: Color(0xFF58CC02)),
                           ],
                         ),
                       ),
@@ -192,21 +192,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () => _openCniDialogue(context),
                         ),
                         const SizedBox(width: EkemaSpacing.lg),
-                        ProcedureListingCard(
+                        const ProcedureListingCard(
                           title: 'Concours ENS 2026',
                           location: 'National · MINESUP',
                           duration: '3 mois',
                           cost: '5 000 F',
-                          headerGradient: const [Color(0xFF9B6DFF), Color(0xFF7B2FF7)],
+                          headerGradient: [Color(0xFF9B6DFF), Color(0xFF7B2FF7)],
                           icon: Icons.school_outlined,
                         ),
                         const SizedBox(width: EkemaSpacing.lg),
-                        ProcedureListingCard(
+                        const ProcedureListingCard(
                           title: 'Création d\'entreprise',
                           location: 'CFCE · Guichet unique',
                           duration: '48 h',
                           cost: 'Variable',
-                          headerGradient: const [Color(0xFFFFB347), Color(0xFFE07912)],
+                          headerGradient: [Color(0xFFFFB347), Color(0xFFE07912)],
                           icon: Icons.business_center_outlined,
                         ),
                       ],
@@ -239,17 +239,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         gradient: const [Color(0xFFFF385C), Color(0xFFE31C5F)],
                         onTap: () => _openCniDialogue(context),
                       ),
-                      CategoryGridTile(
+                      const CategoryGridTile(
                         title: 'Actes civils',
                         subtitle: 'Naissance · Mariage',
                         icon: Icons.description_outlined,
-                        gradient: const [Color(0xFF4A90FF), Color(0xFF004CC4)],
+                        gradient: [Color(0xFF4A90FF), Color(0xFF004CC4)],
                       ),
-                      CategoryGridTile(
+                      const CategoryGridTile(
                         title: 'Concours & Études',
                         subtitle: 'ENS · Bourses',
                         icon: Icons.school_outlined,
-                        gradient: const [Color(0xFF9B6DFF), Color(0xFF7B2FF7)],
+                        gradient: [Color(0xFF9B6DFF), Color(0xFF7B2FF7)],
                       ),
                       CategoryGridTile(
                         title: 'Rédiger un document',

@@ -60,11 +60,11 @@ class ProcedureListingCard extends StatelessWidget {
                         color: Colors.white.withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(EkemaRadius.pill),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.offline_bolt, size: 14, color: EkemaColors.success),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Text(
                             'Hors ligne',
                             style: TextStyle(
@@ -108,7 +108,7 @@ class ProcedureListingCard extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                Icon(Icons.place_outlined, size: 14, color: EkemaColors.textSecondary),
+                const Icon(Icons.place_outlined, size: 14, color: EkemaColors.textSecondary),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(

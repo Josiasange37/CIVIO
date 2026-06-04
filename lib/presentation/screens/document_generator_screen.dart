@@ -236,7 +236,7 @@ class _DocumentGeneratorScreenState extends State<DocumentGeneratorScreen> {
                     major: _majorController.text,
                     content: 'Je soussignée ${_nameController.text}…',
                   );
-                  await PdfGenerator.saveAndShare(bytes, 'demande_bourse_ekema.pdf');
+                  await PdfGenerator.saveAndShare(bytes, 'demande_bourse_civio.pdf');
                 },
                 icon: const Icon(Icons.download_outlined),
                 label: const Text('Télécharger'),

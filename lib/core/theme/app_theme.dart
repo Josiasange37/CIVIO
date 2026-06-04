@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Airbnb-inspired premium token system for EKEMA v2.
+/// Airbnb-inspired premium token system for Civio v2.
 class EkemaColors {
   EkemaColors._();
 

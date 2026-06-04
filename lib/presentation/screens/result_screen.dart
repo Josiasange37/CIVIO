@@ -45,11 +45,11 @@ class _ResultScreenState extends State<ResultScreen> {
                 padding: const EdgeInsets.fromLTRB(EkemaSpacing.lg, EkemaSpacing.xl, EkemaSpacing.lg, 120),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
-                    StaggerFadeSlide(
+                    const StaggerFadeSlide(
                       index: 0,
                       child: MascotSpeechBubble(
                         text: 'Bravo ! Voici votre plan personnalisé. Cochez chaque étape terminée.',
-                        mascot: const DuoMascot(size: 64, mood: 'celebrate'),
+                        mascot: DuoMascot(size: 64, mood: 'celebrate'),
                       ),
                     ),
                     const SizedBox(height: EkemaSpacing.xl),

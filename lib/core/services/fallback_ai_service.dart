@@ -60,7 +60,7 @@ class FallbackAIService implements AIService {
 
     if (matchedProcedure == null) {
       // Generic response when no procedure matches
-      return """Je suis EKEMA, votre assistant administratif pour le Cameroun.
+      return """Je suis Civio, votre assistant administratif pour le Cameroun.
 
 Je peux vous aider avec les procédures suivantes :
 ${ _procedures.map((p) => "• ${p.title}").join('\n') }

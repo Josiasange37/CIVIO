@@ -75,7 +75,7 @@ class StepAccordionCard extends StatelessWidget {
                                   ? const Icon(Icons.check_rounded, color: Colors.white, size: 22)
                                   : Text(
                                       '$index',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w800,
                                         color: EkemaColors.brand,
