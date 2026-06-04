@@ -4,9 +4,10 @@ import 'core/config/app_config.dart';
 import 'core/di/injection.dart';
 import 'core/theme/app_theme.dart';
 import 'presentation/providers/ai_chat_provider.dart';
+import 'presentation/providers/auth_provider.dart';
 import 'presentation/providers/procedure_provider.dart';
 import 'presentation/providers/voice_provider.dart';
-import 'presentation/screens/home_screen.dart';
+import 'presentation/screens/splash_screen.dart';
 import 'presentation/screens/dialogue_screen.dart';
 import 'presentation/screens/result_screen.dart';
 import 'presentation/screens/document_generator_screen.dart';
@@ -32,6 +33,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProcedureProvider()..init()),
         ChangeNotifierProvider(create: (_) => VoiceProvider()..init()),
         ChangeNotifierProvider(create: (_) => AIChatProvider()..init()),
@@ -41,10 +43,6 @@ Future<void> main() async {
   );
 }
 
-/// Try to initialize Firebase. On platforms where it isn't configured
-/// (Linux, macOS, Windows in this project), or when initialization fails for
-/// any other reason, fall back to a no-op "demo mode" so the app still
-/// launches and the UI is previewable.
 Future<void> _initializeFirebase() async {
   if (!AppConfig.firebaseSupported) {
     AppConfig.firebaseEnabled = false;
@@ -96,7 +94,7 @@ class CivioApp extends StatelessWidget {
         );
       },
       routes: {
-        '/': (context) => const HomeScreen(),
+        '/': (context) => const SplashScreen(),
         '/dialogue': (context) => const DialogueScreen(),
         '/result': (context) => const ResultScreen(),
         '/document-generator': (context) => const DocumentGeneratorScreen(),
