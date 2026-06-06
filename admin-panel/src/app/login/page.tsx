@@ -1,312 +1,108 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
-import { signInWithPhoneNumber, RecaptchaVerifier, ConfirmationResult } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [step, setStep] = useState<"phone" | "code">("phone");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
-  const recaptchaRef = useRef<HTMLDivElement>(null);
-  const verifierRef = useRef<RecaptchaVerifier | null>(null);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    if (!verifierRef.current && recaptchaRef.current) {
-      verifierRef.current = new RecaptchaVerifier(auth, recaptchaRef.current, {
-        size: "invisible",
-        callback: () => {},
-      });
-    }
-
-    return () => {
-      verifierRef.current?.clear();
-      verifierRef.current = null;
-    };
-  }, []);
-
-  const handleSendCode = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phoneNumber) {
-      setError("Veuillez saisir votre numéro de téléphone");
+    if (!email || !password) {
+      setError("Veuillez saisir votre email et mot de passe");
       return;
     }
-
     setLoading(true);
     setError("");
-
     try {
-      const fullNumber = `+237${phoneNumber.replace(/\s/g, "")}`;
-      if (!verifierRef.current) {
-        verifierRef.current = new RecaptchaVerifier(auth, recaptchaRef.current!, {
-          size: "invisible",
-          callback: () => {},
-        });
-      }
-      const result = await signInWithPhoneNumber(auth, fullNumber, verifierRef.current);
-      setConfirmationResult(result);
-      setStep("code");
-    } catch (err: any) {
-      setError(err.message || "Erreur d'envoi du code. Vérifiez le numéro.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyCode = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!verificationCode) {
-      setError("Veuillez entrer le code de validation");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    try {
-      if (!confirmationResult) throw new Error("Aucune confirmation en cours");
-      const userCred = await confirmationResult.confirm(verificationCode);
-
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "admin_users", userCred.user.uid), {
-        phone: userCred.user.phoneNumber,
+        email: userCred.user.email,
         lastLogin: new Date().toISOString(),
-        email: userCred.user.email || "",
       }, { merge: true });
-
       router.push("/");
     } catch (err: any) {
-      setError(err.message || "Code invalide. Veuillez réessayer.");
+      const msg =
+        err.code === "auth/user-not-found" || err.code === "auth/wrong-password" || err.code === "auth/invalid-credential"
+          ? "Email ou mot de passe incorrect"
+          : err.code === "auth/invalid-email"
+          ? "Format d'email invalide"
+          : err.code === "auth/too-many-requests"
+          ? "Trop de tentatives. Réessayez plus tard."
+          : "Erreur de connexion. Vérifiez vos identifiants.";
+      setError(msg);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-        padding: "20px",
-        position: "relative",
-        zIndex: 1,
-      }}
-    >
-      <div
-        className="glass-card-rainbow animate-fade-in-up"
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          padding: 2,
-        }}
-      >
-        <div
-          className="glass-inner"
-          style={{
-            padding: "40px 32px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "stretch",
-          }}
-        >
-          <div style={{ textAlign: "center", marginBottom: 32 }}>
-            <div
-              style={{
-                width: 52,
-                height: 52,
-                borderRadius: "var(--radius-lg)",
-                background: "linear-gradient(135deg, var(--accent-emerald), var(--accent-cyan))",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 800,
-                fontSize: 22,
-                color: "white",
-                marginBottom: 16,
-                boxShadow: "0 0 20px var(--accent-emerald-glow)",
-              }}
-            >
+    <div className="min-h-screen flex items-center justify-center p-5 bg-[#f5fafa]">
+      <div className="w-full max-w-[420px] animate-fade-in-up">
+        <div className="chart-container p-8 sm:p-10 flex flex-col items-stretch">
+          <div className="text-center mb-8">
+            <div className="w-[52px] h-[52px] rounded-2xl bg-primary flex items-center justify-center font-extrabold text-[22px] text-white mx-auto mb-4 shadow-lg">
               C
             </div>
-            <h1
-              style={{
-                fontFamily: "Outfit",
-                fontSize: 26,
-                fontWeight: 700,
-                color: "white",
-                letterSpacing: "-0.5px",
-              }}
-            >
+            <h1 className="text-[26px] font-bold text-primary font-headline tracking-tight">
               CIVIO Admin
             </h1>
-            <p
-              style={{
-                fontSize: 13,
-                color: "var(--text-secondary)",
-                marginTop: 6,
-              }}
-            >
+            <p className="text-body-sm text-on-surface-variant mt-1.5">
               Panel de contrôle · Procédures Cameroun
             </p>
           </div>
 
           {error && (
-            <div
-              style={{
-                background: "rgba(244, 63, 94, 0.1)",
-                border: "1px solid var(--accent-rose)",
-                borderRadius: "var(--radius-sm)",
-                padding: "10px 14px",
-                fontSize: 13,
-                color: "var(--accent-rose)",
-                marginBottom: 20,
-                textAlign: "center",
-              }}
-            >
+            <div className="bg-error-container border border-error rounded-lg px-3.5 py-2.5 text-body-sm text-on-error-container mb-5 text-center">
               {error}
             </div>
           )}
 
-          <div ref={recaptchaRef} />
+          <form onSubmit={handleLogin} className="flex flex-col gap-5">
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5">
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="admin@civio.cm"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full h-[46px] px-4 bg-surface border border-outline-variant rounded-xl text-body-md text-on-surface outline-none"
+              />
+            </div>
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5">
+                Mot de passe
+              </label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full h-[46px] px-4 bg-surface border border-outline-variant rounded-xl text-body-md text-on-surface outline-none"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full h-[46px] justify-center text-[15px]"
+            >
+              {loading ? "Connexion..." : "Se connecter"}
+            </button>
+          </form>
 
-          {step === "phone" ? (
-            <form onSubmit={handleSendCode} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              <div>
-                <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
-                  Numéro de téléphone
-                </label>
-                <div style={{ position: "relative" }}>
-                  <span
-                    style={{
-                      position: "absolute",
-                      left: 14,
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    +237
-                  </span>
-                  <input
-                    type="tel"
-                    placeholder="6XX XX XX XX"
-                    required
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    style={{
-                      width: "100%",
-                      height: 46,
-                      padding: "0 16px 0 54px",
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid var(--glass-border)",
-                      borderRadius: "var(--radius-md)",
-                      color: "white",
-                      fontSize: 15,
-                      fontWeight: 600,
-                      outline: "none",
-                      letterSpacing: "0.5px",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="btn-primary"
-                disabled={loading}
-                style={{
-                  height: 46,
-                  justifyContent: "center",
-                  fontSize: 15,
-                }}
-              >
-                {loading ? "Envoi du code..." : "Se connecter par SMS"}
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handleVerifyCode} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              <div>
-                <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
-                  Code de validation (SMS)
-                </label>
-                <input
-                  type="text"
-                  placeholder="------"
-                  maxLength={6}
-                  required
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  style={{
-                    width: "100%",
-                    height: 46,
-                    padding: "0 16px",
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid var(--glass-border)",
-                    borderRadius: "var(--radius-md)",
-                    color: "white",
-                    fontSize: 18,
-                    fontWeight: 700,
-                    textAlign: "center",
-                    letterSpacing: "8px",
-                    outline: "none",
-                  }}
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn-primary"
-                disabled={loading}
-                style={{
-                  height: 46,
-                  justifyContent: "center",
-                  fontSize: 15,
-                }}
-              >
-                {loading ? "Vérification..." : "Valider le code"}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setStep("phone")}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: "var(--text-secondary)",
-                  fontSize: 13,
-                  cursor: "pointer",
-                  textAlign: "center",
-                  marginTop: 4,
-                }}
-              >
-                ← Modifier le numéro
-              </button>
-            </form>
-          )}
-
-          <div
-            style={{
-              marginTop: 28,
-              borderTop: "1px solid var(--glass-border)",
-              paddingTop: 16,
-              fontSize: 11,
-              color: "var(--text-tertiary)",
-              textAlign: "center",
-              lineHeight: "1.4",
-            }}
-          >
-            Authentification par téléphone via Firebase
+          <div className="mt-7 pt-4 border-t border-outline-variant text-[11px] text-on-surface-variant opacity-70 text-center leading-tight">
+            Authentification via Firebase
           </div>
         </div>
       </div>

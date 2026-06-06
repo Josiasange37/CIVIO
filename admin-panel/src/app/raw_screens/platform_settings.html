@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civio Platform Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid #e2e7e7;
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid #e2e7e7;
+            transition: all 0.2s ease-in-out;
+        }
+        .glass-input:focus {
+            outline: none;
+            border-color: #71d4e7;
+            box-shadow: 0 0 0 4px rgba(113, 212, 231, 0.15);
+        }
+        body {
+            background-color: #e9fcfd;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#b5c7be",
+                        "surface-bright": "#f5fafa",
+                        "secondary-fixed": "#a5eeff",
+                        "outline": "#72787f",
+                        "on-tertiary-fixed-variant": "#3a4a43",
+                        "outline-variant": "#c1c7d0",
+                        "surface-container-low": "#f0f4f4",
+                        "inverse-on-surface": "#edf2f2",
+                        "secondary": "#006877",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "background": "#f5fafa",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#99cbfd",
+                        "primary-fixed": "#cee5ff",
+                        "on-secondary-fixed": "#001f25",
+                        "on-primary-fixed-variant": "#054a75",
+                        "on-surface": "#171d1d",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#d6dbdb",
+                        "inverse-surface": "#2c3132",
+                        "surface-container-highest": "#dee3e3",
+                        "on-surface-variant": "#41474e",
+                        "on-primary-container": "#95c8f9",
+                        "surface-container": "#eaefef",
+                        "surface-variant": "#dee3e3",
+                        "secondary-container": "#6de4fd",
+                        "primary-fixed-dim": "#99cbfd",
+                        "on-secondary-fixed-variant": "#004e5a",
+                        "on-primary-fixed": "#001d33",
+                        "on-background": "#171d1d",
+                        "on-tertiary-fixed": "#0f1f19",
+                        "surface-tint": "#2b628e",
+                        "surface-container-high": "#e4e9e9",
+                        "secondary-fixed-dim": "#5dd6ee",
+                        "tertiary-fixed": "#d4e7dd",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#43544d",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#b8cbc2",
+                        "surface": "#f5fafa",
+                        "on-error": "#ffffff",
+                        "primary": "#003c61",
+                        "tertiary": "#2d3d36",
+                        "primary-container": "#18547f",
+                        "on-secondary-container": "#006574",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "base": "4px",
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "margin-desktop": "40px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased text-on-surface">
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface flex flex-col p-md border-r border-outline-variant shadow-sm z-50">
+<div class="flex items-center gap-3 mb-xl px-2">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-lg text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Civio</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Civic Admin</p>
+</div>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+                Procedures
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">description</span>
+                Documents
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">map</span>
+                Map
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">group</span>
+                Users
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-primary bg-primary-fixed rounded-lg font-bold font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto pt-lg space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">help</span>
+                Help Center
+            </a>
+<button class="w-full mt-4 bg-primary text-white py-2 rounded-lg font-body-md font-bold hover:opacity-90 transition-opacity">
+                Support
+            </button>
+</div>
+</aside>
+<!-- Top Navigation Shell -->
+<header class="sticky top-0 w-full bg-white/70 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center px-margin-desktop h-16 ml-64 z-40">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="glass-input pl-10 pr-4 py-1.5 rounded-full w-64 font-body-sm text-body-sm" placeholder="Search settings..." type="text"/>
+</div>
+<nav class="flex gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged administrative official with a kind expression. The person is wearing a sharp navy blue blazer over a crisp white shirt. The background is a blurred office setting with soft, high-key natural lighting and a clean, modern aesthetic. The overall mood is authoritative yet approachable, reflecting the Civio brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVqV5yuzwTNT0lnv6Yid3uVb_7sPtJwWk6cc5w2tHxlZAz--kdzPmMx4ecqJnZfGHxk4UnUVNg9DpeIo-MScHmeLSOMoT9D8CHAoQTY7eIjuurVvth_RzHJLdGQH2V3ROtl9oS32RJRlReo9w63iqVEXtBLeoOMIlO6av9m6ZKV7jymn6w5aaKum6CNTntPlF6gvwndcwTs6mdd7RzlbVt5EGmtwKRRTbc_wJmJD8yCFE2I43VAAauoU_kzPN8y7IsmqC3dGsbndg"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-64 p-margin-desktop min-h-screen">
+<div class="max-w-[1440px] mx-auto">
+<header class="mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary">Platform Settings</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Configure your institutional workspace and security protocols.</p>
+</header>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Settings Navigation Sidebar (Internal) -->
+<nav class="col-span-3 space-y-2">
+<button class="w-full flex items-center justify-between p-4 rounded-xl glass-panel text-primary font-bold shadow-sm transition-all" id="tab-btn-general" onclick="switchTab('general')">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined">settings_suggest</span>
+                            General
+                        </span>
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all" id="tab-btn-security" onclick="switchTab('security')">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined">shield_person</span>
+                            Security
+                        </span>
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all" id="tab-btn-notifications" onclick="switchTab('notifications')">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined">notifications_active</span>
+                            Notifications
+                        </span>
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all" id="tab-btn-api" onclick="switchTab('api')">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined">integration_instructions</span>
+                            API &amp; Dev
+                        </span>
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</nav>
+<!-- Settings Canvas -->
+<div class="col-span-9 space-y-lg">
+<!-- General Section -->
+<section class="tab-content block animate-in fade-in slide-in-from-bottom-2 duration-300" id="section-general">
+<div class="glass-panel rounded-xl p-xl shadow-sm mb-lg">
+<h3 class="font-headline-sm text-headline-sm mb-lg">Institutional Profile</h3>
+<div class="flex items-center gap-xl mb-xl">
+<div class="relative group">
+<div class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-primary-container relative">
+<img alt="Organization Logo" class="w-full h-full object-cover" data-alt="A high-angle architectural photograph of a modern glass skyscraper reflecting a clear sky. The image has a clean, minimalist aesthetic with blue and silver tones, symbolizing institutional stability and corporate professionalism. Soft natural lighting emphasizes the crisp lines and high-end software craftsmanship of the digital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXtAMzI5pdeR5zkp0LSklOVABF3OnStNQPm9U6MSk2cup74_SY2LJr8LuLjzYG1KGNbfZEd3yjOChz-_VbGyaXh4aggTzO9zkJ1Z6ivAQV0dmWxi-yl61OmTuP88_zlUNPhCtWW4x39jgUjGJBQV06n957_MAhjJOYyqaHgD0tzaQGDKy1mTQNSS3KboM3mHVjr2C0Lk38q3QHUNokrh4728z4kAOzRrHEVUu7yo8yUYdJ_5pVb3H_ThHnR215_Hv8Zvn7frh4IM4"/>
+<div class="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-white">photo_camera</span>
+</div>
+</div>
+<button class="absolute -bottom-2 -right-2 bg-white p-1.5 rounded-lg shadow-md border border-outline-variant hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<div class="flex-grow">
+<h4 class="font-body-lg font-bold">City Council Administration</h4>
+<p class="font-body-sm text-on-surface-variant">Your organization logo is visible to all internal members.</p>
+<div class="flex gap-base mt-lg">
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md">Upload New</button>
+<button class="border border-outline-variant px-4 py-2 rounded-lg font-label-md hover:bg-surface-container transition-colors">Remove</button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-lg">
+<div class="space-y-base">
+<label class="font-label-md text-on-surface-variant ml-1">PLATFORM NAME</label>
+<input class="glass-input w-full p-3 rounded-xl font-body-md" type="text" value="Civio Admin Center"/>
+</div>
+<div class="space-y-base">
+<label class="font-label-md text-on-surface-variant ml-1">PRIMARY DOMAIN</label>
+<input class="glass-input w-full p-3 rounded-xl font-body-md" type="text" value="admin.civio.gov"/>
+</div>
+<div class="col-span-2 space-y-base">
+<label class="font-label-md text-on-surface-variant ml-1">CONTACT EMAIL</label>
+<input class="glass-input w-full p-3 rounded-xl font-body-md" type="email" value="it-support@civio.gov"/>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-xl shadow-sm">
+<div class="flex items-center justify-between mb-lg">
+<div>
+<h3 class="font-headline-sm text-headline-sm">Time &amp; Localization</h3>
+<p class="font-body-sm text-on-surface-variant">Control how date and times are displayed platform-wide.</p>
+</div>
+</div>
+<div class="space-y-lg">
+<div class="flex items-center justify-between p-4 bg-azure-mist/30 rounded-xl border border-outline-variant/50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<div>
+<p class="font-body-md font-bold">Standard Timezone</p>
+<p class="font-body-sm text-on-surface-variant">Current: (GMT-05:00) Eastern Time</p>
+</div>
+</div>
+<button class="text-primary font-bold font-label-md underline">Change</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Security Section -->
+<section class="tab-content hidden animate-in fade-in slide-in-from-bottom-2 duration-300" id="section-security">
+<div class="glass-panel rounded-xl p-xl shadow-sm mb-lg">
+<h3 class="font-headline-sm text-headline-sm mb-md">Authentication Protocols</h3>
+<p class="font-body-sm text-on-surface-variant mb-xl">Manage how users access the administrative backend.</p>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant">
+<div class="flex gap-4">
+<div class="w-12 h-12 bg-primary-fixed rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">vibration</span>
+</div>
+<div>
+<p class="font-body-md font-bold">Two-Factor Authentication</p>
+<p class="font-body-sm text-on-surface-variant">Mandatory for all administrator roles.</p>
+</div>
+</div>
+<div class="relative inline-block w-12 h-6 rounded-full bg-secondary-container transition-colors cursor-pointer" onclick="this.classList.toggle('bg-secondary-container'); this.classList.toggle('bg-outline-variant')">
+<div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform translate-x-6"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant">
+<div class="flex gap-4">
+<div class="w-12 h-12 bg-primary-fixed rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">key</span>
+</div>
+<div>
+<p class="font-body-md font-bold">SSO Integration</p>
+<p class="font-body-sm text-on-surface-variant">SAML 2.0 or OpenID Connect provider.</p>
+</div>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-label-md">Configure</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Notifications Section -->
+<section class="tab-content hidden animate-in fade-in slide-in-from-bottom-2 duration-300" id="section-notifications">
+<div class="glass-panel rounded-xl p-xl shadow-sm">
+<h3 class="font-headline-sm text-headline-sm mb-md">System Alerts</h3>
+<p class="font-body-sm text-on-surface-variant mb-xl">Define routing for critical platform events.</p>
+<div class="space-y-base">
+<h4 class="font-label-md text-primary font-bold mb-4 uppercase tracking-widest">Email Notifications</h4>
+<div class="flex items-center justify-between py-4 border-b border-outline-variant/30">
+<div>
+<p class="font-body-md font-medium">New User Registration</p>
+<p class="font-body-sm text-on-surface-variant">Notify when a new resident joins the platform.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between py-4 border-b border-outline-variant/30">
+<div>
+<p class="font-body-md font-medium">Document Submissions</p>
+<p class="font-body-sm text-on-surface-variant">Alert when new procedures require review.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between py-4">
+<div>
+<p class="font-body-md font-medium">Security Alerts</p>
+<p class="font-body-sm text-on-surface-variant">Critical notifications regarding account access.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" disabled="" type="checkbox"/>
+<div class="w-11 h-6 bg-primary rounded-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:translate-x-full opacity-50"></div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- API Section -->
+<section class="tab-content hidden animate-in fade-in slide-in-from-bottom-2 duration-300" id="section-api">
+<div class="glass-panel rounded-xl p-xl shadow-sm">
+<div class="flex justify-between items-start mb-xl">
+<div>
+<h3 class="font-headline-sm text-headline-sm mb-md">API Access Keys</h3>
+<p class="font-body-sm text-on-surface-variant">Integrate Civio with third-party governmental tools.</p>
+</div>
+<button class="bg-primary text-white px-lg py-2.5 rounded-xl font-body-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                                    Generate New Key
+                                </button>
+</div>
+<div class="space-y-4">
+<div class="p-lg rounded-xl border border-outline-variant bg-surface-container-low/50">
+<div class="flex justify-between items-center mb-base">
+<span class="font-label-md font-bold text-on-surface">PRODUCTION_SERVER_MAIN</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-md">Active</span>
+</div>
+<div class="flex items-center gap-base">
+<code class="font-mono text-body-sm bg-surface-variant px-3 py-2 rounded-lg flex-grow border border-outline-variant/30">sk_live_51M2K_**************_9X2q</code>
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant rounded-lg">
+<span class="material-symbols-outlined">content_copy</span>
+</button>
+</div>
+<div class="mt-4 flex items-center gap-4 text-label-md text-on-surface-variant">
+<span>Created: Oct 12, 2023</span>
+<span>•</span>
+<span>Last used: 2 hours ago</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Actions Footer -->
+<div class="flex justify-end items-center gap-lg pt-lg">
+<p class="font-body-sm text-on-surface-variant italic">Last saved: Just now</p>
+<button class="border border-outline-variant px-xl py-3 rounded-xl font-body-md hover:bg-surface-container transition-colors">Discard Changes</button>
+<button class="bg-primary text-white px-xl py-3 rounded-xl font-body-md shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">Save Configuration</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        function switchTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected section
+            const targetSection = document.getElementById('section-' + tabName);
+            if(targetSection) targetSection.classList.remove('hidden');
+
+            // Reset all buttons
+            const buttons = ['general', 'security', 'notifications', 'api'];
+            buttons.forEach(b => {
+                const btn = document.getElementById('tab-btn-' + b);
+                btn.classList.remove('glass-panel', 'text-primary', 'font-bold', 'shadow-sm');
+                btn.classList.add('text-on-surface-variant', 'hover:bg-surface-container');
+            });
+
+            // Set active button
+            const activeBtn = document.getElementById('tab-btn-' + tabName);
+            activeBtn.classList.add('glass-panel', 'text-primary', 'font-bold', 'shadow-sm');
+            activeBtn.classList.remove('text-on-surface-variant', 'hover:bg-surface-container');
+        }
+
+        // Micro-interaction for toggles
+        document.querySelectorAll('label input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const sibling = this.nextElementSibling;
+                if(this.checked) {
+                    sibling.classList.add('peer-checked:bg-primary');
+                }
+            });
+        });
+    </script>
+</body></html>

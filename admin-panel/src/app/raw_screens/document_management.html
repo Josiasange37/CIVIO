@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid #e2e7e7;
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid #e2e7e7;
+        }
+        .glass-input:focus {
+            border-color: #71d4e7;
+            box-shadow: 0 0 0 4px rgba(113, 212, 231, 0.15);
+            outline: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#b5c7be",
+                        "surface-bright": "#f5fafa",
+                        "secondary-fixed": "#a5eeff",
+                        "outline": "#72787f",
+                        "on-tertiary-fixed-variant": "#3a4a43",
+                        "outline-variant": "#c1c7d0",
+                        "surface-container-low": "#f0f4f4",
+                        "inverse-on-surface": "#edf2f2",
+                        "secondary": "#006877",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "background": "#f5fafa",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#99cbfd",
+                        "primary-fixed": "#cee5ff",
+                        "on-secondary-fixed": "#001f25",
+                        "on-primary-fixed-variant": "#054a75",
+                        "on-surface": "#171d1d",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#d6dbdb",
+                        "inverse-surface": "#2c3132",
+                        "surface-container-highest": "#dee3e3",
+                        "on-surface-variant": "#41474e",
+                        "on-primary-container": "#95c8f9",
+                        "surface-container": "#eaefef",
+                        "surface-variant": "#dee3e3",
+                        "secondary-container": "#6de4fd",
+                        "primary-fixed-dim": "#99cbfd",
+                        "on-secondary-fixed-variant": "#004e5a",
+                        "on-primary-fixed": "#001d33",
+                        "on-background": "#171d1d",
+                        "on-tertiary-fixed": "#0f1f19",
+                        "surface-tint": "#2b628e",
+                        "surface-container-high": "#e4e9e9",
+                        "secondary-fixed-dim": "#5dd6ee",
+                        "tertiary-fixed": "#d4e7dd",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#43544d",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#b8cbc2",
+                        "surface": "#f5fafa",
+                        "on-error": "#ffffff",
+                        "primary": "#003c61",
+                        "tertiary": "#2d3d36",
+                        "primary-container": "#18547f",
+                        "on-secondary-container": "#006574",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "base": "4px",
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "margin-desktop": "40px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen overflow-x-hidden">
+<!-- Global Platform Sidebar (JSON: SideNavBar) -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface dark:bg-inverse-surface border-r border-outline-variant dark:border-outline shadow-sm flex flex-col p-md z-50">
+<div class="mb-xl flex items-center gap-sm">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary leading-none">Civio</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Civic Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-body-md">Procedures</span>
+</a>
+<!-- Active Tab: Documents -->
+<a class="flex items-center gap-md px-md py-sm text-primary dark:text-inverse-primary bg-primary-fixed dark:bg-primary-container rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-body-md">Documents</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-body-md">Map</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md">Users</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-md border-t border-outline-variant/30">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Help Center</span>
+</a>
+<button class="mt-md w-full py-sm bg-primary text-white rounded-lg font-bold flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined">contact_support</span>
+<span>Support</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<div class="ml-64 min-h-screen flex flex-col">
+<!-- Top Navigation Bar (JSON: TopNavBar) -->
+<header class="sticky top-0 w-full z-40 bg-white/70 backdrop-blur-xl border-b border-outline-variant/30 px-margin-desktop h-16 flex justify-between items-center shadow-[0px_12px_32px_rgba(24,84,127,0.08)]">
+<div class="flex items-center gap-lg flex-1">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="glass-input w-full pl-10 pr-4 py-2 rounded-full font-body-sm" placeholder="Search documents, folders, or tags..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-lg h-full">
+<a class="font-body-md text-on-surface-variant hover:text-primary transition-colors py-5 border-b-2 border-transparent" href="#">Overview</a>
+<a class="font-body-md text-primary font-bold border-b-2 border-primary py-5" href="#">All Files</a>
+<a class="font-body-md text-on-surface-variant hover:text-primary transition-colors py-5 border-b-2 border-transparent" href="#">Shared</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-xs px-lg py-2 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">upload_file</span>
+<span>Upload Document</span>
+</button>
+<div class="flex items-center gap-sm border-l border-outline-variant/30 ml-md pl-md">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<img alt="User" class="w-10 h-10 rounded-full border-2 border-primary-fixed shadow-sm" data-alt="A professional headshot of a government administrative official, captured with soft, natural lighting. The individual is wearing a smart navy blue suit, projecting an aura of competence and authority. The background is a blurred, high-end office environment with cool blue and white tones, matching the Civio platform's premium aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5mXJT_QBGvRwpcZO_NcEouIgLwzEXO9xj5wrziHhGMTKTB8iaMqllLnEwzqj7sx55P79aDyoRlPG7bWMHgZ0Ztk6iwFathX0V1rC105V9BiOFxnLIkAtiPyP1D93QTmLpa7J2ug8kDGE4cxGOGm-_1SbNjKB2KRx2OvTBpzbXY33FqIRlPzuYq1fN_CuOvaQN73GuxsY5SQgb78BL3YWmKYZBvPLZ07NMua2AS1H89fN6EBZR7j6SI_RVU-nKOfdwaTVuVSJ7CC4"/>
+</div>
+</div>
+</header>
+<!-- Document Management Content Area -->
+<main class="flex-1 p-lg flex gap-lg">
+<!-- Folder/Category Sidebar -->
+<aside class="w-72 flex flex-col gap-lg">
+<section class="glass-panel p-md rounded-xl shadow-sm">
+<h3 class="font-label-md text-label-md text-outline uppercase tracking-wider mb-md">Storage</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between font-label-md">
+<span class="text-on-surface">Used Space</span>
+<span class="text-primary font-bold">12.4 GB / 50 GB</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 25%"></div>
+</div>
+</div>
+</section>
+<nav class="glass-panel p-md rounded-xl shadow-sm space-y-1">
+<h3 class="font-label-md text-label-md text-outline uppercase tracking-wider mb-md px-md">Folders</h3>
+<a class="flex items-center justify-between px-md py-sm bg-primary/10 text-primary rounded-lg font-bold" href="#">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder</span>
+<span>Legal Records</span>
+</div>
+<span class="font-label-md bg-white px-2 py-0.5 rounded text-xs">128</span>
+</a>
+<a class="flex items-center justify-between px-md py-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined">folder</span>
+<span>Procedures</span>
+</div>
+<span class="font-label-md text-xs">54</span>
+</a>
+<a class="flex items-center justify-between px-md py-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined">folder</span>
+<span>Financial Audits</span>
+</div>
+<span class="font-label-md text-xs">32</span>
+</a>
+<a class="flex items-center justify-between px-md py-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined">folder</span>
+<span>Citizen Requests</span>
+</div>
+<span class="font-label-md text-xs">210</span>
+</a>
+<button class="w-full mt-md flex items-center gap-sm px-md py-sm text-primary font-bold border-2 border-dashed border-primary/20 rounded-lg hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined">create_new_folder</span>
+<span>New Folder</span>
+</button>
+</nav>
+<section class="glass-panel p-md rounded-xl shadow-sm">
+<h3 class="font-label-md text-label-md text-outline uppercase tracking-wider mb-md px-md">Tags</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-sm py-1 bg-secondary-container/30 text-secondary font-label-md rounded-full border border-secondary/10">High Priority</span>
+<span class="px-sm py-1 bg-surface-container text-on-surface-variant font-label-md rounded-full">Archive</span>
+<span class="px-sm py-1 bg-surface-container text-on-surface-variant font-label-md rounded-full">Reviewed</span>
+<span class="px-sm py-1 bg-error-container/20 text-error font-label-md rounded-full border border-error/10">Urgent</span>
+</div>
+</section>
+</aside>
+<!-- Main Content Area: Documents Grid -->
+<div class="flex-1 flex flex-col gap-lg">
+<!-- Recent Files Section -->
+<section>
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-headline-sm text-headline-sm">Recent Files</h2>
+<button class="text-primary font-bold hover:underline">View All</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Recent Card 1 -->
+<div class="glass-panel p-md rounded-xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+<div class="flex items-start gap-md relative">
+<div class="w-12 h-12 bg-error/10 text-error flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined" style="font-size: 32px;">picture_as_pdf</span>
+</div>
+<div>
+<h4 class="font-body-md font-bold truncate w-40">City_Council_Minutes_Q3.pdf</h4>
+<p class="text-label-md text-outline">Modified 2h ago • 4.2 MB</p>
+</div>
+<button class="ml-auto text-outline hover:text-primary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Recent Card 2 -->
+<div class="glass-panel p-md rounded-xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+<div class="flex items-start gap-md">
+<div class="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined" style="font-size: 32px;">description</span>
+</div>
+<div>
+<h4 class="font-body-md font-bold truncate w-40">Contract_Vendor_X40.docx</h4>
+<p class="text-label-md text-outline">Modified 5h ago • 1.1 MB</p>
+</div>
+<button class="ml-auto text-outline hover:text-primary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Recent Card 3 -->
+<div class="glass-panel p-md rounded-xl shadow-sm hover:shadow-md transition-shadow group cursor-pointer relative overflow-hidden">
+<div class="flex items-start gap-md">
+<div class="w-12 h-12 bg-secondary/10 text-secondary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined" style="font-size: 32px;">table_chart</span>
+</div>
+<div>
+<h4 class="font-body-md font-bold truncate w-40">Budget_Alloc_2024.xlsx</h4>
+<p class="text-label-md text-outline">Modified yesterday • 850 KB</p>
+</div>
+<button class="ml-auto text-outline hover:text-primary">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- All Files Grid -->
+<section class="flex-1">
+<div class="flex items-center justify-between mb-md">
+<div class="flex items-center gap-md">
+<h2 class="font-headline-sm text-headline-sm">All Documents</h2>
+<div class="flex items-center bg-surface-container rounded-lg p-1">
+<button class="p-1 bg-white shadow-sm rounded-md text-primary">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-1 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">view_list</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs px-md py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span class="font-label-md">Filter</span>
+</button>
+<button class="flex items-center gap-xs px-md py-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">sort</span>
+<span class="font-label-md">Date Modified</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-lg">
+<!-- Bento-style Card with Preview -->
+<div class="glass-panel rounded-xl overflow-hidden shadow-sm group hover:ring-2 hover:ring-primary/20 transition-all">
+<div class="h-32 bg-surface-container-low relative overflow-hidden border-b border-outline-variant/30">
+<img class="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all" data-alt="A blurred high-resolution preview of a technical blueprint for a modern civic center. The drawing shows intricate floor plans with clean architectural lines, predominantly in shades of technical blue and architectural white, presented in a clean, professional software workspace aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzWE_NNYuv4NXV5yOgGeZiUAuS60HPJaQDSZAo_HKaE72WGqluT6e-ctHxaxvbOwoGb0VsAytYawp0iqVF-ZNJk08o3OkHN0XySCSoZGItPVx-Itjli9cgSa72avfMQ0r4C6T84Pa9MVQLhatxpSqad3NEZJtJmkvZzjEhYr9A6FyeqMFxkkB8cihMZFPxWGi5lJlmbdhxePBtMaHkosbUxym4cFMANxr3NQIKHTKwYgKM4NryaMqyhfCHAbima2-q19Nn9gBJp_s"/>
+<div class="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div>
+<span class="absolute top-2 right-2 px-2 py-0.5 bg-error text-white font-label-md rounded text-[10px] uppercase">PDF</span>
+</div>
+<div class="p-md">
+<h4 class="font-body-md font-bold text-on-surface mb-1 truncate">Architecture_Proposal_v2</h4>
+<div class="flex items-center justify-between">
+<span class="text-label-md text-outline">12.8 MB</span>
+<div class="flex -space-x-2">
+<img alt="Team member" class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjmHQkwQKnUPlGCKSjeAHaIRmw64pQ1bx4tV3kl2-WzMB8Nbcikg9WfIb4RwtdxX8-wpmq0RxZLcpjeYGQjvmv2-ovlcVU_74ey_Vhe4eDUVqLENmRzhvL4uewpiN22H_bFHJvulWz36beHNFFQkq_jIw2F0y4x2JDNEgW-STEf5wSC0lYgAAHaUQ2CkfxRBC4m0eQ-k54_IhRlXcXZQsRnbaEeKruxYG5ktLO5ZGaqubQ-1teTrMjHrSrHio3n9ZKD5ZCFaoD2KY"/>
+<img alt="Team member" class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXmvEkY-HFi7HLMOeUTSc7jjuZ6baoDQ92aP8FaGK1X1h4-gP19Z69SjNE_IxbhlVVP0WBKLPRtpxhFIBi66efU3EvIbjkFwG6lzLABNTFDL_2RvS7lGcwusj9mfYfj_vu-bK-4aRdZhgWvHGklWRfU10meLGCIBLV7iYO1EDHUZAGBcF6LqF_Zva4JocufwsrYOQU33tltj56r32oDO3Qg2Dgm_w-7iU6E5DPi8efwCEGward_qkl2p-8JLeNTF5wDwdNaBGhBpc"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Repeatable Simple Document Card -->
+<div class="glass-panel p-md rounded-xl shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-primary/10 text-primary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined">description</span>
+</div>
+<button class="text-outline-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+</div>
+<div class="mt-4">
+<h4 class="font-body-md font-bold text-on-surface line-clamp-2">Employment_Policy_Review_2024_Final.docx</h4>
+<p class="text-label-md text-outline mt-1">Modified 3d ago</p>
+</div>
+</div>
+<div class="glass-panel p-md rounded-xl shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-secondary/10 text-secondary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined">table_chart</span>
+</div>
+<button class="text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</button>
+</div>
+<div class="mt-4">
+<h4 class="font-body-md font-bold text-on-surface line-clamp-2">Quarterly_Tax_Revenue_Reports.xlsx</h4>
+<p class="text-label-md text-outline mt-1">Modified 1w ago</p>
+</div>
+</div>
+<div class="glass-panel p-md rounded-xl shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-surface-container text-on-surface-variant flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined">image</span>
+</div>
+<button class="text-outline-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+</div>
+<div class="mt-4">
+<h4 class="font-body-md font-bold text-on-surface line-clamp-2">Plaza_Renovation_Render.jpg</h4>
+<p class="text-label-md text-outline mt-1">Modified 2w ago</p>
+</div>
+</div>
+<div class="glass-panel p-md rounded-xl shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-primary/10 text-primary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined">description</span>
+</div>
+<button class="text-outline-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+</div>
+<div class="mt-4">
+<h4 class="font-body-md font-bold text-on-surface line-clamp-2">Zoning_Laws_Update_Draft.docx</h4>
+<p class="text-label-md text-outline mt-1">Modified 1 month ago</p>
+</div>
+</div>
+<div class="glass-panel p-md rounded-xl shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between h-44">
+<div class="flex justify-between items-start">
+<div class="w-10 h-10 bg-error/10 text-error flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined">picture_as_pdf</span>
+</div>
+<button class="text-outline-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">star</span>
+</button>
+</div>
+<div class="mt-4">
+<h4 class="font-body-md font-bold text-on-surface line-clamp-2">Public_Hearing_Notices_May.pdf</h4>
+<p class="text-label-md text-outline mt-1">Modified 1 month ago</p>
+</div>
+</div>
+<!-- Drop Zone for adding more -->
+<div class="border-2 border-dashed border-outline-variant/50 rounded-xl flex flex-col items-center justify-center h-44 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer group">
+<div class="w-12 h-12 bg-surface-container rounded-full flex items-center justify-center mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-outline">add</span>
+</div>
+<span class="font-label-md text-outline group-hover:text-primary font-bold">New Document</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simple ripple/focus effect for document cards
+            const cards = document.querySelectorAll('.glass-panel');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-2px)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0px)';
+                });
+            });
+
+            // Handle active state transitions in sidebar (simulation)
+            const navItems = document.querySelectorAll('aside nav a');
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (item.classList.contains('bg-primary-fixed')) return;
+                    navItems.forEach(i => {
+                        i.classList.remove('bg-primary-fixed', 'dark:bg-primary-container', 'text-primary', 'dark:text-inverse-primary', 'font-bold');
+                        i.classList.add('text-on-surface-variant', 'dark:text-outline-variant');
+                        const icon = i.querySelector('.material-symbols-outlined');
+                        if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+                    });
+                    item.classList.add('bg-primary-fixed', 'dark:bg-primary-container', 'text-primary', 'dark:text-inverse-primary', 'font-bold');
+                    item.classList.remove('text-on-surface-variant', 'dark:text-outline-variant');
+                    const icon = item.querySelector('.material-symbols-outlined');
+                    if (icon) icon.style.fontVariationSettings = "'FILL' 1";
+                });
+            });
+        });
+    </script>
+</body></html>

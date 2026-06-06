@@ -1,92 +1,56 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-
-/* ── Search Icon ── */
-const SearchIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-  </svg>
-);
-
-const BellIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-  </svg>
-);
-
-const MoonIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-
-const SunIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-    <circle cx="12" cy="12" r="5" />
-    <line x1="12" y1="1" x2="12" y2="3" />
-    <line x1="12" y1="21" x2="12" y2="23" />
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-    <line x1="1" y1="12" x2="3" y2="12" />
-    <line x1="21" y1="12" x2="23" y2="12" />
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-  </svg>
-);
+import React from "react";
+import { useAuth } from "@/lib/AuthContext";
 
 interface TopBarProps {
-  title?: string;
+  onMenuToggle: () => void;
 }
 
-export default function TopBar({ title }: TopBarProps) {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+export default function TopBar({ onMenuToggle }: TopBarProps) {
+  const { user, logout } = useAuth();
 
   return (
-    <header className="topbar" id="topbar">
-      <div className="topbar-search">
-        <SearchIcon />
-        <input
-          type="text"
-          placeholder="Rechercher une procédure, un document..."
-          id="search-input"
-        />
+    <header className="h-16 lg:hidden flex items-center justify-between px-4 bg-surface border-b border-outline-variant sticky top-0 z-40">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuToggle}
+          className="w-10 h-10 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          aria-label="Open menu"
+        >
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+            <span
+              className="material-symbols-outlined text-white text-sm"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              account_balance
+            </span>
+          </div>
+          <div>
+            <span className="font-bold text-primary text-sm leading-none">Civio</span>
+            <p className="text-[10px] text-on-surface-variant opacity-70 uppercase tracking-widest leading-tight">
+              Civic Admin
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="topbar-actions">
-        <button className="topbar-btn" title="Changer le thème" id="btn-theme" onClick={toggleTheme}>
-          {mounted && theme === "dark" ? <SunIcon /> : <MoonIcon />}
-        </button>
-        <button className="topbar-btn" title="Notifications" id="btn-notifications">
-          <BellIcon />
-          <span className="badge" />
-        </button>
-        <div
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: "50%",
-            background: "linear-gradient(135deg, var(--accent-purple), var(--accent-cyan))",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: 700,
-            fontSize: 14,
-            cursor: "pointer",
-          }}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={logout}
+          className="w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"
+          aria-label="Sign out"
         >
-          JA
-        </div>
+          <span className="material-symbols-outlined text-[20px]">logout</span>
+        </button>
+        {user && (
+          <div className="w-8 h-8 rounded-full bg-primary-fixed-dim text-primary flex items-center justify-center text-xs font-bold">
+            {(user.email || user.phoneNumber || "A")[0].toUpperCase()}
+          </div>
+        )}
       </div>
     </header>
   );

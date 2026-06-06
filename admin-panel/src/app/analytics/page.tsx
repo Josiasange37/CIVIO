@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Sidebar from "@/components/Sidebar";
-import TopBar from "@/components/TopBar";
 import { MiniLineChart, MiniBarChart } from "@/components/Charts";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
@@ -73,7 +71,6 @@ export default function AnalyticsPage() {
         ...prev,
         writingNeeds: fmtNum(total),
         stampSavings: `${fmtNum(total * 1000)} FCFA`,
-        docValidationRate: rate,
       }));
 
       const last24 = new Array(24).fill(0);
@@ -92,7 +89,7 @@ export default function AnalyticsPage() {
           title: "Validation Documentaire",
           badge: total > 0 ? `${rate.toFixed(1)}%` : "—",
           desc: total > 0
-            ? `${fmtNum(completed)} documents validés sur ${fmtNum(total)} générés — calculé à partir de la collection documents.`
+            ? `${fmtNum(completed)} documents validés sur ${fmtNum(total)} générés`
             : "Aucun document généré pour le moment.",
         },
       }));
@@ -100,7 +97,6 @@ export default function AnalyticsPage() {
 
     unsubs.push(onSnapshot(collection(db, "citizens"), (snap) => {
       const citizens = snap.docs.map((d) => ({ id: d.id, ...d.data() } as any));
-
       const regionCounts: Record<string, number> = {};
       for (const c of citizens) {
         const r = c.region || "Inconnue";
@@ -141,15 +137,6 @@ export default function AnalyticsPage() {
             desc: `Moyenne calculée sur ${cniProcs.length} procédure(s) liée(s) à l'identité / passeport dans la base.`,
           },
         }));
-      } else {
-        setEfficiency((prev) => ({
-          ...prev,
-          cniDelay: {
-            title: "Délai Moyen d'Établissement CNI",
-            badge: "—",
-            desc: "Aucune procédure d'identité ou passeport enregistrée.",
-          },
-        }));
       }
     }));
 
@@ -183,153 +170,122 @@ export default function AnalyticsPage() {
   }, []);
 
   return (
-    <>
-      <Sidebar />
-      <main className="main-content">
-        <TopBar />
-        <div className="page-container">
-          <div className="page-header animate-fade-in-up">
+    <div className="page-container">
+      <div className="page-header animate-fade-in-up">
+        <div>
+          <h1 className="page-title">Analyses et Rapports</h1>
+          <p className="page-subtitle">
+            Données consolidées d&apos;utilisation, statistiques régionales et synchronisations hors-ligne.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 stagger">
+        <div className="chart-container p-5">
+          <div className="text-body-sm text-on-surface-variant">Visites / Jour (Moy.)</div>
+          <div className="text-[24px] font-bold text-accent-cyan mt-1 font-headline">{stats.dailyVisits}</div>
+          <div className="text-[11px] text-on-surface-variant opacity-70 mt-2">{stats.dailyVisitsChange}</div>
+        </div>
+        <div className="chart-container p-5">
+          <div className="text-body-sm text-on-surface-variant">Taux d&apos;Assistance Locale</div>
+          <div className="text-[24px] font-bold text-accent-emerald mt-1 font-headline">{stats.assistanceRate}</div>
+          <div className="text-[11px] text-on-surface-variant opacity-70 mt-2">{stats.assistanceRateChange}</div>
+        </div>
+        <div className="chart-container p-5">
+          <div className="text-body-sm text-on-surface-variant">Besoins d&apos;Écriture</div>
+          <div className="text-[24px] font-bold text-accent-purple mt-1 font-headline">{stats.writingNeeds}</div>
+          <div className="text-[11px] text-on-surface-variant opacity-70 mt-2">{stats.writingNeedsChange}</div>
+        </div>
+        <div className="chart-container p-5">
+          <div className="text-body-sm text-on-surface-variant">Économie de Timbre</div>
+          <div className="text-[24px] font-bold text-accent-amber mt-1 font-headline">{stats.stampSavings}</div>
+          <div className="text-[11px] text-on-surface-variant opacity-70 mt-2">{stats.stampSavingsChange}</div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+        <div className="lg:col-span-3 chart-container p-6 animate-fade-in-up">
+          <div className="chart-header">
             <div>
-              <h1 className="page-title">Analyses et Rapports</h1>
-              <p className="page-subtitle">
-                Données consolidées d&apos;utilisation, statistiques régionales et synchronisations hors-ligne.
+              <div className="chart-title">Volume des Synchronisations de Données</div>
+              <p className="text-body-sm text-on-surface-variant mt-1">
+                Documents générés par mois (24 derniers mois)
               </p>
             </div>
           </div>
-
-          <div
-            className="stagger"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: 20,
-              marginBottom: 32,
-            }}
-          >
-            <div className="glass-card" style={{ padding: 20 }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Visites / Jour (Moy.)</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 24, fontWeight: 700, color: "var(--accent-cyan)", marginTop: 4 }}>
-                {stats.dailyVisits}
-              </div>
-              <div style={{ fontSize: 11, color: "var(--text-tertiary)", marginTop: 8 }}>
-                {stats.dailyVisitsChange}
-              </div>
+          {monthlySyncData.some((v) => v > 0) ? (
+            <MiniLineChart
+              data={monthlySyncData}
+              color="#06b6d4"
+              glow="rgba(6,182,212,0.3)"
+              height={240}
+            />
+          ) : (
+            <div className="h-60 flex items-center justify-center text-on-surface-variant text-body-md">
+              Aucun document généré — courbe vide.
             </div>
-            <div className="glass-card" style={{ padding: 20 }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Taux d&apos;Assistance Locale</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 24, fontWeight: 700, color: "var(--accent-emerald)", marginTop: 4 }}>
-                {stats.assistanceRate}
-              </div>
-              <div style={{ fontSize: 11, color: "var(--text-tertiary)", marginTop: 8 }}>
-                {stats.assistanceRateChange}
-              </div>
-            </div>
-            <div className="glass-card" style={{ padding: 20 }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Besoins d&apos;Écriture</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 24, fontWeight: 700, color: "var(--accent-purple)", marginTop: 4 }}>
-                {stats.writingNeeds}
-              </div>
-              <div style={{ fontSize: 11, color: "var(--text-tertiary)", marginTop: 8 }}>
-                {stats.writingNeedsChange}
-              </div>
-            </div>
-            <div className="glass-card" style={{ padding: 20 }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Économie de Timbre</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 24, fontWeight: 700, color: "var(--accent-amber)", marginTop: 4 }}>
-                {stats.stampSavings}
-              </div>
-              <div style={{ fontSize: 11, color: "var(--text-tertiary)", marginTop: 8 }}>
-                {stats.stampSavingsChange}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 24, marginBottom: 32 }}>
-            <div className="chart-container animate-fade-in-up" style={{ padding: 24 }}>
-              <div className="chart-header">
-                <div>
-                  <div className="chart-title">Volume des Synchronisations de Données</div>
-                  <p style={{ fontSize: 13, color: "var(--text-tertiary)", marginTop: 4 }}>
-                    Documents générés par mois (24 derniers mois)
-                  </p>
-                </div>
-              </div>
-              {monthlySyncData.some((v) => v > 0) ? (
-                <MiniLineChart
-                  data={monthlySyncData}
-                  color="#06b6d4"
-                  glow="rgba(6,182,212,0.3)"
-                  height={240}
-                />
-              ) : (
-                <div style={{ height: 240, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-tertiary)", fontSize: 14 }}>
-                  Aucun document généré — courbe vide.
-                </div>
-              )}
-            </div>
-
-            <div className="chart-container animate-fade-in-up" style={{ padding: 24 }}>
-              <div className="chart-header">
-                <div>
-                  <div className="chart-title">Régions Dominantes</div>
-                  <p style={{ fontSize: 13, color: "var(--text-tertiary)", marginTop: 4 }}>
-                    Nombre d&apos;utilisateurs par région administrative
-                  </p>
-                </div>
-              </div>
-              {regionBreakdown.length > 0 ? (
-                <MiniBarChart
-                  data={regionBreakdown}
-                  color="#10b981"
-                  glow="rgba(16,185,129,0.3)"
-                  height={240}
-                />
-              ) : (
-                <div style={{ height: 240, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-tertiary)", fontSize: 14 }}>
-                  Aucun utilisateur enregistré — répartition vide.
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="glass-card animate-fade-in-up" style={{ padding: 24 }}>
-            <h3 style={{ fontFamily: "Outfit", fontSize: 18, fontWeight: 600, marginBottom: 20 }}>
-              Comparaison de l&apos;efficacité administrative
-            </h3>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-              <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", border: "1px solid var(--glass-border)", borderRadius: "var(--radius-lg)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                  <span style={{ fontWeight: 600, color: "white" }}>{efficiency.cniDelay.title}</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent-emerald)", background: "var(--accent-emerald-glow)", padding: "2px 8px", borderRadius: 10 }}>{efficiency.cniDelay.badge}</span>
-                </div>
-                <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                  {efficiency.cniDelay.desc}
-                </p>
-              </div>
-
-              <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", border: "1px solid var(--glass-border)", borderRadius: "var(--radius-lg)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                  <span style={{ fontWeight: 600, color: "white" }}>{efficiency.offlineUse.title}</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent-cyan)", background: "var(--accent-cyan-glow)", padding: "2px 8px", borderRadius: 10 }}>{efficiency.offlineUse.badge}</span>
-                </div>
-                <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                  {efficiency.offlineUse.desc}
-                </p>
-              </div>
-
-              <div style={{ padding: 20, background: "rgba(255,255,255,0.02)", border: "1px solid var(--glass-border)", borderRadius: "var(--radius-lg)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                  <span style={{ fontWeight: 600, color: "white" }}>{efficiency.docValidation.title}</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "var(--accent-purple)", background: "var(--accent-purple-glow)", padding: "2px 8px", borderRadius: 10 }}>{efficiency.docValidation.badge}</span>
-                </div>
-                <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                  {efficiency.docValidation.desc}
-                </p>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
-      </main>
-    </>
+
+        <div className="lg:col-span-2 chart-container p-6 animate-fade-in-up">
+          <div className="chart-header">
+            <div>
+              <div className="chart-title">Régions Dominantes</div>
+              <p className="text-body-sm text-on-surface-variant mt-1">
+                Nombre d&apos;utilisateurs par région administrative
+              </p>
+            </div>
+          </div>
+          {regionBreakdown.length > 0 ? (
+            <MiniBarChart
+              data={regionBreakdown}
+              color="#10b981"
+              glow="rgba(16,185,129,0.3)"
+              height={240}
+            />
+          ) : (
+            <div className="h-60 flex items-center justify-center text-on-surface-variant text-body-md">
+              Aucun utilisateur enregistré — répartition vide.
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="chart-container p-6 animate-fade-in-up">
+        <h3 className="text-headline-md font-bold text-on-surface mb-5 font-headline">
+          Comparaison de l&apos;efficacité administrative
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          {[
+            { key: "cniDelay", icon: "badge", color: "emerald" },
+            { key: "offlineUse", icon: "wifi_off", color: "cyan" },
+            { key: "docValidation", icon: "verified", color: "purple" },
+          ].map(({ key, color }) => {
+            const item = efficiency[key as keyof typeof efficiency];
+            const accentVar = `var(--accent-${color})`;
+            const glowVar = `var(--accent-${color}-glow)`;
+            return (
+              <div
+                key={key}
+                className="p-5 bg-surface border border-outline-variant rounded-2xl"
+              >
+                <div className="flex justify-between items-center mb-3">
+                  <span className="font-semibold text-on-surface text-body-md">{item.title}</span>
+                  <span
+                    className="text-[11px] font-bold px-2 py-0.5 rounded-xl"
+                    style={{ color: accentVar, background: glowVar }}
+                  >
+                    {item.badge}
+                  </span>
+                </div>
+                <p className="text-body-sm text-on-surface-variant leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }

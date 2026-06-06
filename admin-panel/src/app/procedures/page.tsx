@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Sidebar from "@/components/Sidebar";
-import TopBar from "@/components/TopBar";
 import { db } from "@/lib/firebase";
-import { collection, onSnapshot, addDoc, doc, setDoc } from "firebase/firestore";
+import { collection, onSnapshot, addDoc } from "firebase/firestore";
 
 interface Procedure {
   id: string;
@@ -25,7 +23,6 @@ export default function ProceduresPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // New Procedure Form State
   const [newTitle, setNewTitle] = useState("");
   const [newCategory, setNewCategory] = useState("Identité");
   const [newCost, setNewCost] = useState("");
@@ -87,333 +84,205 @@ export default function ProceduresPage() {
   };
 
   return (
-    <>
-      <Sidebar />
-      <main className="main-content">
-        <TopBar />
-        <div className="page-container">
-          {/* Header */}
-          <div className="page-header animate-fade-in-up">
-            <div>
-              <h1 className="page-title">Gestion des Procédures</h1>
-              <p className="page-subtitle">
-                Visualisez, modifiez et ajoutez les guides d&apos;aide aux citoyens.
-              </p>
-            </div>
-            <button className="btn-primary" onClick={() => setIsAdding(!isAdding)}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-              {isAdding ? "Fermer le formulaire" : "Nouvelle Procédure"}
-            </button>
-          </div>
+    <div className="page-container">
+      <div className="page-header animate-fade-in-up">
+        <div>
+          <h1 className="page-title">Gestion des Procédures</h1>
+          <p className="page-subtitle">
+            Visualisez, modifiez et ajoutez les guides d&apos;aide aux citoyens.
+          </p>
+        </div>
+        <button className="btn-primary" onClick={() => setIsAdding(!isAdding)}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          {isAdding ? "Fermer" : "Nouvelle Procédure"}
+        </button>
+      </div>
 
-          {/* Quick Stats Banner (Liquid Glass Style) */}
-          <div
-            className="animate-fade-in-up"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: 16,
-              marginBottom: 32,
-            }}
-          >
-            <div className="glass-card" style={{ padding: "16px 20px" }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Total Procédures</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 24, fontWeight: 700, color: "var(--accent-cyan)", marginTop: 4 }}>
-                {procedures.length}
-              </div>
-            </div>
-            <div className="glass-card" style={{ padding: "16px 20px" }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Actives</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 24, fontWeight: 700, color: "var(--accent-emerald)", marginTop: 4 }}>
-                {procedures.filter(p => p.status === "active").length}
-              </div>
-            </div>
-            <div className="glass-card" style={{ padding: "16px 20px" }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Moyenne Coût</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 24, fontWeight: 700, color: "var(--accent-amber)", marginTop: 4 }}>
-                {(() => {
-                  const costs = procedures.map(p => {
-                    const num = parseInt((p.cost || "").replace(/\s/g, "").replace(/[^0-9]/g, ""));
-                    return isNaN(num) ? 0 : num;
-                  }).filter(c => c > 0);
-                  const avg = costs.length > 0 ? Math.round(costs.reduce((a, b) => a + b, 0) / costs.length) : 0;
-                  return avg > 0 ? `~${avg.toLocaleString()} FCFA` : "—";
-                })()}
-              </div>
-            </div>
-          </div>
-
-          {/* Add Procedure Section (Form in Glass Card) */}
-          {isAdding && (
-            <div className="glass-card animate-fade-in-up" style={{ padding: 24, marginBottom: 32, border: "1px solid var(--accent-emerald)" }}>
-              <h2 style={{ fontFamily: "Outfit", fontSize: 18, fontWeight: 600, marginBottom: 20, color: "var(--accent-emerald)" }}>
-                Créer un nouveau guide de procédure admin
-              </h2>
-              <form onSubmit={handleAddProcedure} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <div style={{ gridColumn: "1 / -1" }}>
-                  <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
-                    Nom de la procédure (ex: Certificat de Célibat)
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid var(--glass-border)",
-                      borderRadius: "var(--radius-md)",
-                      color: "white",
-                      outline: "none",
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Catégorie</label>
-                  <select
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      background: "var(--bg-secondary)",
-                      border: "1px solid var(--glass-border)",
-                      borderRadius: "var(--radius-md)",
-                      color: "white",
-                      outline: "none",
-                    }}
-                  >
-                    {categories.filter(c => c !== "Toutes").map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Difficulté</label>
-                  <select
-                    value={newDifficulty}
-                    onChange={(e) => setNewDifficulty(e.target.value as any)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      background: "var(--bg-secondary)",
-                      border: "1px solid var(--glass-border)",
-                      borderRadius: "var(--radius-md)",
-                      color: "white",
-                      outline: "none",
-                    }}
-                  >
-                    <option value="Facile">Facile</option>
-                    <option value="Moyen">Moyen</option>
-                    <option value="Difficile">Difficile</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Coût (FCFA / Gratuit)</label>
-                  <input
-                    type="text"
-                    placeholder="ex: 5 000 FCFA"
-                    value={newCost}
-                    onChange={(e) => setNewCost(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid var(--glass-border)",
-                      borderRadius: "var(--radius-md)",
-                      color: "white",
-                      outline: "none",
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>Délai indicatif</label>
-                  <input
-                    type="text"
-                    placeholder="ex: 3 jours"
-                    value={newTimeline}
-                    onChange={(e) => setNewTimeline(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid var(--glass-border)",
-                      borderRadius: "var(--radius-md)",
-                      color: "white",
-                      outline: "none",
-                    }}
-                  />
-                </div>
-                <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 10 }}>
-                  <button type="button" className="btn-glass" onClick={() => setIsAdding(false)}>
-                    Annuler
-                  </button>
-                  <button type="submit" className="btn-primary">
-                    Enregistrer la procédure
-                  </button>
-                </div>
-              </form>
-            </div>
-          )}
-
-          {/* Search and Filters Bar */}
-          <div
-            className="animate-fade-in-up"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 16,
-              marginBottom: 24,
-              flexWrap: "wrap",
-            }}
-          >
-            {/* Search Input */}
-            <div style={{ position: "relative", flex: 1, minWidth: 260 }}>
-              <input
-                type="text"
-                placeholder="Rechercher une procédure administrative..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: "100%",
-                  height: 42,
-                  padding: "0 16px 0 44px",
-                  background: "var(--glass-bg)",
-                  border: "1px solid var(--glass-border)",
-                  borderRadius: "var(--radius-xl)",
-                  color: "white",
-                  outline: "none",
-                  transition: "all 0.25s",
-                }}
-              />
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{
-                  position: "absolute",
-                  left: 14,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  width: 18,
-                  height: 18,
-                  color: "var(--text-tertiary)",
-                }}
-              >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </div>
-
-            {/* Category tabs */}
-            <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className="btn-glass"
-                  style={{
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                    fontSize: 12,
-                    background: selectedCategory === cat ? "linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1))" : "var(--glass-bg)",
-                    borderColor: selectedCategory === cat ? "var(--accent-emerald)" : "var(--glass-border)",
-                    color: selectedCategory === cat ? "white" : "var(--text-secondary)",
-                  }}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Procedures Grid */}
-          <div
-            className="stagger"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-              gap: 20,
-            }}
-          >
-            {filteredProcedures.map((proc, index) => {
-              const diffColor = proc.difficulty === "Facile" ? "var(--accent-emerald)" :
-                                proc.difficulty === "Moyen" ? "var(--accent-amber)" :
-                                "var(--accent-rose)";
-
-              return (
-                <div key={proc.id} className="glass-card" style={{ padding: 24, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                  <div>
-                    {/* Header line of card */}
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-                      <span
-                        style={{
-                          fontSize: 11,
-                          fontWeight: 700,
-                          color: "var(--accent-cyan)",
-                          background: "rgba(6, 182, 212, 0.12)",
-                          padding: "3px 10px",
-                          borderRadius: 20,
-                        }}
-                      >
-                        {proc.category}
-                      </span>
-                      <span className={`badge-status badge-${proc.status}`}>
-                        {proc.status === "active" ? "Actif" : proc.status === "pending" ? "En attente" : "Terminé"}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 style={{ fontFamily: "Outfit", fontSize: 18, fontWeight: 700, color: "white", marginBottom: 8 }}>
-                      {proc.title}
-                    </h3>
-
-                    {/* Meta info */}
-                    <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 16 }}>
-                      Difficulté: <strong style={{ color: diffColor }}>{proc.difficulty}</strong> · {proc.stepsCount} étapes dans le parcours.
-                    </p>
-
-                    {/* Quick details */}
-                    <div style={{ display: "flex", gap: 16, borderTop: "1px solid rgba(255,255,255,0.04)", paddingTop: 12, marginBottom: 16 }}>
-                      <div>
-                        <div style={{ fontSize: 11, color: "var(--text-tertiary)" }}>Coût</div>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "white", marginTop: 2 }}>{proc.cost}</div>
-                      </div>
-                      <div>
-                        <div style={{ fontSize: 11, color: "var(--text-tertiary)" }}>Délai moyen</div>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "white", marginTop: 2 }}>{proc.timeline}</div>
-                      </div>
-                      <div>
-                        <div style={{ fontSize: 11, color: "var(--text-tertiary)" }}>Taux d&apos;utilisateurs</div>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "white", marginTop: 2 }}>{proc.successRate}</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-                    <button className="btn-glass" style={{ flex: 1, padding: "8px 12px", fontSize: 12 }}>
-                      Editer
-                    </button>
-                    <button className="btn-glass" style={{ flex: 1, padding: "8px 12px", fontSize: 12, borderColor: "var(--accent-cyan)" }}>
-                      Voir Parcours
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 stagger">
+        <div className="chart-container p-4">
+          <div className="text-body-sm text-on-surface-variant">Total Procédures</div>
+          <div className="text-[24px] font-bold text-accent-cyan mt-1 font-headline">
+            {procedures.length}
           </div>
         </div>
-      </main>
-    </>
+        <div className="chart-container p-4">
+          <div className="text-body-sm text-on-surface-variant">Actives</div>
+          <div className="text-[24px] font-bold text-accent-emerald mt-1 font-headline">
+            {procedures.filter(p => p.status === "active").length}
+          </div>
+        </div>
+        <div className="chart-container p-4">
+          <div className="text-body-sm text-on-surface-variant">Moyenne Coût</div>
+          <div className="text-[24px] font-bold text-accent-amber mt-1 font-headline">
+            {(() => {
+              const costs = procedures.map(p => {
+                const num = parseInt((p.cost || "").replace(/\s/g, "").replace(/[^0-9]/g, ""));
+                return isNaN(num) ? 0 : num;
+              }).filter(c => c > 0);
+              const avg = costs.length > 0 ? Math.round(costs.reduce((a, b) => a + b, 0) / costs.length) : 0;
+              return avg > 0 ? `~${avg.toLocaleString()} FCFA` : "—";
+            })()}
+          </div>
+        </div>
+      </div>
+
+      {isAdding && (
+        <div className="chart-container p-6 mb-8 animate-fade-in-up border border-accent-emerald">
+          <h2 className="text-headline-md font-bold text-accent-emerald mb-5">
+            Créer un nouveau guide de procédure admin
+          </h2>
+          <form onSubmit={handleAddProcedure} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5">
+                Nom de la procédure (ex: Certificat de Célibat)
+              </label>
+              <input
+                type="text"
+                required
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-surface border border-outline-variant rounded-xl text-body-sm text-on-surface outline-none"
+              />
+            </div>
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5">Catégorie</label>
+              <select
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-surface border border-outline-variant rounded-xl text-body-sm text-on-surface outline-none"
+              >
+                {categories.filter(c => c !== "Toutes").map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5">Difficulté</label>
+              <select
+                value={newDifficulty}
+                onChange={(e) => setNewDifficulty(e.target.value as any)}
+                className="w-full px-3.5 py-2.5 bg-surface border border-outline-variant rounded-xl text-body-sm text-on-surface outline-none"
+              >
+                <option value="Facile">Facile</option>
+                <option value="Moyen">Moyen</option>
+                <option value="Difficile">Difficile</option>
+              </select>
+            </div>
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5">Coût (FCFA / Gratuit)</label>
+              <input
+                type="text"
+                placeholder="ex: 5 000 FCFA"
+                value={newCost}
+                onChange={(e) => setNewCost(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-surface border border-outline-variant rounded-xl text-body-sm text-on-surface outline-none"
+              />
+            </div>
+            <div>
+              <label className="font-label-md text-label-md text-on-surface-variant block mb-1.5">Délai indicatif</label>
+              <input
+                type="text"
+                placeholder="ex: 3 jours"
+                value={newTimeline}
+                onChange={(e) => setNewTimeline(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-surface border border-outline-variant rounded-xl text-body-sm text-on-surface outline-none"
+              />
+            </div>
+            <div className="md:col-span-2 flex justify-end gap-3 mt-2">
+              <button type="button" className="btn-glass" onClick={() => setIsAdding(false)}>
+                Annuler
+              </button>
+              <button type="submit" className="btn-primary">
+                Enregistrer la procédure
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 animate-fade-in-up">
+        <div className="relative flex-1 w-full sm:max-w-sm">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Rechercher une procédure administrative..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full h-[42px] pl-[44px] pr-4 bg-surface border border-outline-variant rounded-2xl text-body-sm text-on-surface outline-none"
+          />
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className="btn-glass whitespace-nowrap"
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="stagger grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+        {filteredProcedures.map((proc) => {
+          const diffColor = proc.difficulty === "Facile" ? "var(--accent-emerald)" :
+                            proc.difficulty === "Moyen" ? "var(--accent-amber)" :
+                            "var(--accent-rose)";
+
+          return (
+            <div key={proc.id} className="chart-container p-6 flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-[11px] font-bold text-accent-cyan bg-accent-cyan-glow px-2.5 py-1 rounded-2xl">
+                    {proc.category}
+                  </span>
+                  <span className={`badge-status badge-${proc.status}`}>
+                    {proc.status === "active" ? "Actif" : proc.status === "pending" ? "En attente" : "Terminé"}
+                  </span>
+                </div>
+
+                <h3 className="text-[18px] font-bold text-on-surface mb-2 font-headline">
+                  {proc.title}
+                </h3>
+
+                <p className="text-body-sm text-on-surface-variant mb-4">
+                  Difficulté: <strong style={{ color: diffColor }}>{proc.difficulty}</strong> · {proc.stepsCount} étapes
+                </p>
+
+                <div className="flex gap-4 border-t border-outline-variant pt-3 mb-4">
+                  <div>
+                    <div className="text-[11px] text-on-surface-variant opacity-70">Coût</div>
+                    <div className="text-body-sm font-semibold text-on-surface mt-0.5">{proc.cost}</div>
+                  </div>
+                  <div>
+                    <div className="text-[11px] text-on-surface-variant opacity-70">Délai moyen</div>
+                    <div className="text-body-sm font-semibold text-on-surface mt-0.5">{proc.timeline}</div>
+                  </div>
+                  <div>
+                    <div className="text-[11px] text-on-surface-variant opacity-70">Taux</div>
+                    <div className="text-body-sm font-semibold text-on-surface mt-0.5">{proc.successRate}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-2.5 mt-3">
+                <button className="btn-glass flex-1 text-body-sm">Editer</button>
+                <button className="btn-glass flex-1 text-body-sm border-accent-cyan">Voir Parcours</button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civio | User Management Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#b5c7be",
+                    "surface-bright": "#f5fafa",
+                    "secondary-fixed": "#a5eeff",
+                    "outline": "#72787f",
+                    "on-tertiary-fixed-variant": "#3a4a43",
+                    "outline-variant": "#c1c7d0",
+                    "surface-container-low": "#f0f4f4",
+                    "inverse-on-surface": "#edf2f2",
+                    "secondary": "#006877",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "background": "#f5fafa",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#99cbfd",
+                    "primary-fixed": "#cee5ff",
+                    "on-secondary-fixed": "#001f25",
+                    "on-primary-fixed-variant": "#054a75",
+                    "on-surface": "#171d1d",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#d6dbdb",
+                    "inverse-surface": "#2c3132",
+                    "surface-container-highest": "#dee3e3",
+                    "on-surface-variant": "#41474e",
+                    "on-primary-container": "#95c8f9",
+                    "surface-container": "#eaefef",
+                    "surface-variant": "#dee3e3",
+                    "secondary-container": "#6de4fd",
+                    "primary-fixed-dim": "#99cbfd",
+                    "on-secondary-fixed-variant": "#004e5a",
+                    "on-primary-fixed": "#001d33",
+                    "on-background": "#171d1d",
+                    "on-tertiary-fixed": "#0f1f19",
+                    "surface-tint": "#2b628e",
+                    "surface-container-high": "#e4e9e9",
+                    "secondary-fixed-dim": "#5dd6ee",
+                    "tertiary-fixed": "#d4e7dd",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#43544d",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#b8cbc2",
+                    "surface": "#f5fafa",
+                    "on-error": "#ffffff",
+                    "primary": "#003c61",
+                    "tertiary": "#2d3d36",
+                    "primary-container": "#18547f",
+                    "on-secondary-container": "#006574",
+                    "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "base": "4px",
+                    "margin-mobile": "16px",
+                    "xl": "32px",
+                    "margin-desktop": "40px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #e9fcfd; /* Azure Mist Base Layer */
+            color: #171d1d;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid #e2e7e7;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for clean admin look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c1c7d0; border-radius: 10px; }
+        
+        .active-nav-indicator {
+            position: relative;
+        }
+        .active-nav-indicator::after {
+            content: '';
+            position: absolute;
+            left: -16px;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            background: #003c61;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface border-r border-outline-variant flex flex-col p-md z-50">
+<div class="mb-xl px-sm flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Civio</h1>
+<p class="text-[10px] tracking-widest uppercase font-bold text-on-surface-variant">Civic Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-medium">Procedures</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium">Documents</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-medium">Map</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-primary bg-primary-fixed rounded-lg font-bold active-nav-indicator" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-medium">Users</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-md border-t border-outline-variant/30">
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-medium">Help Center</span>
+</a>
+<div class="mt-4 p-3 glass-card rounded-xl flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/10" data-alt="A professional headshot of a middle-aged male government administrator with a warm, approachable smile. He is wearing a crisp charcoal suit against a soft-focus office background that matches the airy azure mist and white aesthetic of the UI. The lighting is bright and even, conveying a sense of authority and clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBATp-N2kpqWxPkPPlfSxvDec84rAz4Pp-DWMXpCGYOPPT42WrCqBthCD0cwEbdXYdbhS32awEtIvWi311nyYekTpUJ4pahUaO3GwT90qAjerGUjj9dyyA4uvohYoxLlHSPcmBn6Qg0ka65CuPOol0Dz3-VRqOGPnZu5zdmN912bnbw0gNIrNpK1_9qdpP6NoT2WUkXuwwUXkNyAhpbVc7PSYqNqahNeyHB5UjrL2VpV6fYOF3qiBpMIEZ_aqTRx0As_0IT1Dmq4Uc"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Arthur Miller</p>
+<p class="text-xs text-on-surface-variant truncate">Lead Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen flex flex-col">
+<!-- TopNavBar Shell -->
+<header class="sticky top-0 w-full h-16 bg-white/70 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center px-margin-desktop z-40 shadow-[0px_12px_32px_rgba(24,84,127,0.08)]">
+<div class="flex items-center gap-lg flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-white/40 border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all text-sm" placeholder="Search users, roles, or departments..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full ring-2 ring-white"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded-full">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="h-6 w-[1px] bg-outline-variant mx-2"></div>
+<button class="flex items-center gap-2 bg-primary text-white px-5 py-2 rounded-full font-bold text-sm hover:opacity-90 active:scale-95 transition-all shadow-md">
+<span class="material-symbols-outlined text-sm">person_add</span>
+                    Invite User
+                </button>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-margin-desktop space-y-lg">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">User Management</h2>
+<p class="text-on-surface-variant mt-1">Manage administrative access and regional department assignments.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 glass-card rounded-lg text-sm font-medium hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                        Advanced Filters
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 glass-card rounded-lg text-sm font-medium hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Export PDF
+                    </button>
+</div>
+</div>
+<!-- Bento Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="glass-card p-xl rounded-2xl shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-on-surface-variant font-label-md text-label-md">TOTAL USERS</span>
+<span class="material-symbols-outlined text-primary">group</span>
+</div>
+<div class="text-3xl font-extrabold text-primary">1,284</div>
+<div class="text-xs text-secondary mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span>
+                        +12% from last month
+                    </div>
+</div>
+<div class="glass-card p-xl rounded-2xl shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-on-surface-variant font-label-md text-label-md">ACTIVE NOW</span>
+<span class="material-symbols-outlined text-secondary">fiber_manual_record</span>
+</div>
+<div class="text-3xl font-extrabold text-primary">312</div>
+<div class="text-xs text-on-surface-variant mt-2">Peak usage at 10:00 AM</div>
+</div>
+<div class="glass-card p-xl rounded-2xl shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-on-surface-variant font-label-md text-label-md">PENDING INVITES</span>
+<span class="material-symbols-outlined text-outline">mail</span>
+</div>
+<div class="text-3xl font-extrabold text-primary">18</div>
+<div class="text-xs text-error mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span>
+                        3 expiring soon
+                    </div>
+</div>
+<div class="glass-card p-xl rounded-2xl shadow-sm border-secondary/20 bg-secondary-container/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-on-surface-variant font-label-md text-label-md">DEPARTMENTS</span>
+<span class="material-symbols-outlined text-primary">account_balance</span>
+</div>
+<div class="text-3xl font-extrabold text-primary">24</div>
+<div class="text-xs text-on-surface-variant mt-2">6 regional hubs</div>
+</div>
+</div>
+<!-- Main Data Table Container -->
+<div class="glass-card rounded-2xl shadow-sm overflow-hidden">
+<div class="p-lg border-b border-outline-variant/30 flex justify-between items-center bg-white/40">
+<div class="flex gap-4">
+<button class="text-primary font-bold border-b-2 border-primary pb-1 text-sm">All Users</button>
+<button class="text-on-surface-variant font-medium hover:text-primary transition-colors text-sm">Administrators</button>
+<button class="text-on-surface-variant font-medium hover:text-primary transition-colors text-sm">Department Leads</button>
+</div>
+<div class="flex items-center gap-2 text-xs font-bold text-on-surface-variant">
+<span>Showing 1-10 of 1,284</span>
+<div class="flex gap-1 ml-4">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white border border-outline-variant/30">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white border border-outline-variant/30">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">User</th>
+<th class="px-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Role</th>
+<th class="px-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Department</th>
+<th class="px-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Last Active</th>
+<th class="px-lg py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- User Row 1 -->
+<tr class="hover:bg-azure-mist/50 transition-colors group">
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a confident woman of color in professional business attire, smiling warmly. She is positioned in a modern office with glass partitions and soft, diffuse light reflecting the light-blue and white color scheme of a high-end civic admin platform. The photography is clean, sharp, and high-quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9sBJpuATswyQCPmczmteY2eSBQitpZjDKg8gpv_5pcE7uhP4R4NoV1p3tLwhOWEa-VyRkT9PIjQWZtRISNmeefaulnc6fti6IFpPusKV5r9O6xza9JLwVHw0A5Z7GX2OmcEUsVwGKgUtLuWGkKbyYaQq19hN1y5AGvPkrN_LYXCL2JxxbxitoBbzYVBUcpkihpvouUzHb6hKovg0eOapu8eKHI7AsTCpzqRxSSYnObD48LI0nESSiXv4SA3E-6mXBS4U3SEi81hg"/>
+<div>
+<p class="font-bold text-on-surface">Elena Rodriguez</p>
+<p class="text-xs text-on-surface-variant">elena.r@civio.gov</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold">System Admin</span>
+</td>
+<td class="px-lg py-4">
+<p class="text-sm font-medium text-on-surface">Urban Planning</p>
+<p class="text-[10px] text-on-surface-variant">North District</p>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+<span class="text-xs font-bold text-secondary">Active</span>
+</div>
+</td>
+<td class="px-lg py-4 text-sm text-on-surface-variant">2 mins ago</td>
+<td class="px-lg py-4 text-right">
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- User Row 2 -->
+<tr class="hover:bg-azure-mist/50 transition-colors group">
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a diverse male executive in his 30s wearing a light blue dress shirt, set against a bright, airy architectural background. The image has a clean, corporate aesthetic with soft bokeh effects and cool lighting tones that harmonize with a digital administration interface's color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-uejtU36x3jFmoH0xwp2Ioa79Df20aNnea9aivwfiDbu47p_IVpTJE-BiiGL_1yMBYdiyycYlz8MjGvr60snLyNAXkmlp9r8oW75hjinNkXlxVuOLwTjwjojlipt6ChbBvBvif3hHWIZpFWF3tuq9nDgKkH9hBeGAcPs06MwRYw1H3vpmWRbVvW7SH4IZX78JMPsxogOGkiB9u__DQdI3y6Iw_foDadejqCdRcncNO20ibdjPGSSIn16Aq94TSgpmY2r-BZ-6iTg"/>
+<div>
+<p class="font-bold text-on-surface">Marcus Chen</p>
+<p class="text-xs text-on-surface-variant">m.chen@civio.gov</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs font-bold">Department Lead</span>
+</td>
+<td class="px-lg py-4">
+<p class="text-sm font-medium text-on-surface">Public Works</p>
+<p class="text-[10px] text-on-surface-variant">Central Hub</p>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+<span class="text-xs font-bold text-secondary">Active</span>
+</div>
+</td>
+<td class="px-lg py-4 text-sm text-on-surface-variant">45 mins ago</td>
+<td class="px-lg py-4 text-right">
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- User Row 3 -->
+<tr class="hover:bg-azure-mist/50 transition-colors group">
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed-dim flex items-center justify-center font-bold text-tertiary">
+                                            JS
+                                        </div>
+<div>
+<p class="font-bold text-on-surface">Julianne Smith</p>
+<p class="text-xs text-on-surface-variant">j.smith@civio.gov</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs font-bold">Reviewer</span>
+</td>
+<td class="px-lg py-4">
+<p class="text-sm font-medium text-on-surface">Social Services</p>
+<p class="text-[10px] text-on-surface-variant">West Regional</p>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 bg-outline-variant rounded-full"></span>
+<span class="text-xs font-bold text-outline">Inactive</span>
+</div>
+</td>
+<td class="px-lg py-4 text-sm text-on-surface-variant">3 days ago</td>
+<td class="px-lg py-4 text-right">
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- User Row 4 -->
+<tr class="hover:bg-azure-mist/50 transition-colors group">
+<td class="px-lg py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a creative professional woman in her early 40s with a modern hairstyle and minimalist jewelry. She is backlit by soft, natural light in a contemporary studio setting with subtle icy blue accents that mirror the platform's glassmorphism and modern minimalist aesthetic. High-key lighting ensures a clean, professional finish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq-hX562MGJJZzIPZLkdhgKqDCMMw0XAC0wiiMYPMK08jzGshAgmLnrxw2GbW0Zw_43CdRWKI7MUKLBbQXlRp4P21mjzI-OIp-ZCoIK2fImgQpfEJpaX8b8rgkIZkH4nMWMC0Ge6luH-aBeEFWpzwfGrrinFpP0cSi6zZYq5QlUlxa99GHKNsm8J5gC973pJZCNpvGHPEfPFzX-P-82ABrF_8iy3zpVOpdIpx-XkQhO3EMCzopN3TTId6LvCx8CoWd5KfVMkKgg9U"/>
+<div>
+<p class="font-bold text-on-surface">Sarah Van der Berg</p>
+<p class="text-xs text-on-surface-variant">sarah.v@civio.gov</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-4">
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs font-bold">Admin Assistant</span>
+</td>
+<td class="px-lg py-4">
+<p class="text-sm font-medium text-on-surface">Health &amp; Safety</p>
+<p class="text-[10px] text-on-surface-variant">East District</p>
+</td>
+<td class="px-lg py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+<span class="text-xs font-bold text-secondary">Active</span>
+</div>
+</td>
+<td class="px-lg py-4 text-sm text-on-surface-variant">12 mins ago</td>
+<td class="px-lg py-4 text-right">
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-lg bg-white/20 flex justify-center border-t border-outline-variant/30">
+<button class="text-sm font-bold text-primary hover:underline transition-all">View All 1,284 Records</button>
+</div>
+</div>
+<!-- Asymmetric Regional Activity Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<div class="lg:col-span-2 glass-card rounded-2xl p-xl flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Regional Access Map</h3>
+<p class="text-on-surface-variant text-sm">Real-time user density by regional administrative hubs.</p>
+</div>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-[10px] font-bold text-secondary">
+<span class="w-2 h-2 bg-secondary rounded-full"></span> HIGH TRAFFIC
+                                </span>
+<span class="flex items-center gap-1 text-[10px] font-bold text-outline">
+<span class="w-2 h-2 bg-outline-variant rounded-full"></span> LOW TRAFFIC
+                                </span>
+</div>
+</div>
+<div class="w-full h-48 bg-surface-container-low rounded-xl relative overflow-hidden">
+<!-- Simulated Map Placeholder -->
+<img class="w-full h-full object-cover opacity-60 mix-blend-multiply" data-alt="A stylized, minimalist digital map of a city's administrative districts, rendered in a palette of soft greys, icy aquas, and deep blues. The map uses glowing heat-map indicators to show density, perfectly matching the modern administrative dashboard's professional and high-tech aesthetic. The lighting is bright and clean with no harsh shadows." data-location="Metropolis" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_KuFLHyxyPBk-TxjurOyf8qqLkzl5ODjlaTfho79BtmLj9JFjDwmg79MGECEJ7t_yVlJUKo90fvX7NWyiATTCTLzO029QrE7nu98e31UnBtgA-POrDrVxdqVeUnHsT-eRXhuPvCtT6yfliJj5WOIzRsQ7rz3DiI2i6zLJG7xb3QPRzU7GmQ4LfgSMorrdlHANK_3hBOi8anOAjHQF-fa-Y-zW4hRPbFnx82bI3_aP3Has4SftSWTm8ShLlv7McJnNKxHWu0yFLt0"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-primary/90 text-white px-4 py-2 rounded-full text-xs font-bold backdrop-blur-md shadow-xl">
+                                    CENTRAL HUB: 142 Active
+                                </div>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-xl">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4">Security Logs</h3>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="w-2 h-2 bg-error rounded-full mt-2"></div>
+<div>
+<p class="text-sm font-bold">Failed Login Attempt</p>
+<p class="text-xs text-on-surface-variant">User: d.vance@civio.gov</p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">10:42 AM Today</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
+<div>
+<p class="text-sm font-bold">New Role Assigned</p>
+<p class="text-xs text-on-surface-variant">Elena R. assigned 'Reviewer' to J. Smith</p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">09:15 AM Today</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+<div>
+<p class="text-sm font-bold">System Maintenance</p>
+<p class="text-xs text-on-surface-variant">Weekly backup completed successfully</p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">03:00 AM Today</p>
+</div>
+</div>
+<button class="w-full mt-4 py-2 text-sm font-bold text-primary bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors">
+                            View Security Audit
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-auto p-margin-desktop text-center">
+<p class="text-xs text-outline-variant font-medium tracking-widest uppercase">
+                © 2024 Civio Administrative Platform • Professional Edition v4.2.0
+            </p>
+</footer>
+</main>
+<script>
+        // Micro-interaction for hover effects on glass cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+        
+        // Simple search feedback simulation
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            console.log('Searching for:', e.target.value);
+            // In a real app, this would trigger table filtering
+        });
+    </script>
+</body></html>

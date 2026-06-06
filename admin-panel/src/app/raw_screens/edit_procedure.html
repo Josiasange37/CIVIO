@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Edit Procedure | Civio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#cee5ff",
+                    "on-tertiary-container": "#b5c7be",
+                    "surface": "#f5fafa",
+                    "tertiary": "#2d3d36",
+                    "inverse-primary": "#99cbfd",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c1c7d0",
+                    "surface-dim": "#d6dbdb",
+                    "surface-container": "#eaefef",
+                    "secondary-container": "#6de4fd",
+                    "on-background": "#171d1d",
+                    "secondary-fixed-dim": "#5dd6ee",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "secondary": "#006877",
+                    "on-tertiary-fixed-variant": "#3a4a43",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#41474e",
+                    "background": "#f5fafa",
+                    "tertiary-fixed": "#d4e7dd",
+                    "outline": "#72787f",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#95c8f9",
+                    "surface-tint": "#2b628e",
+                    "primary": "#003c61",
+                    "inverse-surface": "#2c3132",
+                    "on-primary-fixed-variant": "#054a75",
+                    "surface-container-low": "#f0f4f4",
+                    "on-surface": "#171d1d",
+                    "tertiary-container": "#43544d",
+                    "secondary-fixed": "#a5eeff",
+                    "tertiary-fixed-dim": "#b8cbc2",
+                    "surface-container-highest": "#dee3e3",
+                    "primary-fixed-dim": "#99cbfd",
+                    "on-primary-fixed": "#001d33",
+                    "on-secondary-container": "#006574",
+                    "inverse-on-surface": "#edf2f2",
+                    "primary-container": "#18547f",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#dee3e3",
+                    "surface-bright": "#f5fafa",
+                    "on-secondary-fixed": "#001f25",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#004e5a",
+                    "on-tertiary-fixed": "#0f1f19",
+                    "surface-container-high": "#e4e9e9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "margin-desktop": "40px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "gutter": "24px",
+                    "base": "4px",
+                    "xl": "32px",
+                    "margin-mobile": "16px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Plus Jakarta Sans"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid #e2e7e7;
+      }
+      .sidebar-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .sidebar-scroll::-webkit-scrollbar-thumb {
+        background: #c1c7d0;
+        border-radius: 10px;
+      }
+      input:focus, textarea:focus, select:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(113, 212, 231, 0.2);
+        border-color: #006877;
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface border-r border-outline-variant flex flex-col p-md z-30">
+<div class="mb-xl px-sm flex items-center gap-md">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">account_tree</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Civio</h1>
+<p class="font-label-md text-label-md text-outline">Civic Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-xs overflow-y-auto sidebar-scroll">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary bg-primary-fixed font-bold" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-body-md">Procedures</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-body-md">Documents</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-body-md">Map</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md">Users</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="pt-md border-t border-outline-variant space-y-xs">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Help Center</span>
+</a>
+<button class="w-full flex items-center justify-center gap-sm bg-primary text-white py-sm rounded-lg font-bold active:scale-95 transition-transform">
+<span class="material-symbols-outlined">support_agent</span>
+                Support
+            </button>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full ml-64 bg-white/70 backdrop-blur-xl border-b border-outline-variant/30 h-16 flex justify-between items-center px-margin-desktop z-20">
+<div class="flex items-center gap-xl flex-1">
+<div class="relative max-w-md w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-md py-2 bg-white/40 border border-outline-variant rounded-full text-body-sm focus:bg-white transition-all" placeholder="Search procedures..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="font-body-md text-primary border-b-2 border-primary py-4" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-sm">
+<img class="w-8 h-8 rounded-full border border-outline-variant object-cover" data-alt="A professional headshot of a middle-aged male civil servant with short dark hair and a friendly, confident expression. He is wearing a sharp, tailored navy blue suit over a crisp white shirt. The background is a blurred office interior with soft natural light filtering through large windows, maintaining the bright and clean light-mode aesthetic of the platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjq507jvEv2AR2whsKWAjwwIn6XRGVEEVhr1bnsJVdU1phyQAOUFgzBG14cZ6rjPGjUhx4Bd1VGkVmaeq-r1TUv4C4IpSxfS1Q-Y8zBjeY0n7kxypqZE6br56Ze4nT1yblqpRCkwOKI9SwWkR-VM3RUM_9zp1tgVhOTzI882NIXoAAOmo3xk0Aew5zCvG7nsssTmJ4u8rGLuPlZqJCQe04hlSR01dC5B9fbNMKfiIWuqOFV2UUl5WkyP84velgZx6CqXSJDUBay3k"/>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 p-margin-desktop pb-32">
+<div class="max-w-[1440px] mx-auto">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-xs text-body-sm text-outline mb-lg">
+<a class="hover:text-primary transition-colors" href="#">Procedures</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-on-surface">Edit Procedure</span>
+</nav>
+<header class="mb-xl flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-xs">Residential Building Permit</h2>
+<p class="text-body-lg text-on-surface-variant">Update the guidelines, requirements, and workflow for residential structural modifications.</p>
+</div>
+<div class="flex items-center gap-sm">
+<span class="bg-secondary-container text-on-secondary-container px-md py-1 rounded-full font-label-md">ACTIVE</span>
+<span class="text-body-sm text-outline">Last updated: 2 hours ago</span>
+</div>
+</header>
+<form class="space-y-lg">
+<!-- Section 1: General Information -->
+<section class="glass-card rounded-xl p-xl shadow-[0px_12px_32px_rgba(24,84,127,0.05)]">
+<div class="flex items-center gap-md mb-xl">
+<div class="w-10 h-10 bg-primary-fixed text-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">info</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">General Information</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-xl">
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block">PROCEDURE NAME</label>
+<input class="w-full bg-white/40 border border-outline-variant rounded-lg px-md py-3 text-body-md focus:bg-white transition-all" type="text" value="Residential Building Permit"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block">DEPARTMENT RESPONSIBLE</label>
+<select class="w-full bg-white/40 border border-outline-variant rounded-lg px-md py-3 text-body-md focus:bg-white transition-all appearance-none">
+<option>Urban Planning &amp; Development</option>
+<option>Public Works</option>
+<option>Environmental Services</option>
+</select>
+</div>
+<div class="md:col-span-2 space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block">PROCEDURE DESCRIPTION</label>
+<textarea class="w-full bg-white/40 border border-outline-variant rounded-lg px-md py-3 text-body-md focus:bg-white transition-all" rows="4">Official permit process for citizens intending to build, extend, or structurally alter residential properties within the municipal boundaries. Requires technical review and environmental impact assessment.</textarea>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block">ESTIMATED PROCESSING TIME (DAYS)</label>
+<div class="relative">
+<input class="w-full bg-white/40 border border-outline-variant rounded-lg px-md py-3 text-body-md focus:bg-white transition-all" type="number" value="15"/>
+<span class="absolute right-md top-1/2 -translate-y-1/2 text-outline text-body-sm">Work Days</span>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block">APPLICATION FEE (USD)</label>
+<div class="relative">
+<span class="absolute left-md top-1/2 -translate-y-1/2 text-outline text-body-md">$</span>
+<input class="w-full bg-white/40 border border-outline-variant rounded-lg pl-8 pr-md py-3 text-body-md focus:bg-white transition-all" type="text" value="250.00"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Document Requirements -->
+<section class="glass-card rounded-xl p-xl shadow-[0px_12px_32px_rgba(24,84,127,0.05)]">
+<div class="flex justify-between items-center mb-xl">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 bg-primary-fixed text-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">description</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Document Requirements</h3>
+</div>
+<button class="flex items-center gap-xs text-primary font-bold hover:bg-primary-fixed px-md py-2 rounded-lg transition-colors" type="button">
+<span class="material-symbols-outlined text-md">add_circle</span>
+                            Add Requirement
+                        </button>
+</div>
+<div class="space-y-md">
+<!-- Document Row -->
+<div class="flex items-center gap-lg p-md border border-outline-variant/30 rounded-lg hover:border-primary/50 transition-colors group">
+<div class="flex-1">
+<h4 class="font-body-md font-bold text-on-surface">Proof of Ownership</h4>
+<p class="text-body-sm text-on-surface-variant">Deed, Title, or recent Property Tax receipt.</p>
+</div>
+<div class="flex items-center gap-xl">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-outline">FORMAT</span>
+<span class="text-body-sm font-medium">PDF ONLY</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-body-sm font-bold">Mandatory</span>
+</div>
+<button class="p-2 text-outline hover:text-error transition-colors" type="button">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<!-- Document Row 2 -->
+<div class="flex items-center gap-lg p-md border border-outline-variant/30 rounded-lg hover:border-primary/50 transition-colors group">
+<div class="flex-1">
+<h4 class="font-body-md font-bold text-on-surface">Structural Engineering Plans</h4>
+<p class="text-body-sm text-on-surface-variant">Must be stamped by a licensed architect or engineer.</p>
+</div>
+<div class="flex items-center gap-xl">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-outline">FORMAT</span>
+<span class="text-body-sm font-medium">DWG, PDF</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-body-sm font-bold">Mandatory</span>
+</div>
+<button class="p-2 text-outline hover:text-error transition-colors" type="button">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<!-- Document Row 3 -->
+<div class="flex items-center gap-lg p-md border border-outline-variant/30 rounded-lg hover:border-primary/50 transition-colors group bg-surface-container-low">
+<div class="flex-1">
+<h4 class="font-body-md font-bold text-on-surface">Environmental Clearance</h4>
+<p class="text-body-sm text-on-surface-variant">Required only for properties near protected water bodies.</p>
+</div>
+<div class="flex items-center gap-xl">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-outline">FORMAT</span>
+<span class="text-body-sm font-medium">PDF</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">radio_button_unchecked</span>
+<span class="text-body-sm">Optional</span>
+</div>
+<button class="p-2 text-outline hover:text-error transition-colors" type="button">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Workflow Steps -->
+<section class="glass-card rounded-xl p-xl shadow-[0px_12px_32px_rgba(24,84,127,0.05)]">
+<div class="flex items-center gap-md mb-xl">
+<div class="w-10 h-10 bg-primary-fixed text-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">reorder</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Workflow Steps</h3>
+</div>
+<div class="relative pl-8 space-y-xl before:content-[''] before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant/30">
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-primary border-4 border-white ring-1 ring-primary-fixed"></div>
+<div class="flex flex-col md:flex-row gap-lg bg-white/40 p-md rounded-xl border border-outline-variant/20">
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<span class="bg-primary-fixed text-primary font-bold text-[10px] px-2 py-0.5 rounded">STEP 01</span>
+<h4 class="font-body-md font-bold text-on-surface">Initial Submission Review</h4>
+</div>
+<p class="text-body-sm text-on-surface-variant">Verification of documents and fee payment status by administrative staff.</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="px-md py-1 bg-surface rounded-lg border border-outline-variant text-body-sm">Admin Team A</div>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors" type="button">
+<span class="material-symbols-outlined">settings_suggest</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-primary border-4 border-white ring-1 ring-primary-fixed"></div>
+<div class="flex flex-col md:flex-row gap-lg bg-white/40 p-md rounded-xl border border-outline-variant/20">
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<span class="bg-primary-fixed text-primary font-bold text-[10px] px-2 py-0.5 rounded">STEP 02</span>
+<h4 class="font-body-md font-bold text-on-surface">Technical Evaluation</h4>
+</div>
+<p class="text-body-sm text-on-surface-variant">Review by Engineering and Urban Planning specialists for compliance.</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="px-md py-1 bg-surface rounded-lg border border-outline-variant text-body-sm">Specialist Panel</div>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors" type="button">
+<span class="material-symbols-outlined">settings_suggest</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Step 3 (Validation Error State Example) -->
+<div class="relative">
+<div class="absolute -left-[25px] top-1 w-4 h-4 rounded-full bg-error border-4 border-white ring-1 ring-error-container"></div>
+<div class="flex flex-col md:flex-row gap-lg bg-error-container/20 p-md rounded-xl border border-error/30">
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<span class="bg-error text-white font-bold text-[10px] px-2 py-0.5 rounded">STEP 03</span>
+<h4 class="font-body-md font-bold text-on-surface">Final Approval</h4>
+</div>
+<p class="text-body-sm text-error">Missing designated signer. Please select an authorized signatory.</p>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-primary font-bold text-body-sm underline" type="button">Assign Now</button>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors text-error" type="button">
+<span class="material-symbols-outlined">warning</span>
+</button>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-sm ml-2 text-outline hover:text-primary transition-colors py-2 group" type="button">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-body-sm">Add New Step</span>
+</button>
+</div>
+</section>
+</form>
+</div>
+</main>
+<!-- Sticky Save Bar -->
+<footer class="fixed bottom-0 left-64 right-0 h-20 bg-white/80 backdrop-blur-xl border-t border-outline-variant/30 flex items-center justify-between px-margin-desktop z-40 shadow-[0px_-4px_20px_rgba(24,84,127,0.04)]">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-secondary">cloud_done</span>
+<span class="text-body-sm text-outline">All changes automatically saved to draft.</span>
+</div>
+<div class="flex items-center gap-lg">
+<button class="px-xl py-3 rounded-lg font-bold text-on-surface-variant hover:bg-surface-container transition-colors border border-outline-variant">
+                Cancel
+            </button>
+<button class="px-display-lg py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-container active:scale-95 transition-all flex items-center gap-sm shadow-md">
+<span class="material-symbols-outlined text-md">save</span>
+                Save Changes
+            </button>
+</div>
+</footer>
+<!-- Interaction Script -->
+<script>
+        // Micro-interaction: Focus ring behavior simulation
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label')?.classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label')?.classList.remove('text-primary');
+            });
+        });
+
+        // Sticky Bar Entrance
+        window.addEventListener('scroll', () => {
+            const footer = document.querySelector('footer');
+            if (window.scrollY > 100) {
+                footer.classList.add('translate-y-0');
+            }
+        });
+    </script>
+</body></html>

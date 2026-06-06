@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Civio | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid #e2e7e7;
+        }
+        .sidebar-blur {
+            backdrop-filter: blur(12px);
+        }
+        body {
+            background-color: #f5fafa;
+            color: #171d1d;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c7d0;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#cee5ff",
+                      "on-tertiary-container": "#b5c7be",
+                      "surface": "#f5fafa",
+                      "tertiary": "#2d3d36",
+                      "inverse-primary": "#99cbfd",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#c1c7d0",
+                      "surface-dim": "#d6dbdb",
+                      "surface-container": "#eaefef",
+                      "secondary-container": "#6de4fd",
+                      "on-background": "#171d1d",
+                      "secondary-fixed-dim": "#5dd6ee",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "secondary": "#006877",
+                      "on-tertiary-fixed-variant": "#3a4a43",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#41474e",
+                      "background": "#f5fafa",
+                      "tertiary-fixed": "#d4e7dd",
+                      "outline": "#72787f",
+                      "on-error-container": "#93000a",
+                      "error": "#ba1a1a",
+                      "on-primary-container": "#95c8f9",
+                      "surface-tint": "#2b628e",
+                      "primary": "#003c61",
+                      "inverse-surface": "#2c3132",
+                      "on-primary-fixed-variant": "#054a75",
+                      "surface-container-low": "#f0f4f4",
+                      "on-surface": "#171d1d",
+                      "tertiary-container": "#43544d",
+                      "secondary-fixed": "#a5eeff",
+                      "tertiary-fixed-dim": "#b8cbc2",
+                      "surface-container-highest": "#dee3e3",
+                      "primary-fixed-dim": "#99cbfd",
+                      "on-primary-fixed": "#001d33",
+                      "on-secondary-container": "#006574",
+                      "inverse-on-surface": "#edf2f2",
+                      "primary-container": "#18547f",
+                      "on-primary": "#ffffff",
+                      "surface-variant": "#dee3e3",
+                      "surface-bright": "#f5fafa",
+                      "on-secondary-fixed": "#001f25",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#004e5a",
+                      "on-tertiary-fixed": "#0f1f19",
+                      "surface-container-high": "#e4e9e9"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "margin-desktop": "40px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "gutter": "24px",
+                      "base": "4px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "headline-sm": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "label-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="font-body-md text-body-md antialiased">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface dark:bg-inverse-surface border-r border-outline-variant dark:border-outline shadow-sm flex flex-col p-md z-50">
+<div class="flex items-center gap-sm mb-xl px-sm">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary leading-none">Civio</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70 uppercase tracking-widest mt-1">Civic Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-md px-md py-sm text-primary dark:text-inverse-primary bg-primary-fixed dark:bg-primary-container rounded-lg font-bold transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span>Procedures</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span>Documents</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span>Map</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Users</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-lg space-y-1">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Help Center</span>
+</a>
+<div class="px-md py-sm">
+<button class="w-full py-sm px-md bg-primary text-white rounded-lg font-bold hover:opacity-90 transition-opacity">
+                    Support
+                </button>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Anchor -->
+<header class="sticky top-0 w-full bg-white/70 dark:bg-surface/70 backdrop-blur-xl border-b border-outline-variant/30 shadow-[0px_12px_32px_rgba(24,84,127,0.08)] z-40">
+<div class="flex justify-between items-center px-margin-desktop h-16 w-full ml-64 max-w-[calc(100%-16rem)]">
+<div class="flex items-center gap-xl">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-white/40 border border-outline-variant rounded-full text-body-sm focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" placeholder="Search data..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-primary dark:text-inverse-primary border-b-2 border-primary font-medium px-1 h-16 flex items-center" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary font-medium px-1 h-16 flex items-center transition-colors" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-lg">
+<button class="flex items-center gap-sm px-md py-2 bg-primary text-white rounded-full font-bold active:opacity-80 transition-opacity shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>New Procedure</span>
+</button>
+<div class="flex items-center gap-md border-l border-outline-variant pl-lg">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="apps">apps</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Close-up professional portrait of a male administrative officer with a friendly and focused expression. The background is a blurred high-end government office setting with soft azure and white tones. The lighting is bright and even, reflecting a professional and trustworthy civic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoawa40M_L8MdpjAg1Iqg3tivK_CJnwKjFw78MYnT_P8LMqgW29rEOYARqVaIkaVXxzq7IRps5fF_dX0_gqM8ulcn3wecobWAg8HkXN8eeXSIpszexXErtburPBnI-uez0eu2c2bIbEFzO1LhXB8-e3cDdT8eyDRpRk1CKB9BcoW7lm9ICWNR7ztg9bnwK1-TYknYDTr347GLLIjdx0TycPwJimaMy_zi_nx0NLlnFr-bfhzAK4fOBNUfvOoczwkZ0kSbCun7DFSA"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-margin-desktop bg-surface min-h-[calc(100vh-64px)]">
+<div class="max-w-[1440px] mx-auto">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Overview Dashboard</h2>
+<p class="text-on-surface-variant mt-1">Real-time performance metrics and administrative status.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-sm glass-card rounded-lg flex items-center gap-xs font-medium text-on-surface-variant hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[20px]">calendar_today</span>
+<span>Last 30 Days</span>
+</button>
+<button class="px-md py-sm glass-card rounded-lg flex items-center gap-xs font-medium text-on-surface-variant hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+<span>Filters</span>
+</button>
+</div>
+</div>
+<!-- KPI Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
+<!-- KPI 1: Total Users -->
+<div class="glass-card p-lg rounded-xl shadow-sm group">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">group</span>
+</div>
+<div class="flex items-center gap-xs text-green-600 bg-green-50 px-2 py-1 rounded-full text-label-md">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+12.5%</span>
+</div>
+</div>
+<h3 class="text-on-surface-variant font-medium">Total Users</h3>
+<div class="flex items-baseline gap-sm mt-xs">
+<span class="font-headline-lg text-headline-lg">12,840</span>
+<div class="flex-1 h-8 ml-md">
+<svg class="w-full h-full stroke-primary fill-none stroke-[2] opacity-40" viewbox="0 0 100 30">
+<path d="M0 25 Q 10 20, 20 22 T 40 10 T 60 15 T 80 5 T 100 12"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- KPI 2: Active Procedures -->
+<div class="glass-card p-lg rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">account_tree</span>
+</div>
+<div class="flex items-center gap-xs text-secondary-container bg-secondary/10 px-2 py-1 rounded-full text-label-md">
+<span class="material-symbols-outlined text-[14px]">remove</span>
+<span>Stable</span>
+</div>
+</div>
+<h3 class="text-on-surface-variant font-medium">Active Procedures</h3>
+<div class="flex items-baseline gap-sm mt-xs">
+<span class="font-headline-lg text-headline-lg">842</span>
+<div class="flex-1 h-8 ml-md">
+<svg class="w-full h-full stroke-secondary fill-none stroke-[2] opacity-40" viewbox="0 0 100 30">
+<path d="M0 15 Q 20 15, 40 18 T 60 12 T 80 15 T 100 14"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- KPI 3: Pending Documents -->
+<div class="glass-card p-lg rounded-xl shadow-sm">
+<div class="flex justify-between items-start mb-md">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex items-center gap-xs text-error bg-error-container px-2 py-1 rounded-full text-label-md">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+4.2%</span>
+</div>
+</div>
+<h3 class="text-on-surface-variant font-medium">Pending Documents</h3>
+<div class="flex items-baseline gap-sm mt-xs">
+<span class="font-headline-lg text-headline-lg">2,109</span>
+<div class="flex-1 h-8 ml-md">
+<svg class="w-full h-full stroke-tertiary fill-none stroke-[2] opacity-40" viewbox="0 0 100 30">
+<path d="M0 10 Q 15 15, 30 5 T 50 20 T 75 10 T 100 25"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Insights Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Procedures Overview Chart Area -->
+<div class="lg:col-span-2 glass-card rounded-xl p-lg shadow-sm">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h3 class="font-headline-sm text-headline-sm">Procedures Overview</h3>
+<p class="text-body-sm text-on-surface-variant">Volume of new vs. resolved cases</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-label-md">New Cases</span>
+</div>
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded-full bg-secondary-fixed-dim"></div>
+<span class="text-label-md">Resolved</span>
+</div>
+</div>
+</div>
+<!-- Simplified Visual Chart -->
+<div class="h-64 flex items-end justify-between gap-sm relative pb-8">
+<div class="absolute left-0 bottom-0 w-full h-[1px] bg-outline-variant"></div>
+<!-- Chart Bars -->
+<div class="flex flex-col items-center gap-xs w-full">
+<div class="w-full max-w-[40px] bg-primary rounded-t-lg transition-all hover:opacity-80" style="height: 60%"></div>
+<div class="w-full max-w-[40px] bg-secondary-fixed-dim rounded-t-lg" style="height: 45%"></div>
+<span class="absolute bottom-1 text-label-md opacity-60">Mon</span>
+</div>
+<div class="flex flex-col items-center gap-xs w-full">
+<div class="w-full max-w-[40px] bg-primary rounded-t-lg transition-all hover:opacity-80" style="height: 80%"></div>
+<div class="w-full max-w-[40px] bg-secondary-fixed-dim rounded-t-lg" style="height: 65%"></div>
+<span class="absolute bottom-1 text-label-md opacity-60">Tue</span>
+</div>
+<div class="flex flex-col items-center gap-xs w-full">
+<div class="w-full max-w-[40px] bg-primary rounded-t-lg transition-all hover:opacity-80" style="height: 55%"></div>
+<div class="w-full max-w-[40px] bg-secondary-fixed-dim rounded-t-lg" style="height: 70%"></div>
+<span class="absolute bottom-1 text-label-md opacity-60">Wed</span>
+</div>
+<div class="flex flex-col items-center gap-xs w-full">
+<div class="w-full max-w-[40px] bg-primary rounded-t-lg transition-all hover:opacity-80" style="height: 90%"></div>
+<div class="w-full max-w-[40px] bg-secondary-fixed-dim rounded-t-lg" style="height: 50%"></div>
+<span class="absolute bottom-1 text-label-md opacity-60">Thu</span>
+</div>
+<div class="flex flex-col items-center gap-xs w-full">
+<div class="w-full max-w-[40px] bg-primary rounded-t-lg transition-all hover:opacity-80" style="height: 75%"></div>
+<div class="w-full max-w-[40px] bg-secondary-fixed-dim rounded-t-lg" style="height: 85%"></div>
+<span class="absolute bottom-1 text-label-md opacity-60">Fri</span>
+</div>
+<div class="flex flex-col items-center gap-xs w-full">
+<div class="w-full max-w-[40px] bg-primary rounded-t-lg transition-all hover:opacity-80" style="height: 40%"></div>
+<div class="w-full max-w-[40px] bg-secondary-fixed-dim rounded-t-lg" style="height: 30%"></div>
+<span class="absolute bottom-1 text-label-md opacity-60">Sat</span>
+</div>
+</div>
+</div>
+<!-- Recent Activity Feed -->
+<div class="glass-card rounded-xl p-lg shadow-sm">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-headline-sm text-headline-sm">Recent Activity</h3>
+<button class="text-primary text-label-md font-bold hover:underline">View All</button>
+</div>
+<div class="space-y-lg">
+<!-- Activity Item 1 -->
+<div class="flex gap-md">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary relative z-10">
+<span class="material-symbols-outlined text-[18px]">edit_document</span>
+</div>
+<div class="absolute top-10 left-1/2 -translate-x-1/2 w-[1px] h-full bg-outline-variant"></div>
+</div>
+<div class="pb-md">
+<p class="text-body-sm font-medium">Business Permit Approval</p>
+<p class="text-label-md text-on-surface-variant opacity-70">Marcia White approved case #8291</p>
+<p class="text-[11px] text-outline mt-1">2 minutes ago</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex gap-md">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 relative z-10">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+</div>
+<div class="absolute top-10 left-1/2 -translate-x-1/2 w-[1px] h-full bg-outline-variant"></div>
+</div>
+<div class="pb-md">
+<p class="text-body-sm font-medium">New User Registration</p>
+<p class="text-label-md text-on-surface-variant opacity-70">John Doe completed residential profile</p>
+<p class="text-[11px] text-outline mt-1">15 minutes ago</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex gap-md">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 relative z-10">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</div>
+</div>
+<div>
+<p class="text-body-sm font-medium">System Alert</p>
+<p class="text-label-md text-on-surface-variant opacity-70">Database sync delayed in Sector 4</p>
+<p class="text-[11px] text-outline mt-1">1 hour ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Table Section -->
+<div class="mt-gutter glass-card rounded-xl overflow-hidden shadow-sm">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm">Critical Procedures</h3>
+<div class="flex gap-md">
+<select class="bg-transparent border-outline-variant rounded-lg text-body-sm focus:ring-primary">
+<option>High Priority</option>
+<option>Medium Priority</option>
+</select>
+</div>
+</div>
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant text-label-md border-b border-outline-variant">
+<th class="px-lg py-md font-medium">PROCEDURE NAME</th>
+<th class="px-lg py-md font-medium">ASSIGNED TO</th>
+<th class="px-lg py-md font-medium">DUE DATE</th>
+<th class="px-lg py-md font-medium">STATUS</th>
+<th class="px-lg py-md font-medium">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-azure-mist/50 transition-colors">
+<td class="px-lg py-md">
+<div class="flex flex-col">
+<span class="font-medium text-body-sm">Residential Zoning Waiver</span>
+<span class="text-[12px] text-on-surface-variant">ID: RZ-2024-001</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-primary-fixed-dim text-[10px] flex items-center justify-center font-bold">JD</div>
+<span class="text-body-sm">Julian Dash</span>
+</div>
+</td>
+<td class="px-lg py-md text-body-sm">Oct 24, 2024</td>
+<td class="px-lg py-md">
+<span class="px-sm py-xs bg-error-container text-on-error-container rounded-full text-[11px] font-bold uppercase">Overdue</span>
+</td>
+<td class="px-lg py-md">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-azure-mist/50 transition-colors">
+<td class="px-lg py-md">
+<div class="flex flex-col">
+<span class="font-medium text-body-sm">Infrastructure Grant #44</span>
+<span class="text-[12px] text-on-surface-variant">ID: IG-2024-089</span>
+</div>
+</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed text-[10px] flex items-center justify-center font-bold">AS</div>
+<span class="text-body-sm">Anne Smith</span>
+</div>
+</td>
+<td class="px-lg py-md text-body-sm">Oct 28, 2024</td>
+<td class="px-lg py-md">
+<span class="px-sm py-xs bg-secondary-container text-on-secondary-container rounded-full text-[11px] font-bold uppercase">In Review</span>
+</td>
+<td class="px-lg py-md">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<script>
+        // Simple micro-interactions for interactivity
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'transform 0.3s ease';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

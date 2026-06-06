@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Sidebar from "@/components/Sidebar";
-import TopBar from "@/components/TopBar";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 
@@ -143,205 +141,141 @@ export default function UsersPage() {
   });
 
   return (
-    <>
-      <Sidebar />
-      <main className="main-content">
-        <TopBar />
-        <div className="page-container">
-          <div className="page-header animate-fade-in-up">
-            <div>
-              <h1 className="page-title">Utilisateurs Actifs</h1>
-              <p className="page-subtitle">
-                Suivez la répartition des citoyens camerounais qui utilisent Civio pour leurs démarches.
-              </p>
+    <div className="page-container">
+      <div className="page-header animate-fade-in-up">
+        <div>
+          <h1 className="page-title">Utilisateurs Actifs</h1>
+          <p className="page-subtitle">
+            Suivez la répartition des citoyens camerounais qui utilisent Civio pour leurs démarches.
+          </p>
+        </div>
+      </div>
+
+      <div className="chart-container p-5 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 stagger">
+          <div>
+            <div className="text-body-sm text-on-surface-variant">Citoyens Enregistrés</div>
+            <div className="text-[32px] font-bold text-primary mt-2 font-headline tracking-tight">
+              {userStats.registered}
+            </div>
+            <div className="text-body-sm text-accent-emerald mt-2">
+              {userStats.registeredChange}
             </div>
           </div>
-
-          <div
-            className="stagger"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: 20,
-              marginBottom: 32,
-            }}
-          >
-            <div className="glass-card" style={{ padding: 24 }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Citoyens Enregistrés</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 32, fontWeight: 700, color: "white", marginTop: 8 }}>
-                {userStats.registered}
-              </div>
-              <div style={{ fontSize: 12, color: "var(--accent-emerald)", marginTop: 8 }}>
-                {userStats.registeredChange}
-              </div>
+          <div>
+            <div className="text-body-sm text-on-surface-variant">Actifs Aujourd&apos;hui</div>
+            <div className="text-[32px] font-bold text-primary mt-2 font-headline tracking-tight">
+              {userStats.activeToday}
             </div>
-            <div className="glass-card" style={{ padding: 24 }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Actifs Aujourd&apos;hui</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 32, fontWeight: 700, color: "white", marginTop: 8 }}>
-                {userStats.activeToday}
-              </div>
-              <div style={{ fontSize: 12, color: "var(--accent-cyan)", marginTop: 8 }}>
-                {userStats.activeTodayChange}
-              </div>
-            </div>
-            <div className="glass-card" style={{ padding: 24 }}>
-              <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Sessions Hors-ligne</div>
-              <div style={{ fontFamily: "Outfit", fontSize: 32, fontWeight: 700, color: "white", marginTop: 8 }}>
-                {userStats.offlineSessions}
-              </div>
-              <div style={{ fontSize: 12, color: "var(--text-tertiary)", marginTop: 8 }}>
-                {userStats.offlineSessionsChange}
-              </div>
+            <div className="text-body-sm text-accent-cyan mt-2">
+              {userStats.activeTodayChange}
             </div>
           </div>
-
-          <div
-            className="animate-fade-in-up"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: 16,
-              marginBottom: 24,
-              flexWrap: "wrap",
-            }}
-          >
-            <div style={{ position: "relative", flex: 1, minWidth: 260 }}>
-              <input
-                type="text"
-                placeholder="Rechercher par nom ou région..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: "100%",
-                  height: 42,
-                  padding: "0 16px 0 44px",
-                  background: "var(--glass-bg)",
-                  border: "1px solid var(--glass-border)",
-                  borderRadius: "var(--radius-xl)",
-                  color: "white",
-                  outline: "none",
-                  transition: "all 0.25s",
-                }}
-              />
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{
-                  position: "absolute",
-                  left: 14,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  width: 18,
-                  height: 18,
-                  color: "var(--text-tertiary)",
-                }}
-              >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
+          <div>
+            <div className="text-body-sm text-on-surface-variant">Sessions Hors-ligne</div>
+            <div className="text-[32px] font-bold text-primary mt-2 font-headline tracking-tight">
+              {userStats.offlineSessions}
             </div>
-
-            <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
-              {regions.map((reg) => (
-                <button
-                  key={reg}
-                  onClick={() => setSelectedRegion(reg)}
-                  className="btn-glass"
-                  style={{
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                    fontSize: 12,
-                    background: selectedRegion === reg ? "linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.1))" : "var(--glass-bg)",
-                    borderColor: selectedRegion === reg ? "var(--accent-cyan)" : "var(--glass-border)",
-                    color: selectedRegion === reg ? "white" : "var(--text-secondary)",
-                  }}
-                >
-                  {reg === "Toutes" ? "Toutes les Régions" : reg.split(" ")[0]}
-                </button>
-              ))}
+            <div className="text-body-sm text-on-surface-variant opacity-70 mt-2">
+              {userStats.offlineSessionsChange}
             </div>
-          </div>
-
-          <div className="chart-container animate-fade-in-up" style={{ padding: 0, overflow: "hidden" }}>
-            <div className="chart-header" style={{ padding: "20px 24px 16px" }}>
-              <div>
-                <div className="chart-title">Annuaire des Citoyens</div>
-                <p style={{ fontSize: 13, color: "var(--text-tertiary)", marginTop: 4 }}>
-                  Liste des utilisateurs actifs et hors-ligne enregistrés sur Civio
-                </p>
-              </div>
-            </div>
-
-            <table className="glass-table">
-              <thead>
-                <tr>
-                  <th>Citoyen</th>
-                  <th>Région d&apos;inscription</th>
-                  <th>Date d&apos;inscription</th>
-                  <th>Dernière activité</th>
-                  <th>Démarches complétées</th>
-                  <th>Statut</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredCitizens.map((cit, i) => (
-                  <tr key={cit.id}>
-                    <td>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <div
-                          style={{
-                            width: 36,
-                            height: 36,
-                            borderRadius: "50%",
-                            background: `linear-gradient(135deg, ${cit.avatarColor}, var(--bg-primary))`,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: 13,
-                            fontWeight: 700,
-                            color: "white",
-                            flexShrink: 0,
-                            boxShadow: `0 0 10px ${cit.avatarColor}44`,
-                          }}
-                        >
-                          {cit.name
-                            .split(" ")
-                            .map((w) => w[0])
-                            .join("")}
-                        </div>
-                        <div>
-                          <span style={{ color: "var(--text-primary)", fontWeight: 600, display: "block" }}>
-                            {cit.name}
-                          </span>
-                          <span style={{ fontSize: 11, color: "var(--text-tertiary)" }}>
-                            ID: {cit.id}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>{cit.region}</td>
-                    <td>{cit.joinedDate}</td>
-                    <td style={{ color: "var(--text-primary)" }}>{cit.lastActive}</td>
-                    <td style={{ textAlign: "center", fontWeight: 700, color: "var(--accent-cyan)" }}>
-                      {cit.completedProcedures}
-                    </td>
-                    <td>
-                      <span className={`badge-status badge-${cit.status === "active" ? "active" : "error"}`}>
-                        {cit.status === "active" ? "En ligne" : "Hors ligne"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
-      </main>
-    </>
+      </div>
+
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 animate-fade-in-up">
+        <div className="relative flex-1 w-full sm:max-w-sm">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Rechercher par nom ou région..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full h-[42px] pl-[44px] pr-4 bg-surface border border-outline-variant rounded-2xl text-body-sm text-on-surface outline-none"
+          />
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto pb-1 w-full sm:w-auto">
+          {regions.map((reg) => (
+            <button
+              key={reg}
+              onClick={() => setSelectedRegion(reg)}
+              className="btn-glass whitespace-nowrap"
+            >
+              {reg === "Toutes" ? "Toutes les Régions" : reg.split(" ")[0]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="chart-container animate-fade-in-up overflow-hidden">
+        <div className="chart-header">
+          <div>
+            <div className="chart-title">Annuaire des Citoyens</div>
+            <p className="text-body-sm text-on-surface-variant mt-1">
+              Liste des utilisateurs actifs et hors-ligne enregistrés sur Civio
+            </p>
+          </div>
+        </div>
+
+        <div className="table-responsive">
+          <table className="glass-table">
+            <thead>
+              <tr>
+                <th>Citoyen</th>
+                <th className="hide-mobile">Région</th>
+                <th className="hide-mobile">Inscription</th>
+                <th>Dernière activité</th>
+                <th>Démarches</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCitizens.map((cit) => (
+                <tr key={cit.id}>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-bold text-white flex-shrink-0"
+                        style={{
+                          background: `linear-gradient(135deg, ${cit.avatarColor}, var(--bg-primary))`,
+                          boxShadow: `0 0 10px ${cit.avatarColor}44`,
+                        }}
+                      >
+                        {cit.name.split(" ").map((w) => w[0]).join("")}
+                      </div>
+                      <div>
+                        <span className="text-on-surface font-semibold block text-body-sm">
+                          {cit.name}
+                        </span>
+                        <span className="text-[11px] text-on-surface-variant opacity-70">
+                          ID: {cit.id}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="hide-mobile">{cit.region}</td>
+                  <td className="hide-mobile">{cit.joinedDate}</td>
+                  <td className="text-on-surface">{cit.lastActive}</td>
+                  <td className="text-center font-bold text-accent-cyan">
+                    {cit.completedProcedures}
+                  </td>
+                  <td>
+                    <span className={`badge-status badge-${cit.status === "active" ? "active" : "error"}`}>
+                      {cit.status === "active" ? "En ligne" : "Hors ligne"}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   );
 }

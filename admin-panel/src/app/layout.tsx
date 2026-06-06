@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/lib/AuthContext";
+import { AppLayout } from "@/components/AppLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -9,23 +10,15 @@ const inter = Inter({
   display: "swap",
 });
 
-const outfit = Outfit({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-plus-jakarta-sans",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "CIVIO Admin — Panel d'Administration",
-  description:
-    "Panel d'administration pour l'application CIVIO — Gestion des procédures administratives et académiques du Cameroun.",
-  keywords: [
-    "CIVIO",
-    "admin",
-    "Cameroun",
-    "procédures administratives",
-    "Xyberclan",
-  ],
+  title: "Civio | Dashboard",
+  description: "Civio civic administration panel — Cameroon",
 };
 
 export default function RootLayout({
@@ -34,22 +27,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
-      <body suppressHydrationWarning>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          {/* Floating Orbs Background */}
-          <div className="orb orb-1" aria-hidden="true" />
-          <div className="orb orb-2" aria-hidden="true" />
-          <div className="orb orb-3" aria-hidden="true" />
-          <div className="orb orb-4" aria-hidden="true" />
-
-          {children}
-        </ThemeProvider>
+    <html
+      lang="en"
+      className={`${inter.variable} ${plusJakartaSans.variable} light`}
+      suppressHydrationWarning
+    >
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="font-body-md text-body-md antialiased" suppressHydrationWarning>
+        <AuthProvider>
+          <AppLayout>{children}</AppLayout>
+        </AuthProvider>
       </body>
     </html>
   );
